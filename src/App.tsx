@@ -1,9 +1,23 @@
-function App() {
-  return (
-    <>
-      <h1 className='text-3xl font-bold underline'>Hello world!</h1>
-    </>
-  );
-}
+import { createBrowserRouter } from 'react-router-dom';
 
-export default App;
+import { Layout } from './components/layout/Layout';
+import { Home } from './pages/home/home';
+import { Login } from './pages/login/login';
+
+const router = createBrowserRouter([
+  {
+    element: <Layout />,
+    children: [
+      {
+        path: '',
+        element: <Home />,
+      },
+    ],
+  },
+  {
+    path: '/login',
+    element: <Login />,
+  },
+]);
+
+export { router };
