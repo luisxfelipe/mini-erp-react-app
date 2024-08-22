@@ -1,12 +1,13 @@
 import { createContext, ReactNode, useEffect, useState } from 'react';
 
 import { api } from '../services/api';
-
-interface UserProps {
-  id: string;
-  name: string | null;
-  email: string | null;
-}
+import {
+  setAuthorizationToken,
+  setUserStorage,
+  signOut,
+  verifyLoggedIn,
+} from '../shared/functions/connection/auth';
+import { IUser } from '../shared/types/UserType';
 
 interface SignInProps {
   email: string;
@@ -17,10 +18,9 @@ type AuthContextData = {
   signed: boolean;
   signIn({ email, password }: SignInProps): Promise<void>;
   signOut(): void;
-  verifyLoggedIn(): boolean;
   loading: boolean;
-  user: UserProps | null;
-  setUser: React.Dispatch<React.SetStateAction<UserProps | null>>;
+  user: IUser | null;
+  setUser: React.Dispatch<React.SetStateAction<IUser | null>>;
 };
 
 interface AuthProviderProps {
@@ -30,11 +30,13 @@ interface AuthProviderProps {
 export const AuthContext = createContext({} as AuthContextData);
 
 const AuthProvider = ({ children }: AuthProviderProps) => {
-  const [user, setUser] = useState<UserProps | null>(null);
+  const [user, setUser] = useState<IUser | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!verifyLoggedIn()) {
+      setUser(null);
+      setLoading(false);
       signOut();
     } else {
       setUser(JSON.parse(localStorage.getItem('@mini-erp:user') || ''));
@@ -52,34 +54,11 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     if (response.status === 401) {
       alert('Usuário ou senha inválidos');
     } else {
-      api.defaults.headers.Authorization = `Bearer ${response.data.access_token}`;
-      localStorage.setItem('@mini-erp:token', response.data.access_token);
-      localStorage.setItem(
-        '@mini-erp:user',
-        JSON.stringify(response.data.user),
-      );
-      setUser(JSON.parse(localStorage.getItem('@mini-erp:user') || ''));
+      setAuthorizationToken(`Bearer ${response.data.access_token}`);
+      setUserStorage(response.data.user);
+      setUser(response.data.user);
     }
     setLoading(false);
-  };
-
-  const signOut = () => {
-    localStorage.clear();
-    setUser(null);
-    setLoading(false);
-  };
-
-  const verifyLoggedIn = (): boolean => {
-    const token = localStorage.getItem('@mini-erp:token');
-    const user = localStorage.getItem('@mini-erp:user');
-    if (!token) {
-      return false;
-    }
-
-    if (!user) {
-      return false;
-    }
-    return true;
   };
 
   return (
@@ -88,7 +67,6 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
         signed: !!user,
         signIn,
         signOut,
-        verifyLoggedIn,
         loading,
         user,
         setUser,

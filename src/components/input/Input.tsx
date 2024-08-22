@@ -1,32 +1,29 @@
-import { RegisterOptions, UseFormRegister } from 'react-hook-form';
+/* eslint-disable react/prop-types */
+import { forwardRef, HtmlHTMLAttributes } from 'react';
 
-interface InputProps {
+type InputProps = HtmlHTMLAttributes<HTMLInputElement> & {
+  title?: string;
   type: string;
   placeholder: string;
-  name: string;
-  register: UseFormRegister<any>;
   error?: string;
-  rules?: RegisterOptions;
-}
-
-export const Input = ({
-  type,
-  placeholder,
-  name,
-  register,
-  rules,
-  error,
-}: InputProps) => {
-  return (
-    <div>
-      <input
-        className='w-full border-2 rounded-md h-11 px-2'
-        placeholder={placeholder}
-        type={type}
-        {...register(name, rules)}
-        id={name}
-      />
-      {error && <p className='my-1 text-red-500'>{error}</p>}
-    </div>
-  );
 };
+
+export const Input = forwardRef<HTMLInputElement, InputProps>(
+  ({ title, type, placeholder, error, ...props }, ref) => {
+    return (
+      <>
+        {title && <p className='mb-2 font-medium'>{title}</p>}
+        <input
+          className='w-full h-10 p-2 border border-gray-300 rounded-lg'
+          type={type}
+          placeholder={placeholder}
+          {...props}
+          ref={ref}
+        />
+        {error && <p className='my-1 text-red-500'>{error}</p>}
+      </>
+    );
+  },
+);
+
+Input.displayName = 'Input';

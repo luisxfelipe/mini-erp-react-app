@@ -5,8 +5,9 @@ import { z } from 'zod';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 
-import { Input } from '../../components/input/Input';
-import { AuthContext } from '../../contexts/authContext';
+import { Input } from '../../../components/input/Input';
+import { AuthContext } from '../../../contexts/authContext';
+import { signOut } from '../../../shared/functions/connection/auth';
 
 const schema = z.object({
   email: z
@@ -29,14 +30,16 @@ export const Login = () => {
     mode: 'onChange',
   });
 
-  const { signIn, signOut } = useContext(AuthContext);
+  const { setUser, signIn } = useContext(AuthContext);
 
   useEffect(() => {
     async function handleLogout() {
+      setUser(null);
       await signOut();
     }
 
     handleLogout();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   function onSubmit(data: FormData) {
@@ -58,21 +61,21 @@ export const Login = () => {
       >
         <div className='mb-3'>
           <Input
+            title='E-mail'
             type='email'
             placeholder='Digite seu e-mail...'
-            name='email'
             error={errors.email?.message}
-            register={register}
+            {...register('email')}
           />
         </div>
 
         <div className='mb-3'>
           <Input
+            title='Senha'
             type='password'
             placeholder='Digite sua senha...'
-            name='password'
             error={errors.password?.message}
-            register={register}
+            {...register('password')}
           />
         </div>
 
