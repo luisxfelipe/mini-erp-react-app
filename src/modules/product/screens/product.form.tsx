@@ -15,7 +15,6 @@ import { IProduct } from '../../../shared/types/ProductType';
 const schema = z.object({
   name: z.string().min(1, 'O campo nome é obrigatório'),
   description: z.string(),
-  // o campo categoria deve ter o valor maior que 0
   category: z.string().min(1, 'Selecione uma categoria'),
 });
 
@@ -57,11 +56,13 @@ export const Product = () => {
   useEffect(() => {
     const loadProduct = async (id: number) => {
       if (id) {
-        const product: IProduct = await getProductById(id);
-        setProduct(product);
-        setValue('name', product.name);
-        setValue('category', product.category.id.toString());
-        setValue('description', product.description);
+        const productLoaded: IProduct = await getProductById(id);
+        setProduct(productLoaded);
+        setValue('name', productLoaded.name);
+        if (productLoaded.category.id) {
+          setValue('category', productLoaded.category.id.toString());
+        }
+        setValue('description', productLoaded.description);
       }
     };
 
@@ -116,7 +117,7 @@ export const Product = () => {
               title='Categoria'
               name='category'
               options={categories.map((category) => ({
-                value: category.id.toString(),
+                value: category.id ? category.id.toString() : '',
                 label: category.name,
               }))}
               register={register}

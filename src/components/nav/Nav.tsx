@@ -3,11 +3,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import {
-  AppstoreOutlined,
-  HomeOutlined,
-  ShoppingOutlined,
-  TagOutlined,
-  UserOutlined,
+    AppstoreOutlined, HomeOutlined, ShoppingOutlined, TagOutlined, UserOutlined
 } from '@ant-design/icons';
 
 type MenuItem = Required<MenuProps>['items'][number];
@@ -47,7 +43,7 @@ export const Nav = () => {
         {
           key: 'categories_view',
           label: 'Visualizar',
-          onClick: () => navigate('/category'),
+          onClick: () => navigate('/categories'),
         },
         {
           key: 'categories_insert',

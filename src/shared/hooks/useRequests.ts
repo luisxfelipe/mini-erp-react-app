@@ -2,15 +2,11 @@ import { useContext, useState } from 'react';
 import { NavigateFunction } from 'react-router-dom';
 
 import { AuthContext } from '../../contexts/authContext';
-import {
-  ERROR_ACCESS_DENIED,
-  ERROR_INVALID_LOGIN,
-} from '../constants/errorsStatus';
+import { ERROR_ACCESS_DENIED, ERROR_INVALID_LOGIN } from '../constants/errorsStatus';
 import { URL_LOGIN } from '../constants/urls';
 import { setAuthorizationToken, signOut } from '../functions/connection/auth';
 import ConnectionAPI, {
-  connectionAPIPost,
-  MethodType,
+    connectionAPIPost, MethodType
 } from '../functions/connection/connectionApi';
 import { IAuth } from '../types/AuthType';
 
@@ -42,7 +38,7 @@ export const useRequests = () => {
           signOut();
         }
         console.log(`Error: ${error.message}`);
-        return undefined;
+        throw new Error(error.message);
       });
 
     setLoading(false);

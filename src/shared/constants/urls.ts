@@ -1,5 +1,5 @@
 export const URL_CATEGORIES = 'http://localhost:3000/categories';
-export const URL_CATEGORY_ID = 'http://localhost:3000/categories/{id}';
+export const URL_CATEGORY_ID = 'http://localhost:3000/categories/{categoryId}';
 
 export const URL_LOGIN = 'http://localhost:3000/auth/signin';
 

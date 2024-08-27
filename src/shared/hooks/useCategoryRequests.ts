@@ -1,7 +1,13 @@
+import toast from 'react-hot-toast';
+
 import { URL_CATEGORIES, URL_CATEGORY_ID } from '../constants/urls';
 import { MethodsEnum } from '../enums/methods.enum';
 import { ICategory } from '../types/CategoryType';
 import { useRequests } from './useRequests';
+
+interface ICategoryRequestProps {
+  name: string;
+}
 
 const useCategoryRequests = () => {
   const { request } = useRequests();
@@ -19,19 +25,40 @@ const useCategoryRequests = () => {
   };
 
   const getCategoryById = async (id: number) => {
-    const response = await request<ICategory>(
-      URL_CATEGORY_ID.replace(':id', id.toString()),
-      MethodsEnum.GET,
-    );
-    if (response) {
+    try {
+      const response = await request<ICategory>(
+        URL_CATEGORY_ID.replace('{categoryId}', id.toString()),
+        MethodsEnum.GET,
+      );
       return response;
+    } catch (error) {
+      toast.error('Erro ao buscar a categoria');
+      console.log(`Erro ao buscar a categoria: ${error}`);
+      throw new Error(`Erro ao buscar a categoria: ${error}`);
     }
-    return {} as ICategory;
   };
 
-  // Outras funções de requisição para categorias...
+  const saveCategory = async (category: ICategory, id?: string) => {
+    const url = id
+      ? URL_CATEGORY_ID.replace('{categoryId}', id)
+      : URL_CATEGORIES;
+    const method = id ? MethodsEnum.PATCH : MethodsEnum.POST;
 
-  return { getCategories, getCategoryById };
+    const body: ICategoryRequestProps = {
+      name: category.name,
+    };
+
+    try {
+      const response = await request<ICategory>(url, method, body);
+      toast.success('Categoria salva com sucesso!');
+      return response;
+    } catch (error) {
+      toast.error('Erro ao salvar a categoria');
+      throw new Error(`Erro ao salvar a categoria: ${error}`);
+    }
+  };
+
+  return { getCategories, getCategoryById, saveCategory };
 };
 
 export default useCategoryRequests;

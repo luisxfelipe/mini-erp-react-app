@@ -34,24 +34,25 @@ const useProductRequests = () => {
     return {} as IProduct;
   };
 
-  // Outras funções de requisição para produtos...
   const saveProduct = async (product: IProduct, id?: string) => {
     const url = id ? URL_PRODUCT_ID.replace('{productId}', id) : URL_PRODUCTS;
     const method = id ? MethodsEnum.PATCH : MethodsEnum.POST;
 
-    const body: IProductRequestProps = {
-      name: product.name,
-      categoryId: product.category.id,
-      description: product.description,
-    };
+    if (product.category.id) {
+      const body: IProductRequestProps = {
+        name: product.name,
+        categoryId: product.category.id,
+        description: product.description,
+      };
 
-    try {
-      const response = await request<IProduct>(url, method, body);
-      toast.success('Produto salvo com sucesso!');
-      return response;
-    } catch (error) {
-      toast.error('Erro ao salvar o produto');
-      throw new Error(`Erro ao salvar o produto: ${error}`);
+      try {
+        const response = await request<IProduct>(url, method, body);
+        toast.success('Produto salvo com sucesso!');
+        return response;
+      } catch (error) {
+        toast.error('Erro ao salvar o produto');
+        throw new Error(`Erro ao salvar o produto: ${error}`);
+      }
     }
   };
 

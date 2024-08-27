@@ -4,14 +4,18 @@ import { Product } from './product/screens/product.form';
 import { Products } from './product/screens/products.list';
 
 export enum ProductRoutesEnum {
-  PRODUCT = '/products',
+  PRODUCTS = '/products',
   PRODUCT_INSERT = '/products/insert',
   PRODUCT_EDIT = '/products/:productId',
 }
 
 export const productRoutes: RouteObject[] = [
   {
-    path: ProductRoutesEnum.PRODUCT,
+    path: '/',
+    element: <Products />,
+  },
+  {
+    path: ProductRoutesEnum.PRODUCTS,
     element: <Products />,
   },
   {
