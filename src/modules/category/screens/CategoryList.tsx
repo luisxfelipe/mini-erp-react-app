@@ -1,28 +1,22 @@
 import { ColumnsType } from 'antd/es/table';
 import { useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 
 import Button from '../../../components/button/Button';
+import Modal from '../../../components/modal/Modal';
 import Table from '../../../components/table/Table';
 import { ICategory } from '../../../shared/interfaces/CategoryInterface';
-import { CategoryRoutesEnum } from '../category.routes';
 import useCategoryRequests from '../hooks/useCategoryRequests';
+import { CategoryDetails } from './CategoryDetails';
 
 export const CategoryList = () => {
   const { getCategories } = useCategoryRequests();
   const [categories, setCategories] = useState<ICategory[]>([]);
-  const navigate = useNavigate();
+  const [categoryId, setCategoryId] = useState<number>();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
-    const loadProducts = async () => {
-      const response = await getCategories();
-      if (response) {
-        setCategories(response);
-      }
-    };
-
     loadProducts();
   }, []);
 
@@ -50,14 +44,7 @@ export const CategoryList = () => {
           <div style={{ width: '180px', display: 'flex' }}>
             <Button
               margin='0px 16px 0px 0px'
-              onClick={() => {
-                navigate(
-                  CategoryRoutesEnum.CATEGORY_EDIT.replace(
-                    ':categoryId',
-                    `${category.id}`,
-                  ),
-                );
-              }}
+              onClick={() => handleEditCategory(category)}
               icon={<EditOutlined />}
             >
               Editar
@@ -72,6 +59,25 @@ export const CategoryList = () => {
     [],
   );
 
+  const handleEditCategory = (category: ICategory) => {
+    if (category) {
+      setCategoryId(category.id);
+    }
+    setIsModalOpen(true);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+    setCategoryId(undefined);
+  };
+
+  const loadProducts = async () => {
+    const response = await getCategories();
+    if (response) {
+      setCategories(response);
+    }
+  };
+
   return (
     <div>
       <div className='flex justify-between'>
@@ -81,13 +87,23 @@ export const CategoryList = () => {
             title='Inserir'
             backgroundColor='#001529'
             color='white'
-            onClick={() => {
-              navigate(CategoryRoutesEnum.CATEGORY_INSERT);
-            }}
+            onClick={() => setIsModalOpen(true)}
           />
         </div>
       </div>
       <Table columns={columns} dataSource={categories} rowKey='id' />
+      <Modal
+        isModalOpen={isModalOpen}
+        title='Categoria'
+        onClose={() => setIsModalOpen(false)}
+        onCancel={handleCancel}
+      >
+        <CategoryDetails
+          onCancel={handleCancel}
+          categoryId={categoryId}
+          onSave={loadProducts}
+        />
+      </Modal>
     </div>
   );
 };

@@ -1,6 +1,9 @@
 import toast from 'react-hot-toast';
 
-import { URL_CATEGORIES, URL_CATEGORY_ID } from '../../../shared/constants/urls';
+import {
+  URL_CATEGORIES,
+  URL_CATEGORY_ID,
+} from '../../../shared/constants/urls';
 import { MethodsEnum } from '../../../shared/enums/methods.enum';
 import { useRequests } from '../../../shared/hooks/useRequests';
 import { ICategory } from '../../../shared/interfaces/CategoryInterface';
@@ -49,10 +52,8 @@ const useCategoryRequests = () => {
 
     try {
       const response = await request<ICategory>(url, method, body);
-      toast.success('Categoria salva com sucesso!');
       return response;
     } catch (error) {
-      toast.error('Erro ao salvar a categoria');
       throw new Error(`Erro ao salvar a categoria: ${error}`);
     }
   };

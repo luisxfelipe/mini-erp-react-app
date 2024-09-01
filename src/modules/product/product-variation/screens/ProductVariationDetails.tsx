@@ -72,7 +72,6 @@ export const ProductVariationDetails = ({
         productVariationId ? productVariationId.toString() : undefined,
       )
         .then(() => {
-          setProductVariation(undefined);
           onSave();
           handleCancel();
           toast.success('Variação salva com sucesso!');

@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import { useNavigate, useParams } from 'react-router-dom';
 import { z } from 'zod';
 
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -16,13 +15,20 @@ const schema = z.object({
 
 type FormData = z.infer<typeof schema>;
 
-export const CategoryDetails = () => {
-  const { categoryId } = useParams();
+interface CategoryDetailsProps {
+  onCancel: () => void;
+  categoryId?: number;
+  onSave: () => void;
+}
+
+export const CategoryDetails = ({
+  onCancel,
+  categoryId,
+  onSave,
+}: CategoryDetailsProps) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [category, setCategory] = useState<ICategory>();
   const { getCategoryById, saveCategory } = useCategoryRequests();
-
-  const navigate = useNavigate();
 
   const {
     register,
@@ -45,7 +51,7 @@ export const CategoryDetails = () => {
     };
 
     if (categoryId) {
-      loadProduct(parseInt(categoryId));
+      loadProduct(categoryId);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [categoryId]);
@@ -55,19 +61,24 @@ export const CategoryDetails = () => {
       {
         name: data.name,
       },
-      categoryId,
+      categoryId ? categoryId.toString() : undefined,
     )
       .then(() => {
+        onSave();
         toast.success('Categoria salva com sucesso!');
-        setCategory(undefined);
-        reset();
-        navigate('/categories');
+        handleCancel();
       })
       .catch((error) => {
         toast.error('Erro ao salvar categoria.');
         throw new Error(`Erro ao salvar categoria: ${error}`);
       });
   }
+
+  const handleCancel = () => {
+    setCategory(undefined);
+    reset();
+    onCancel();
+  };
 
   return (
     <div>
@@ -91,7 +102,7 @@ export const CategoryDetails = () => {
               type='button'
               style={{ color: '#001529' }}
               color='white'
-              onClick={() => navigate('/categories')}
+              onClick={handleCancel}
             >
               Cancelar
             </button>
