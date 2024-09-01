@@ -1,7 +1,7 @@
 import { RouteObject } from 'react-router-dom';
 
-import { Categories } from './screens/categories.list';
-import { Category } from './screens/category.form';
+import { CategoryDetails } from './screens/CategoryDetails';
+import { CategoryList } from './screens/CategoryList';
 
 export enum CategoryRoutesEnum {
   CATEGORIES = '/categories',
@@ -12,14 +12,14 @@ export enum CategoryRoutesEnum {
 export const categoryRoutes: RouteObject[] = [
   {
     path: CategoryRoutesEnum.CATEGORIES,
-    element: <Categories />,
+    element: <CategoryList />,
   },
   {
     path: CategoryRoutesEnum.CATEGORY_INSERT,
-    element: <Category />,
+    element: <CategoryDetails />,
   },
   {
     path: CategoryRoutesEnum.CATEGORY_EDIT,
-    element: <Category />,
+    element: <CategoryDetails />,
   },
 ];

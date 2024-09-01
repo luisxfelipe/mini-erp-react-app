@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { ColumnsType } from 'antd/es/table';
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -7,28 +6,27 @@ import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 
 import Button from '../../../components/button/Button';
 import Table from '../../../components/table/Table';
-import useProductRequests from '../../../shared/hooks/useProductRequests';
-import { IProduct } from '../../../shared/types/ProductType';
-import { ProductRoutesEnum } from '../../routes';
-import CategoryColumn from '../components/CategoryColumn';
+import { ICategory } from '../../../shared/interfaces/CategoryInterface';
+import { CategoryRoutesEnum } from '../category.routes';
+import useCategoryRequests from '../hooks/useCategoryRequests';
 
-export const Products = () => {
-  const { getProducts } = useProductRequests();
-  const [products, setProducts] = useState<IProduct[]>([]);
+export const CategoryList = () => {
+  const { getCategories } = useCategoryRequests();
+  const [categories, setCategories] = useState<ICategory[]>([]);
   const navigate = useNavigate();
 
   useEffect(() => {
     const loadProducts = async () => {
-      const response = await getProducts();
+      const response = await getCategories();
       if (response) {
-        setProducts(response);
+        setCategories(response);
       }
     };
 
     loadProducts();
   }, []);
 
-  const columns: ColumnsType<IProduct> = useMemo(
+  const columns: ColumnsType<ICategory> = useMemo(
     () => [
       {
         title: 'Id',
@@ -44,25 +42,19 @@ export const Products = () => {
         render: (text) => <a>{text}</a>,
       },
       {
-        title: 'Categoria',
-        dataIndex: 'category',
-        key: 'category',
-        render: (_, product) => <CategoryColumn category={product.category} />,
-      },
-      {
         title: 'Ações',
         dataIndex: '',
         width: 240,
         key: 'x',
-        render: (_, product) => (
+        render: (_, category) => (
           <div style={{ width: '180px', display: 'flex' }}>
             <Button
               margin='0px 16px 0px 0px'
               onClick={() => {
                 navigate(
-                  ProductRoutesEnum.PRODUCT_EDIT.replace(
-                    ':productId',
-                    `${product.id}`,
+                  CategoryRoutesEnum.CATEGORY_EDIT.replace(
+                    ':categoryId',
+                    `${category.id}`,
                   ),
                 );
               }}
@@ -90,12 +82,12 @@ export const Products = () => {
             backgroundColor='#001529'
             color='white'
             onClick={() => {
-              navigate(ProductRoutesEnum.PRODUCT_INSERT);
+              navigate(CategoryRoutesEnum.CATEGORY_INSERT);
             }}
           />
         </div>
       </div>
-      <Table columns={columns} dataSource={products} rowKey='id' />
+      <Table columns={columns} dataSource={categories} rowKey='id' />
     </div>
   );
 };

@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import { Divider } from 'antd';
+import { useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
 import { z } from 'zod';
@@ -7,10 +8,11 @@ import { zodResolver } from '@hookform/resolvers/zod';
 
 import { Input } from '../../../components/input/Input';
 import Select from '../../../components/select/Select';
-import useCategoryRequests from '../../../shared/hooks/useCategoryRequests';
-import useProductRequests from '../../../shared/hooks/useProductRequests';
-import { ICategory } from '../../../shared/types/CategoryType';
-import { IProduct } from '../../../shared/types/ProductType';
+import { ICategory } from '../../../shared/interfaces/CategoryInterface';
+import { IProduct } from '../../../shared/interfaces/ProductInterface';
+import useCategoryRequests from '../../category/hooks/useCategoryRequests';
+import useProductRequests from '../hooks/useProductRequests';
+import { ProductVariationList } from '../product-variation/screens/ProductVariationList';
 
 const schema = z.object({
   name: z.string().min(1, 'O campo nome é obrigatório'),
@@ -20,7 +22,7 @@ const schema = z.object({
 
 type FormData = z.infer<typeof schema>;
 
-export const Product = () => {
+export const ProductDetails = () => {
   const { productId } = useParams();
   const [product, setProduct] = useState<IProduct>();
   const [categories, setCategories] = useState<ICategory[]>([]);
@@ -43,34 +45,26 @@ export const Product = () => {
     },
   });
 
-  useEffect(() => {
-    const loadCategories = async () => {
-      const categories: ICategory[] = await getCategories();
-      setCategories(categories);
-    };
-
-    loadCategories();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [product]);
+  const memoizedGetCategories = useCallback(getCategories, []);
+  const memoizedGetProductById = useCallback(getProductById, []);
 
   useEffect(() => {
-    const loadProduct = async (id: number) => {
-      if (id) {
-        const productLoaded: IProduct = await getProductById(id);
-        setProduct(productLoaded);
-        setValue('name', productLoaded.name);
-        if (productLoaded.category.id) {
-          setValue('category', productLoaded.category.id.toString());
-        }
-        setValue('description', productLoaded.description);
+    const fetchData = async () => {
+      const categoriesData = await memoizedGetCategories();
+      setCategories(categoriesData);
+
+      if (productId) {
+        const productData = await memoizedGetProductById(parseInt(productId));
+        setProduct(productData);
+
+        setValue('name', productData.name);
+        setValue('description', productData.description);
+        setValue('category', productData.category.id?.toString() || '');
       }
     };
 
-    if (productId) {
-      loadProduct(parseInt(productId));
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [productId]);
+    fetchData();
+  }, [productId, memoizedGetCategories, memoizedGetProductById, setValue]);
 
   function onSubmit(data: FormData) {
     const categorySelected = categories.find(
@@ -91,7 +85,7 @@ export const Product = () => {
         navigate('/products');
       })
       .catch((error) => {
-        console.log(`error: ${error}`);
+        throw new Error(`Erro ao salvar o produto: ${error}`);
       });
   }
 
@@ -156,6 +150,12 @@ export const Product = () => {
           </div>
         </form>
       </div>
+      {product && (
+        <div>
+          <Divider />
+          <ProductVariationList />
+        </div>
+      )}
     </div>
   );
 };

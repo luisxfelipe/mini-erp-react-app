@@ -2,12 +2,9 @@ import { createContext, ReactNode, useEffect, useState } from 'react';
 
 import { api } from '../services/api';
 import {
-  setAuthorizationToken,
-  setUserStorage,
-  signOut,
-  verifyLoggedIn,
+    setAuthorizationToken, setUserStorage, signOut, verifyLoggedIn
 } from '../shared/functions/connection/auth';
-import { IUser } from '../shared/types/UserType';
+import { IUser } from '../shared/interfaces/UserInterface';
 
 interface SignInProps {
   email: string;

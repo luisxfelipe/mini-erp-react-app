@@ -3,8 +3,15 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import {
-    AppstoreOutlined, HomeOutlined, ShoppingOutlined, TagOutlined, UserOutlined
+  AppstoreOutlined,
+  HomeOutlined,
+  ShoppingOutlined,
+  TagOutlined,
+  UserOutlined,
 } from '@ant-design/icons';
+
+import { CategoryRoutesEnum } from '../../modules/category/category.routes';
+import { ProductRoutesEnum } from '../../modules/product.routes';
 
 type MenuItem = Required<MenuProps>['items'][number];
 
@@ -26,12 +33,12 @@ export const Nav = () => {
         {
           key: 'products_view',
           label: 'Visualizar',
-          onClick: () => navigate('/products'),
+          onClick: () => navigate(ProductRoutesEnum.PRODUCTS),
         },
         {
-          key: 'products_insert',
+          key: 'product_insert',
           label: 'Inserir',
-          onClick: () => navigate('/products/insert'),
+          onClick: () => navigate(ProductRoutesEnum.PRODUCT_INSERT),
         },
       ],
     },
@@ -43,12 +50,12 @@ export const Nav = () => {
         {
           key: 'categories_view',
           label: 'Visualizar',
-          onClick: () => navigate('/categories'),
+          onClick: () => navigate(CategoryRoutesEnum.CATEGORIES),
         },
         {
           key: 'categories_insert',
           label: 'Inserir',
-          onClick: () => navigate('/category/insert'),
+          onClick: () => navigate(CategoryRoutesEnum.CATEGORY_INSERT),
         },
       ],
     },

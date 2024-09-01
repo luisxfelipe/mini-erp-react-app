@@ -1,9 +1,9 @@
 import toast from 'react-hot-toast';
 
-import { URL_PRODUCT_ID, URL_PRODUCTS } from '../constants/urls';
-import { MethodsEnum } from '../enums/methods.enum';
-import { IProduct } from '../types/ProductType';
-import { useRequests } from './useRequests';
+import { URL_PRODUCT_ID, URL_PRODUCTS } from '../../../shared/constants/urls';
+import { MethodsEnum } from '../../../shared/enums/methods.enum';
+import { useRequests } from '../../../shared/hooks/useRequests';
+import { IProduct } from '../../../shared/interfaces/ProductInterface';
 
 interface IProductRequestProps {
   name: string;

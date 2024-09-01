@@ -1,7 +1,7 @@
 import { RouteObject } from 'react-router-dom';
 
-import { Product } from './product/screens/product.form';
-import { Products } from './product/screens/products.list';
+import { ProductDetails } from './product/screens/ProductDetails';
+import { ProductList } from './product/screens/ProductList';
 
 export enum ProductRoutesEnum {
   PRODUCTS = '/products',
@@ -12,18 +12,18 @@ export enum ProductRoutesEnum {
 export const productRoutes: RouteObject[] = [
   {
     path: '/',
-    element: <Products />,
+    element: <ProductList />,
   },
   {
     path: ProductRoutesEnum.PRODUCTS,
-    element: <Products />,
+    element: <ProductList />,
   },
   {
     path: ProductRoutesEnum.PRODUCT_INSERT,
-    element: <Product />,
+    element: <ProductDetails />,
   },
   {
     path: ProductRoutesEnum.PRODUCT_EDIT,
-    element: <Product />,
+    element: <ProductDetails />,
   },
 ];

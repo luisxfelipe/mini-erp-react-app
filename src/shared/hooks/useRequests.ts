@@ -8,7 +8,7 @@ import { setAuthorizationToken, signOut } from '../functions/connection/auth';
 import ConnectionAPI, {
     connectionAPIPost, MethodType
 } from '../functions/connection/connectionApi';
-import { IAuth } from '../types/AuthType';
+import { IAuth } from '../interfaces/AuthInterface';
 
 export const useRequests = () => {
   const [loading, setLoading] = useState(false);
@@ -37,7 +37,6 @@ export const useRequests = () => {
         if (error.message === ERROR_ACCESS_DENIED) {
           signOut();
         }
-        console.log(`Error: ${error.message}`);
         throw new Error(error.message);
       });
 
@@ -60,8 +59,7 @@ export const useRequests = () => {
         return result;
       })
       .catch(() => {
-        console.log(ERROR_INVALID_LOGIN);
-        return undefined;
+        throw new Error(ERROR_INVALID_LOGIN);
       });
 
     setLoading(false);

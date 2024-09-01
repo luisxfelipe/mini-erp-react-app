@@ -1,9 +1,9 @@
 import toast from 'react-hot-toast';
 
-import { URL_CATEGORIES, URL_CATEGORY_ID } from '../constants/urls';
-import { MethodsEnum } from '../enums/methods.enum';
-import { ICategory } from '../types/CategoryType';
-import { useRequests } from './useRequests';
+import { URL_CATEGORIES, URL_CATEGORY_ID } from '../../../shared/constants/urls';
+import { MethodsEnum } from '../../../shared/enums/methods.enum';
+import { useRequests } from '../../../shared/hooks/useRequests';
+import { ICategory } from '../../../shared/interfaces/CategoryInterface';
 
 interface ICategoryRequestProps {
   name: string;
@@ -33,7 +33,6 @@ const useCategoryRequests = () => {
       return response;
     } catch (error) {
       toast.error('Erro ao buscar a categoria');
-      console.log(`Erro ao buscar a categoria: ${error}`);
       throw new Error(`Erro ao buscar a categoria: ${error}`);
     }
   };

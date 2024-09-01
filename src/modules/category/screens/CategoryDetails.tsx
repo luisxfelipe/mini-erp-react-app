@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
 import { useNavigate, useParams } from 'react-router-dom';
 import { z } from 'zod';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { Input } from '../../../components/input/Input';
-import useCategoryRequests from '../../../shared/hooks/useCategoryRequests';
-import { ICategory } from '../../../shared/types/CategoryType';
+import { ICategory } from '../../../shared/interfaces/CategoryInterface';
+import useCategoryRequests from '../hooks/useCategoryRequests';
 
 const schema = z.object({
   name: z.string().min(1, 'O campo nome é obrigatório'),
@@ -15,8 +16,9 @@ const schema = z.object({
 
 type FormData = z.infer<typeof schema>;
 
-export const Category = () => {
+export const CategoryDetails = () => {
   const { categoryId } = useParams();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [category, setCategory] = useState<ICategory>();
   const { getCategoryById, saveCategory } = useCategoryRequests();
 
@@ -56,12 +58,14 @@ export const Category = () => {
       categoryId,
     )
       .then(() => {
+        toast.success('Categoria salva com sucesso!');
         setCategory(undefined);
         reset();
         navigate('/categories');
       })
       .catch((error) => {
-        console.log(`error: ${error}`);
+        toast.error('Erro ao salvar categoria.');
+        throw new Error(`Erro ao salvar categoria: ${error}`);
       });
   }
 
