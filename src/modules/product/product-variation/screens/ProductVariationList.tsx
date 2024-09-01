@@ -21,15 +21,8 @@ export const ProductVariationList = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
-    const loadProductVariations = async (id: number) => {
-      const response = await getProductVariations(id);
-      if (response) {
-        setProductVariations(response);
-      }
-    };
-
     if (productId) {
-      loadProductVariations(parseInt(productId));
+      loadProductVariations();
     }
   }, []);
 
@@ -45,7 +38,7 @@ export const ProductVariationList = () => {
     setIsModalOpen(true);
   };
 
-  const handleSaveProductVariation = async () => {
+  const loadProductVariations = async () => {
     if (productId) {
       const response = await getProductVariations(parseInt(productId));
       if (response) {
@@ -116,7 +109,7 @@ export const ProductVariationList = () => {
         <ProductVariationDetails
           onCancel={handleCancel}
           productVariationId={productVariationId}
-          onSave={handleSaveProductVariation}
+          onSave={loadProductVariations}
         />
       </Modal>
     </div>
