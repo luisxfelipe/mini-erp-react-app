@@ -28,7 +28,6 @@ export const ProductVariationDetails = ({
   onSave,
 }: ProductVariationDetailsProps) => {
   const { productId } = useParams();
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { getProductVariationById, saveProductVariation } =
     useProductVariationRequests();
 
@@ -67,8 +66,8 @@ export const ProductVariationDetails = ({
       saveProductVariation(
         {
           name: data.name,
-          productId: parseInt(productId),
         },
+        productId,
         productVariationId ? productVariationId.toString() : undefined,
       )
         .then(() => {
@@ -76,9 +75,8 @@ export const ProductVariationDetails = ({
           handleCancel();
           toast.success('Variação salva com sucesso!');
         })
-        .catch((error) => {
+        .catch(() => {
           toast.error('Erro ao salvar a variação');
-          throw new Error(`Erro ao salvar a variação: ${error}`);
         });
     }
   }

@@ -3,13 +3,8 @@ import toast from 'react-hot-toast';
 import { URL_PRODUCT_ID, URL_PRODUCTS } from '../../../shared/constants/urls';
 import { MethodsEnum } from '../../../shared/enums/methods.enum';
 import { useRequests } from '../../../shared/hooks/useRequests';
+import { IProductInsert } from '../../../shared/interfaces/ProductInsertInterface';
 import { IProduct } from '../../../shared/interfaces/ProductInterface';
-
-interface IProductRequestProps {
-  name: string;
-  categoryId: number;
-  description: string;
-}
 
 const useProductRequests = () => {
   const { request } = useRequests();
@@ -34,25 +29,17 @@ const useProductRequests = () => {
     return {} as IProduct;
   };
 
-  const saveProduct = async (product: IProduct, id?: string) => {
+  const saveProduct = async (product: IProductInsert, id?: string) => {
     const url = id ? URL_PRODUCT_ID.replace('{productId}', id) : URL_PRODUCTS;
     const method = id ? MethodsEnum.PATCH : MethodsEnum.POST;
 
-    if (product.category.id) {
-      const body: IProductRequestProps = {
-        name: product.name,
-        categoryId: product.category.id,
-        description: product.description,
-      };
-
-      try {
-        const response = await request<IProduct>(url, method, body);
-        toast.success('Produto salvo com sucesso!');
-        return response;
-      } catch (error) {
-        toast.error('Erro ao salvar o produto');
-        throw new Error(`Erro ao salvar o produto: ${error}`);
-      }
+    try {
+      const response = await request<IProduct>(url, method, product);
+      toast.success('Produto salvo com sucesso!');
+      return response;
+    } catch (error) {
+      toast.error('Erro ao salvar o produto');
+      throw new Error(`Erro ao salvar o produto: ${error}`);
     }
   };
 

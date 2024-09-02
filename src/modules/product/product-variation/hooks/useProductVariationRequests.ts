@@ -1,18 +1,11 @@
-import toast from 'react-hot-toast';
-
 import {
-    URL_PRODUCT_VARIATION_ID, URL_PRODUCT_VARIATIONS
+  URL_PRODUCT_VARIATION_ID,
+  URL_PRODUCT_VARIATIONS,
 } from '../../../../shared/constants/urls';
 import { MethodsEnum } from '../../../../shared/enums/methods.enum';
 import { useRequests } from '../../../../shared/hooks/useRequests';
-import {
-    IProductVariationInsert
-} from '../../../../shared/interfaces/ProductVariationInsertInterface';
+import { IProductVariationInsert } from '../../../../shared/interfaces/ProductVariationInsertInterface';
 import { IProductVariation } from '../../../../shared/interfaces/ProductVariationInterface';
-
-interface IProductVariationRequestProps {
-  name: string;
-}
 
 const useProductVariationRequests = () => {
   const { request } = useRequests();
@@ -47,6 +40,7 @@ const useProductVariationRequests = () => {
 
   const saveProductVariation = async (
     productVariation: IProductVariationInsert,
+    productId: string,
     id?: string,
   ) => {
     let url = '';
@@ -54,32 +48,24 @@ const useProductVariationRequests = () => {
     if (id) {
       url = URL_PRODUCT_VARIATION_ID.replace('{productVariationId}', id);
     } else {
-      if (productVariation.productId) {
-        url = URL_PRODUCT_VARIATIONS.replace(
-          '{productId}',
-          productVariation.productId.toString(),
-        );
-      } else {
-        throw new Error('Erro ao salvar a variação de produto');
-      }
+      url = URL_PRODUCT_VARIATIONS.replace('{productId}', productId);
     }
 
-    if (productVariation.productId) {
-      const method = id ? MethodsEnum.PATCH : MethodsEnum.POST;
+    const method = id ? MethodsEnum.PATCH : MethodsEnum.POST;
+    console.log(`url: ${url}`);
+    console.log(`method: ${method}`);
+    console.log(`productVariation: ${JSON.stringify(productVariation)}`);
 
-      const body: IProductVariationRequestProps = {
-        name: productVariation.name,
-      };
-
-      try {
-        const response = await request<IProductVariation>(url, method, body);
-        return response;
-      } catch (error) {
-        throw new Error(`Erro ao salvar a variável: ${error}`);
-      }
-    } else {
-      toast.error('Erro ao salvar a variação de produto');
-      throw new Error('Erro ao salvar a variação de produto');
+    try {
+      const response = await request<IProductVariation>(
+        url,
+        method,
+        productVariation,
+      );
+      console.log(`response: ${response}`);
+      return response;
+    } catch (error) {
+      throw new Error(`Erro ao salvar a variável: ${error}`);
     }
   };
 

@@ -58,6 +58,7 @@ export const SupplierList = () => {
 
   useEffect(() => {
     loadSuppliers();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleCancel = () => {

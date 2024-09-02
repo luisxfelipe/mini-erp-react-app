@@ -33,6 +33,7 @@ export const SupplierDetails = ({
   supplierId,
   onSave,
 }: SupplierDetailsProps) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [supplier, setSupplier] = useState<ISupplier>();
 
   const { getSupplierById, saveSupplier } = useSupplierRequests();
@@ -50,16 +51,21 @@ export const SupplierDetails = ({
 
   useEffect(() => {
     const loadSupplier = async (id: number) => {
-      if (id) {
-        const supplierLoaded: ISupplier = await getSupplierById(id);
-        setSupplier(supplierLoaded);
-        setValue('corporateName', supplierLoaded.corporateName);
-        setValue('tradeName', supplierLoaded.tradeName);
-        setValue('cnpj', supplierLoaded.cnpj);
-        setValue('email', supplierLoaded.email);
-        setValue('phone', supplierLoaded.phone);
-        setValue('website', supplierLoaded.website);
-      }
+      getSupplierById(id)
+        .then((supplierLoaded) => {
+          if (supplierLoaded) {
+            setSupplier(supplierLoaded);
+            setValue('corporateName', supplierLoaded.corporateName);
+            setValue('tradeName', supplierLoaded.tradeName);
+            setValue('cnpj', supplierLoaded.cnpj);
+            setValue('email', supplierLoaded.email);
+            setValue('phone', supplierLoaded.phone);
+            setValue('website', supplierLoaded.website);
+          }
+        })
+        .catch((error) => {
+          throw new Error(`Erro ao carregar o fornecedor: ${error}`);
+        });
     };
 
     if (supplierId) {

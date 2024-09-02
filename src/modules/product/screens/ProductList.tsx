@@ -8,9 +8,9 @@ import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import Button from '../../../components/button/Button';
 import Table from '../../../components/table/Table';
 import { IProduct } from '../../../shared/interfaces/ProductInterface';
-import { ProductRoutesEnum } from '../../product.routes';
 import CategoryColumn from '../components/CategoryColumn';
 import useProductRequests from '../hooks/useProductRequests';
+import { ProductRoutesEnum } from '../product.routes';
 
 export const ProductList = () => {
   const { getProducts } = useProductRequests();

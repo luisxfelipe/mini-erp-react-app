@@ -36,17 +36,8 @@ const useSupplierRequests = () => {
       : URL_SUPPLIERS;
     const method = id ? MethodsEnum.PATCH : MethodsEnum.POST;
 
-    const body: ISupplierInsert = {
-      corporateName: supplier.corporateName,
-      tradeName: supplier.tradeName,
-      cnpj: supplier.cnpj || undefined,
-      email: supplier.email || undefined,
-      phone: supplier.phone || undefined,
-      website: supplier.website || undefined,
-    };
-
     try {
-      const response = await request<ISupplier>(url, method, body);
+      const response = await request<ISupplier>(url, method, supplier);
       return response;
     } catch (error) {
       throw new Error(`Erro ao salvar o fornecedor: ${error}`);

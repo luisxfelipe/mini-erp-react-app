@@ -6,11 +6,8 @@ import {
 } from '../../../shared/constants/urls';
 import { MethodsEnum } from '../../../shared/enums/methods.enum';
 import { useRequests } from '../../../shared/hooks/useRequests';
+import { ICategoryInsert } from '../../../shared/interfaces/CategoryInsertInterface';
 import { ICategory } from '../../../shared/interfaces/CategoryInterface';
-
-interface ICategoryRequestProps {
-  name: string;
-}
 
 const useCategoryRequests = () => {
   const { request } = useRequests();
@@ -40,18 +37,14 @@ const useCategoryRequests = () => {
     }
   };
 
-  const saveCategory = async (category: ICategory, id?: string) => {
+  const saveCategory = async (category: ICategoryInsert, id?: string) => {
     const url = id
       ? URL_CATEGORY_ID.replace('{categoryId}', id)
       : URL_CATEGORIES;
     const method = id ? MethodsEnum.PATCH : MethodsEnum.POST;
 
-    const body: ICategoryRequestProps = {
-      name: category.name,
-    };
-
     try {
-      const response = await request<ICategory>(url, method, body);
+      const response = await request<ICategory>(url, method, category);
       return response;
     } catch (error) {
       throw new Error(`Erro ao salvar a categoria: ${error}`);

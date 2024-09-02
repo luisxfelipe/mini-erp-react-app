@@ -43,11 +43,16 @@ export const CategoryDetails = ({
 
   useEffect(() => {
     const loadCategory = async (id: number) => {
-      if (id) {
-        const categoryLoaded: ICategory = await getCategoryById(id);
-        setCategory(categoryLoaded);
-        setValue('name', categoryLoaded.name);
-      }
+      getCategoryById(id)
+        .then((categoryLoaded) => {
+          if (categoryLoaded) {
+            setCategory(categoryLoaded);
+            setValue('name', categoryLoaded.name);
+          }
+        })
+        .catch((error) => {
+          throw new Error(`Erro ao buscar a categoria: ${error}`);
+        });
     };
 
     if (categoryId) {

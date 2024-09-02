@@ -11,7 +11,7 @@ import {
 } from '@ant-design/icons';
 
 import { CategoryRoutesEnum } from '../../modules/category/category.routes';
-import { ProductRoutesEnum } from '../../modules/product.routes';
+import { ProductRoutesEnum } from '../../modules/product/product.routes';
 import { SupplierRoutesEnum } from '../../modules/supplier/supplier.routes';
 
 type MenuItem = Required<MenuProps>['items'][number];

@@ -24,6 +24,7 @@ export const ProductVariationList = () => {
     if (productId) {
       loadProductVariations();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleCancel = () => {

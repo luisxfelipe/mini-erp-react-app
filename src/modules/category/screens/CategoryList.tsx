@@ -18,6 +18,7 @@ export const CategoryList = () => {
 
   useEffect(() => {
     loadProducts();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const columns: ColumnsType<ICategory> = useMemo(

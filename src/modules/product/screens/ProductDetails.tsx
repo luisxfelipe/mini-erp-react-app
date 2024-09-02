@@ -45,7 +45,9 @@ export const ProductDetails = () => {
     },
   });
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const memoizedGetCategories = useCallback(getCategories, []);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const memoizedGetProductById = useCallback(getProductById, []);
 
   useEffect(() => {
@@ -58,7 +60,9 @@ export const ProductDetails = () => {
         setProduct(productData);
 
         setValue('name', productData.name);
-        setValue('description', productData.description);
+        if (productData.description) {
+          setValue('description', productData.description);
+        }
         setValue('category', productData.category.id?.toString() || '');
       }
     };
@@ -74,7 +78,7 @@ export const ProductDetails = () => {
     saveProduct(
       {
         name: data.name,
-        category: categorySelected!,
+        categoryId: categorySelected!.id,
         description: data.description,
       },
       productId,
