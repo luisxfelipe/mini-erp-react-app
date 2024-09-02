@@ -5,6 +5,7 @@ import { categoryRoutes } from './modules/category/category.routes';
 import { loginRoutes } from './modules/login/routes';
 import { productRoutes } from './modules/product.routes';
 import { productVariationRoutes } from './modules/product/product-variation/produc-variations.routes';
+import { supplierRoutes } from './modules/supplier/supplier.routes';
 import { verifyLoggedIn } from './shared/functions/connection/auth';
 
 import type { Router as RemixRouter } from '@remix-run/router';
@@ -13,6 +14,7 @@ const routesLoggedIn: RouteObject[] = [
   ...categoryRoutes,
   ...productRoutes,
   ...productVariationRoutes,
+  ...supplierRoutes,
 ].map((route) => ({
   ...route,
   loader: verifyLoggedIn,

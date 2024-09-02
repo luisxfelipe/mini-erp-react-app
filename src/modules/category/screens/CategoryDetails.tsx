@@ -42,7 +42,7 @@ export const CategoryDetails = ({
   });
 
   useEffect(() => {
-    const loadProduct = async (id: number) => {
+    const loadCategory = async (id: number) => {
       if (id) {
         const categoryLoaded: ICategory = await getCategoryById(id);
         setCategory(categoryLoaded);
@@ -51,7 +51,7 @@ export const CategoryDetails = ({
     };
 
     if (categoryId) {
-      loadProduct(categoryId);
+      loadCategory(categoryId);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [categoryId]);

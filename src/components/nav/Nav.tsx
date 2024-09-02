@@ -12,6 +12,7 @@ import {
 
 import { CategoryRoutesEnum } from '../../modules/category/category.routes';
 import { ProductRoutesEnum } from '../../modules/product.routes';
+import { SupplierRoutesEnum } from '../../modules/supplier/supplier.routes';
 
 type MenuItem = Required<MenuProps>['items'][number];
 
@@ -46,18 +47,14 @@ export const Nav = () => {
       key: 'categories',
       label: 'Categorias',
       icon: <AppstoreOutlined />,
-      children: [
-        {
-          key: 'categories_view',
-          label: 'Visualizar',
-          onClick: () => navigate(CategoryRoutesEnum.CATEGORIES),
-        },
-        {
-          key: 'categories_insert',
-          label: 'Inserir',
-          onClick: () => navigate(CategoryRoutesEnum.CATEGORY_INSERT),
-        },
-      ],
+
+      onClick: () => navigate(CategoryRoutesEnum.CATEGORIES),
+    },
+    {
+      key: 'suppliers',
+      label: 'Fornecedores',
+      icon: <ShoppingOutlined />,
+      onClick: () => navigate(SupplierRoutesEnum.SUPPLIERS),
     },
     {
       key: 'order',
