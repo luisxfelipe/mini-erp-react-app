@@ -1,9 +1,7 @@
 import axios, { AxiosRequestConfig } from 'axios';
 
 import {
-  ERROR_ACCESS_DENIED,
-  ERROR_CONNECTION,
-  ERROR_INVALID_LOGIN,
+    ERROR_ACCESS_DENIED, ERROR_CONNECTION, ERROR_INVALID_LOGIN
 } from '../../constants/errorsStatus';
 import { MethodsEnum } from '../../enums/methods.enum';
 import { getAuthorizationToken } from './auth';
@@ -47,7 +45,7 @@ export default class ConnectionAPI {
           case 403:
             throw new Error(ERROR_ACCESS_DENIED);
           default:
-            throw new Error(ERROR_CONNECTION);
+            throw new Error(`Error: ${error.message}`);
         }
       }
       throw new Error(ERROR_INVALID_LOGIN);

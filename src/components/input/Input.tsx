@@ -4,7 +4,7 @@ import { forwardRef, HtmlHTMLAttributes } from 'react';
 type InputProps = HtmlHTMLAttributes<HTMLInputElement> & {
   title?: string;
   type: string;
-  placeholder: string;
+  placeholder?: string;
   error?: string;
 };
 

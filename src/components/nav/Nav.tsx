@@ -1,7 +1,3 @@
-import { Menu as ManuAntd, MenuProps } from 'antd';
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-
 import {
   AppstoreOutlined,
   HomeOutlined,
@@ -9,9 +5,13 @@ import {
   TagOutlined,
   UserOutlined,
 } from '@ant-design/icons';
+import { Menu as ManuAntd, MenuProps } from 'antd';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { CategoryRoutesEnum } from '../../modules/category/category.routes';
 import { ProductRoutesEnum } from '../../modules/product/product.routes';
+import { PurchaseOrderRoutesEnum } from '../../modules/purchase-order/purchase-orders.routes';
 import { SupplierRoutesEnum } from '../../modules/supplier/supplier.routes';
 
 type MenuItem = Required<MenuProps>['items'][number];
@@ -57,10 +57,10 @@ export const Nav = () => {
       onClick: () => navigate(SupplierRoutesEnum.SUPPLIERS),
     },
     {
-      key: 'order',
-      label: 'Pedidos',
+      key: 'purchase-orders',
+      label: 'Pedidos de compra',
       icon: <TagOutlined />,
-      onClick: () => navigate('/order'),
+      onClick: () => navigate(PurchaseOrderRoutesEnum.PURCHASE_ORDERS),
     },
     {
       key: 'user',

@@ -1,10 +1,11 @@
 import {
-  URL_PRODUCT_VARIATION_ID,
-  URL_PRODUCT_VARIATIONS,
+    URL_PRODUCT_VARIATION_ID, URL_PRODUCT_VARIATIONS
 } from '../../../../shared/constants/urls';
 import { MethodsEnum } from '../../../../shared/enums/methods.enum';
 import { useRequests } from '../../../../shared/hooks/useRequests';
-import { IProductVariationInsert } from '../../../../shared/interfaces/ProductVariationInsertInterface';
+import {
+    IProductVariationInsert
+} from '../../../../shared/interfaces/ProductVariationInsertInterface';
 import { IProductVariation } from '../../../../shared/interfaces/ProductVariationInterface';
 
 const useProductVariationRequests = () => {
@@ -52,9 +53,6 @@ const useProductVariationRequests = () => {
     }
 
     const method = id ? MethodsEnum.PATCH : MethodsEnum.POST;
-    console.log(`url: ${url}`);
-    console.log(`method: ${method}`);
-    console.log(`productVariation: ${JSON.stringify(productVariation)}`);
 
     try {
       const response = await request<IProductVariation>(
@@ -62,7 +60,6 @@ const useProductVariationRequests = () => {
         method,
         productVariation,
       );
-      console.log(`response: ${response}`);
       return response;
     } catch (error) {
       throw new Error(`Erro ao salvar a variável: ${error}`);
