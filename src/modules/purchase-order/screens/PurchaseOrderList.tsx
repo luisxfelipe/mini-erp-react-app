@@ -26,6 +26,15 @@ export const PurchaseOrderList = () => {
         render: (text) => <a>{text}</a>,
       },
       {
+        title: 'Data do pedido',
+        dataIndex: 'date',
+        key: 'date',
+        render: (date) => {
+          const formattedDate = new Date(date).toLocaleDateString('pt-BR');
+          return <span>{formattedDate}</span>;
+        },
+      },
+      {
         title: 'Numero do pedido',
         dataIndex: 'number',
         key: 'number',
