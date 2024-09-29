@@ -1,8 +1,8 @@
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { ColumnsType } from 'antd/es/table';
+import { format, parseISO } from 'date-fns';
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 
 import Button from '../../../components/button/Button';
 import Table from '../../../components/table/Table';
@@ -30,7 +30,8 @@ export const PurchaseOrderList = () => {
         dataIndex: 'date',
         key: 'date',
         render: (date) => {
-          const formattedDate = new Date(date).toLocaleDateString('pt-BR');
+          const parsedDate = parseISO(date);
+          const formattedDate = format(parsedDate, 'dd/MM/yyyy');
           return <span>{formattedDate}</span>;
         },
       },
