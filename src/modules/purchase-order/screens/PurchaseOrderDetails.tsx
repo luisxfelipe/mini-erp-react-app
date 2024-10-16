@@ -1,4 +1,4 @@
-import { message } from 'antd';
+import { Divider } from 'antd';
 import { useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
@@ -7,7 +7,6 @@ import { z } from 'zod';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 
-import { DatePicker } from '../../../components/date-picker/DatePicker';
 import { Input } from '../../../components/input/Input';
 import Select from '../../../components/select/Select';
 import { IPurchaseOrder } from '../../../shared/interfaces/PurchaseOrderInterface';
@@ -15,6 +14,7 @@ import { IPurchaseOrderStatus } from '../../../shared/interfaces/PurchaseOrderSt
 import { ISupplier } from '../../../shared/interfaces/SupplierInterface';
 import useSupplierRequests from '../../supplier/hooks/useSupplierRequets';
 import usePurchaseOrderRequests from '../hooks/usePurchaseOrderRequests';
+import { PurchaseOrderItemList } from '../purchase-order-item/screens/PurchaseOrderItemList';
 import usePurchaseOrderStatusRequests from '../purchase-order-status/hooks/usePurchaseOrderStatusRequests';
 import { PurchaseOrderRoutesEnum } from '../purchase-orders.routes';
 
@@ -286,6 +286,12 @@ export const PurchaseOrderDetails = () => {
           </div>
         </form>
       </div>
+      {purchaseOrderId && (
+        <div>
+          <Divider />
+          <PurchaseOrderItemList />
+        </div>
+      )}
     </div>
   );
 };

@@ -6,16 +6,18 @@ type InputProps = HtmlHTMLAttributes<HTMLInputElement> & {
   type: string;
   placeholder?: string;
   error?: string;
+  step?: string | number;
 };
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ title, type, placeholder, error, ...props }, ref) => {
+  ({ title, type, placeholder, error, step, ...props }, ref) => {
     return (
       <>
         {title && <p className='mb-2 font-medium'>{title}</p>}
         <input
           className='w-full h-10 p-2 border border-gray-300 rounded-lg'
           type={type}
+          step={step}
           placeholder={placeholder}
           {...props}
           ref={ref}
