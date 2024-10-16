@@ -181,7 +181,6 @@ export const PurchaseOrderItemDetails = ({
       productVariationSelected.id &&
       purchaseOrderId
     ) {
-      console.log(JSON.stringify(purchaseOrderItem));
       savePurchaseOrderItem(
         {
           productId: productSelected.id,
@@ -194,8 +193,7 @@ export const PurchaseOrderItemDetails = ({
         purchaseOrderId,
         purchaseOrderItem?.id.toString(),
       )
-        .then((response: any) => {
-          console.log(`response: ${JSON.stringify(response)}`);
+        .then(() => {
           onSave();
           handleCancel();
           toast.success('Item salvo com sucesso!');

@@ -57,11 +57,7 @@ const usePurchaseOrderItemRequests = () => {
       );
     }
 
-    console.log('URL:', url);
-
     const method = id ? MethodsEnum.PATCH : MethodsEnum.POST;
-
-    console.log(JSON.stringify(purchaseOrderItem));
 
     try {
       const response = await request<IPurchaseOrderItem>(
