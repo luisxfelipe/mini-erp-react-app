@@ -1,16 +1,19 @@
-import {
-  AppstoreOutlined,
-  HomeOutlined,
-  ShoppingOutlined,
-  TagOutlined,
-  UserOutlined,
-} from '@ant-design/icons';
 import { Menu as ManuAntd, MenuProps } from 'antd';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import {
+    AppstoreOutlined, HomeOutlined, ShoppingOutlined, TagOutlined, UserOutlined
+} from '@ant-design/icons';
+
 import { CategoryRoutesEnum } from '../../modules/category/category.routes';
 import { ProductRoutesEnum } from '../../modules/product/product.routes';
+import {
+    PurchaseOrderItemStatusRoutesEnum
+} from '../../modules/purchase-order/purchase-order-item/purchase-order-item-status/purchase-order-item-status.routes';
+import {
+    PurchaseOrderStatusRoutesEnum
+} from '../../modules/purchase-order/purchase-order-status/purchase-order-status.routes';
 import { PurchaseOrderRoutesEnum } from '../../modules/purchase-order/purchase-orders.routes';
 import { SupplierRoutesEnum } from '../../modules/supplier/supplier.routes';
 
@@ -58,9 +61,29 @@ export const Nav = () => {
     },
     {
       key: 'purchase-orders',
-      label: 'Pedidos de compra',
+      label: 'Compras',
       icon: <TagOutlined />,
-      onClick: () => navigate(PurchaseOrderRoutesEnum.PURCHASE_ORDERS),
+      children: [
+        {
+          key: 'purchase-orders_view',
+          label: 'Visualizar',
+          onClick: () => navigate(PurchaseOrderRoutesEnum.PURCHASE_ORDERS),
+        },
+        {
+          key: 'purchase-order-status',
+          label: 'Status de compra',
+          onClick: () =>
+            navigate(PurchaseOrderStatusRoutesEnum.PURCHASE_ORDER_STATUS),
+        },
+        {
+          key: 'purchase-order-item-status',
+          label: 'Status de itens de compras',
+          onClick: () =>
+            navigate(
+              PurchaseOrderItemStatusRoutesEnum.PURCHASE_ORDER_ITEM_STATUS,
+            ),
+        },
+      ],
     },
     {
       key: 'user',

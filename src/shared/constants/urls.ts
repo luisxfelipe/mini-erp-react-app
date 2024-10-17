@@ -18,6 +18,7 @@ export const URL_PURCHASE_ORDER_ITEMS = `${URL_BASE}/purchase-orders/{purchaseOr
 export const URL_PURCHASE_ORDER_ITEM_ID = `${URL_BASE}/purchase-orders/{purchaseOrderId}/purchase-order-items/{purchaseOrderItemId}`;
 
 export const URL_PURCHASE_ORDER_ITEM_STATUS = `${URL_BASE}/purchase-order-item-status`;
+export const URL_PURCHASE_ORDER_ITEM_STATUS_ID = `${URL_BASE}/purchase-order-item-status/{purchaseOrderItemStatusId}`;
 
 export const URL_PURCHASE_ORDER_STATUS = `${URL_BASE}/purchase-order-status`;
 export const URL_PURCHASE_ORDER_STATUS_ID = `${URL_BASE}/purchase-order-status/{purchaseOrderStatusId}`;

@@ -9,8 +9,14 @@ import {
 } from './modules/product/product-variation/produc-variations.routes';
 import { productRoutes } from './modules/product/product.routes';
 import {
+    purchaseOrderItemStatusRoutes
+} from './modules/purchase-order/purchase-order-item/purchase-order-item-status/purchase-order-item-status.routes';
+import {
     purchaseOrderItemRoutes
 } from './modules/purchase-order/purchase-order-item/purchase-order-item.routes';
+import {
+    purchaseOrderStatusRoutes
+} from './modules/purchase-order/purchase-order-status/purchase-order-status.routes';
 import { purchaseOrderRoutes } from './modules/purchase-order/purchase-orders.routes';
 import { supplierRoutes } from './modules/supplier/supplier.routes';
 import { verifyLoggedIn } from './shared/functions/connection/auth';
@@ -20,6 +26,8 @@ const routesLoggedIn: RouteObject[] = [
   ...categoryRoutes,
   ...purchaseOrderRoutes,
   ...purchaseOrderItemRoutes,
+  ...purchaseOrderItemStatusRoutes,
+  ...purchaseOrderStatusRoutes,
   ...productRoutes,
   ...productVariationRoutes,
   ...supplierRoutes,

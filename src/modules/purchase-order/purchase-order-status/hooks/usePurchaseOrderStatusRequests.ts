@@ -5,6 +5,9 @@ import {
 } from '../../../../shared/constants/urls';
 import { MethodsEnum } from '../../../../shared/enums/methods.enum';
 import { useRequests } from '../../../../shared/hooks/useRequests';
+import {
+    IPurchaseOrderStatusInsert
+} from '../../../../shared/interfaces/PurchaseOrderStatusInsertInterface';
 import { IPurchaseOrderStatus } from '../../../../shared/interfaces/PurchaseOrderStatusInterface';
 
 const usePurchaseOrderStatusRequests = () => {
@@ -39,7 +42,7 @@ const usePurchaseOrderStatusRequests = () => {
   };
 
   const savePurchaseOrderStatus = async (
-    purchaseOrderStatus: IPurchaseOrderStatus,
+    purchaseOrderStatus: IPurchaseOrderStatusInsert,
     id?: string,
   ) => {
     const url = id
