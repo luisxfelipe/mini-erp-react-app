@@ -28,6 +28,12 @@ export const URL_PURCHASE_ORDER_STATUS_ID = `${URL_BASE}/purchase-order-status/{
 export const URL_SALE_ORDERS = `${URL_BASE}/sales-orders`;
 export const URL_SALE_ORDER_ID = `${URL_BASE}/sales-orders/{saleOrderId}`;
 
+export const URL_SALE_ORDER_ITEMS = `${URL_BASE}/sale-orders/{saleOrderId}/sale-order-items`;
+export const URL_SALE_ORDER_ITEM_ID = `${URL_BASE}/sale-orders/{saleOrderId}/sale-order-items/{saleOrderItemId}`;
+
+export const URL_SALE_ORDER_ITEM_STATUS = `${URL_BASE}/sale-order-item-status`;
+export const URL_SALE_ORDER_ITEM_STATUS_ID = `${URL_BASE}/sale-order-item-status/{saleOrderItemStatusId}`;
+
 export const URL_SALE_STATUS = `${URL_BASE}/sale-status`;
 
 export const URL_SUPPLIERS = `${URL_BASE}/suppliers`;
