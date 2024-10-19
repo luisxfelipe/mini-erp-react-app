@@ -15,6 +15,7 @@ import {
     PurchaseOrderStatusRoutesEnum
 } from '../../modules/purchase-order/purchase-order-status/purchase-order-status.routes';
 import { PurchaseOrderRoutesEnum } from '../../modules/purchase-order/purchase-orders.routes';
+import { SaleOrderRoutesEnum } from '../../modules/sale-order/sale-orders.routes';
 import { SupplierRoutesEnum } from '../../modules/supplier/supplier.routes';
 
 type MenuItem = Required<MenuProps>['items'][number];
@@ -82,6 +83,18 @@ export const Nav = () => {
             navigate(
               PurchaseOrderItemStatusRoutesEnum.PURCHASE_ORDER_ITEM_STATUS,
             ),
+        },
+      ],
+    },
+    {
+      key: 'sales',
+      label: 'Vendas',
+      icon: <TagOutlined />,
+      children: [
+        {
+          key: 'sales_view',
+          label: 'Visualizar',
+          onClick: () => navigate(SaleOrderRoutesEnum.SALE_ORDERS),
         },
       ],
     },
