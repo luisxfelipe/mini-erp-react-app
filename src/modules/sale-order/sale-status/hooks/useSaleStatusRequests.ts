@@ -1,7 +1,7 @@
 import { URL_SALE_STATUS } from '../../../../shared/constants/urls';
 import { MethodsEnum } from '../../../../shared/enums/methods.enum';
 import { useRequests } from '../../../../shared/hooks/useRequests';
-import { ISaleStatus } from '../../../../shared/interfaces/SaleStatusInterface';
+import { ISaleStatus } from '../interfaces/SaleStatusInterface';
 
 const useSaleStatusRequests = () => {
   const { request } = useRequests();

@@ -10,12 +10,14 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Input } from '../../../components/input/Input';
 import Select from '../../../components/select/Select';
 import { IPurchaseOrder } from '../../../shared/interfaces/PurchaseOrderInterface';
-import { IPurchaseOrderStatus } from '../../../shared/interfaces/PurchaseOrderStatusInterface';
-import { ISupplier } from '../../../shared/interfaces/SupplierInterface';
 import useSupplierRequests from '../../supplier/hooks/useSupplierRequets';
+import { ISupplier } from '../../supplier/interfaces/SupplierInterface';
 import usePurchaseOrderRequests from '../hooks/usePurchaseOrderRequests';
 import { PurchaseOrderItemList } from '../purchase-order-item/screens/PurchaseOrderItemList';
 import usePurchaseOrderStatusRequests from '../purchase-order-status/hooks/usePurchaseOrderStatusRequests';
+import {
+    IPurchaseOrderStatus
+} from '../purchase-order-status/interfaces/PurchaseOrderStatusInterface';
 import { PurchaseOrderRoutesEnum } from '../purchase-orders.routes';
 
 const schema = z.object({

@@ -6,8 +6,8 @@ import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import Button from '../../../components/button/Button';
 import Modal from '../../../components/modal/Modal';
 import Table from '../../../components/table/Table';
-import { ICategory } from '../../../shared/interfaces/CategoryInterface';
 import useCategoryRequests from '../hooks/useCategoryRequests';
+import { ICategory } from '../interfaces/CategoryInterface';
 import { CategoryDetails } from './CategoryDetails';
 
 export const CategoryList = () => {

@@ -1,6 +1,6 @@
 import { Tag } from 'antd';
 
-import { ICategory } from '../../../shared/interfaces/CategoryInterface';
+import { ICategory } from '../../category/interfaces/CategoryInterface';
 
 interface CategoryColumProps {
   category?: ICategory;

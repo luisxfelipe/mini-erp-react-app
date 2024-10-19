@@ -7,8 +7,8 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { Input } from '../../../../components/input/Input';
-import { IProductVariation } from '../../../../shared/interfaces/ProductVariationInterface';
 import useProductVariationRequests from '../hooks/useProductVariationRequests';
+import { IProductVariation } from '../interfaces/ProductVariationInterface';
 
 const schema = z.object({
   name: z.string().min(1, 'O campo nome é obrigatório'),

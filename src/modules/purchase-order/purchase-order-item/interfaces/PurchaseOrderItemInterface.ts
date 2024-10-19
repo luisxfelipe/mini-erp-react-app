@@ -1,6 +1,10 @@
+import {
+    IProductVariation
+} from '../../../product/product-variation/interfaces/ProductVariationInterface';
+import {
+    IPurchaseOrderItemStatus
+} from '../purchase-order-item-status/interfaces/PurchaseOrderItemStatusInterface';
 import { IProduct } from './ProductInterface';
-import { IProductVariation } from './ProductVariationInterface';
-import { IPurchaseOrderItemStatus } from './PurchaseOrderItemStatusInterface';
 
 export interface IPurchaseOrderItem {
   id: number;

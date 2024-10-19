@@ -1,7 +1,7 @@
 import { URL_PLATFORMS } from '../../../shared/constants/urls';
 import { MethodsEnum } from '../../../shared/enums/methods.enum';
 import { useRequests } from '../../../shared/hooks/useRequests';
-import { IPlatform } from '../../../shared/interfaces/PlatformInterface';
+import { IPlatform } from '../interfaces/PlatformInterface';
 
 const usePlatformRequests = () => {
   const { request } = useRequests();

@@ -8,9 +8,9 @@ import { zodResolver } from '@hookform/resolvers/zod';
 
 import { Input } from '../../../components/input/Input';
 import Select from '../../../components/select/Select';
-import { ICategory } from '../../../shared/interfaces/CategoryInterface';
 import { IProduct } from '../../../shared/interfaces/ProductInterface';
 import useCategoryRequests from '../../category/hooks/useCategoryRequests';
+import { ICategory } from '../../category/interfaces/CategoryInterface';
 import useProductRequests from '../hooks/useProductRequests';
 import { ProductVariationList } from '../product-variation/screens/ProductVariationList';
 

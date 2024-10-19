@@ -7,10 +7,8 @@ import { MethodsEnum } from '../../../../../shared/enums/methods.enum';
 import { useRequests } from '../../../../../shared/hooks/useRequests';
 import {
     IPurchaseOrderItemStatusInsert
-} from '../../../../../shared/interfaces/PurchaseOrderItemStatusInsertInterface';
-import {
-    IPurchaseOrderItemStatus
-} from '../../../../../shared/interfaces/PurchaseOrderItemStatusInterface';
+} from '../interfaces/PurchaseOrderItemStatusInsertInterface';
+import { IPurchaseOrderItemStatus } from '../interfaces/PurchaseOrderItemStatusInterface';
 
 const usePurchaseOrderItemStatusRequests = () => {
   const { request } = useRequests();

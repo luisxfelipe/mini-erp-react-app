@@ -6,10 +6,8 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { Input } from '../../../../../components/input/Input';
-import {
-    IPurchaseOrderItemStatus
-} from '../../../../../shared/interfaces/PurchaseOrderItemStatusInterface';
 import usePurchaseOrderItemStatusRequests from '../hooks/usePurchaseOrderItemStatusRequests';
+import { IPurchaseOrderItemStatus } from '../interfaces/PurchaseOrderItemStatusInterface';
 
 const schema = z.object({
   name: z.string().min(1, 'O campo nome é obrigatório'),

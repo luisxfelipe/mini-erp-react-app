@@ -9,15 +9,17 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Input } from '../../../../components/input/Input';
 import Select from '../../../../components/select/Select';
 import { IProduct } from '../../../../shared/interfaces/ProductInterface';
-import { IProductVariation } from '../../../../shared/interfaces/ProductVariationInterface';
-import { IPurchaseOrderItem } from '../../../../shared/interfaces/PurchaseOrderItemInterface';
-import {
-    IPurchaseOrderItemStatus
-} from '../../../../shared/interfaces/PurchaseOrderItemStatusInterface';
 import useProductRequests from '../../../product/hooks/useProductRequests';
 import useProductVariationRequests from '../../../product/product-variation/hooks/useProductVariationRequests';
+import {
+    IProductVariation
+} from '../../../product/product-variation/interfaces/ProductVariationInterface';
 import usePurchaseOrderItemRequests from '../hooks/usePurchaseOrderItemRequests';
+import { IPurchaseOrderItem } from '../interfaces/PurchaseOrderItemInterface';
 import usePurchaseOrderItemStatusRequests from '../purchase-order-item-status/hooks/usePurchaseOrderItemStatusRequests';
+import {
+    IPurchaseOrderItemStatus
+} from '../purchase-order-item-status/interfaces/PurchaseOrderItemStatusInterface';
 
 const schema = z.object({
   product: z.string().min(1, 'Selecione um produto'),

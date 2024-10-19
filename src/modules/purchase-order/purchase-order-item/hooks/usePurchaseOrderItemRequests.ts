@@ -3,10 +3,8 @@ import {
 } from '../../../../shared/constants/urls';
 import { MethodsEnum } from '../../../../shared/enums/methods.enum';
 import { useRequests } from '../../../../shared/hooks/useRequests';
-import {
-    IPurchaseOrderItemInsert
-} from '../../../../shared/interfaces/PurchaseOrderItemInsertInterface';
-import { IPurchaseOrderItem } from '../../../../shared/interfaces/PurchaseOrderItemInterface';
+import { IPurchaseOrderItemInsert } from '../interfaces/PurchaseOrderItemInsertInterface';
+import { IPurchaseOrderItem } from '../interfaces/PurchaseOrderItemInterface';
 
 const usePurchaseOrderItemRequests = () => {
   const { request } = useRequests();

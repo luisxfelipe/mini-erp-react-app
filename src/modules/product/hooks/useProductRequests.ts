@@ -3,8 +3,8 @@ import toast from 'react-hot-toast';
 import { URL_PRODUCT_ID, URL_PRODUCTS } from '../../../shared/constants/urls';
 import { MethodsEnum } from '../../../shared/enums/methods.enum';
 import { useRequests } from '../../../shared/hooks/useRequests';
-import { IProductInsert } from '../../../shared/interfaces/ProductInsertInterface';
 import { IProduct } from '../../../shared/interfaces/ProductInterface';
+import { IProductInsert } from '../interfaces/ProductInsertInterface';
 
 const useProductRequests = () => {
   const { request } = useRequests();

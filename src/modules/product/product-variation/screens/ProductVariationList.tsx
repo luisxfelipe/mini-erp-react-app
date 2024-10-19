@@ -7,8 +7,8 @@ import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import Button from '../../../../components/button/Button';
 import Modal from '../../../../components/modal/Modal';
 import Table from '../../../../components/table/Table';
-import { IProductVariation } from '../../../../shared/interfaces/ProductVariationInterface';
 import useProductVariationRequests from '../hooks/useProductVariationRequests';
+import { IProductVariation } from '../interfaces/ProductVariationInterface';
 import { ProductVariationDetails } from './ProductVariationDetails';
 
 export const ProductVariationList = () => {

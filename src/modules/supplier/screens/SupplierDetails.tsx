@@ -6,8 +6,8 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { Input } from '../../../components/input/Input';
-import { ISupplier } from '../../../shared/interfaces/SupplierInterface';
 import useSupplierRequests from '../hooks/useSupplierRequets';
+import { ISupplier } from '../interfaces/SupplierInterface';
 
 const schema = z.object({
   corporateName: z.string().min(1, 'O campo razão social é obrigatório'),

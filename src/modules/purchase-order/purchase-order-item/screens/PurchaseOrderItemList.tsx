@@ -7,8 +7,8 @@ import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import Button from '../../../../components/button/Button';
 import Modal from '../../../../components/modal/Modal';
 import Table from '../../../../components/table/Table';
-import { IPurchaseOrderItem } from '../../../../shared/interfaces/PurchaseOrderItemInterface';
 import usePurchaseOrderItemRequests from '../hooks/usePurchaseOrderItemRequests';
+import { IPurchaseOrderItem } from '../interfaces/PurchaseOrderItemInterface';
 import { PurchaseOrderItemDetails } from './PurchaseOrderItemDetails';
 
 export const PurchaseOrderItemList = () => {

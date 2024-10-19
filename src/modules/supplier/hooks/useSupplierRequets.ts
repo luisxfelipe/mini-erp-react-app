@@ -3,8 +3,8 @@ import toast from 'react-hot-toast';
 import { URL_SUPPLIER_ID, URL_SUPPLIERS } from '../../../shared/constants/urls';
 import { MethodsEnum } from '../../../shared/enums/methods.enum';
 import { useRequests } from '../../../shared/hooks/useRequests';
-import { ISupplierInsert } from '../../../shared/interfaces/SupplierInsertInterface';
-import { ISupplier } from '../../../shared/interfaces/SupplierInterface';
+import { ISupplierInsert } from '../interfaces/SupplierInsertInterface';
+import { ISupplier } from '../interfaces/SupplierInterface';
 
 const useSupplierRequests = () => {
   const { request } = useRequests();

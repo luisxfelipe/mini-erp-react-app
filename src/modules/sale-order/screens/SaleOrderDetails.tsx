@@ -9,14 +9,14 @@ import { zodResolver } from '@hookform/resolvers/zod';
 
 import { Input } from '../../../components/input/Input';
 import Select from '../../../components/select/Select';
-import { IPlatform } from '../../../shared/interfaces/PlatformInterface';
 import { ISaleOrder } from '../../../shared/interfaces/SaleOrderInterface';
-import { ISaleStatus } from '../../../shared/interfaces/SaleStatusInterface';
 import usePlatformRequests from '../../platform/hooks/usePlatformRequests';
+import { IPlatform } from '../../platform/interfaces/PlatformInterface';
 import useSaleOrderRequests from '../hooks/useSaleOrderRequests';
 import { SaleOrderItemList } from '../sale-order-item/screens/SaleOrderItemList';
 import { SaleOrderRoutesEnum } from '../sale-orders.routes';
 import useSaleStatusRequests from '../sale-status/hooks/useSaleStatusRequests';
+import { ISaleStatus } from '../sale-status/interfaces/SaleStatusInterface';
 
 const schema = z.object({
   // verifica se a data é do tipo string, se tem 10 caracteres, se o formato é dd/mm/yyyy e se a data é menor ou igual a data atual

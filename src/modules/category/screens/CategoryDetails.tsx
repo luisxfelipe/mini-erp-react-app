@@ -6,8 +6,8 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { Input } from '../../../components/input/Input';
-import { ICategory } from '../../../shared/interfaces/CategoryInterface';
 import useCategoryRequests from '../hooks/useCategoryRequests';
+import { ICategory } from '../interfaces/CategoryInterface';
 
 const schema = z.object({
   name: z.string().min(1, 'O campo nome é obrigatório'),

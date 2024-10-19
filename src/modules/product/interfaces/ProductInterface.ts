@@ -1,4 +1,4 @@
-import { ICategory } from './CategoryInterface';
+import { ICategory } from '../../modules/category/interfaces/CategoryInterface';
 
 export interface IProduct {
   id: number;

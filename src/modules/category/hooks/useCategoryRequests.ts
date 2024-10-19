@@ -1,13 +1,10 @@
 import toast from 'react-hot-toast';
 
-import {
-  URL_CATEGORIES,
-  URL_CATEGORY_ID,
-} from '../../../shared/constants/urls';
+import { URL_CATEGORIES, URL_CATEGORY_ID } from '../../../shared/constants/urls';
 import { MethodsEnum } from '../../../shared/enums/methods.enum';
 import { useRequests } from '../../../shared/hooks/useRequests';
-import { ICategoryInsert } from '../../../shared/interfaces/CategoryInsertInterface';
-import { ICategory } from '../../../shared/interfaces/CategoryInterface';
+import { ICategoryInsert } from '../interfaces/CategoryInsertInterface';
+import { ICategory } from '../interfaces/CategoryInterface';
 
 const useCategoryRequests = () => {
   const { request } = useRequests();

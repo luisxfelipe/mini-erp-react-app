@@ -3,10 +3,8 @@ import {
 } from '../../../../shared/constants/urls';
 import { MethodsEnum } from '../../../../shared/enums/methods.enum';
 import { useRequests } from '../../../../shared/hooks/useRequests';
-import {
-    IProductVariationInsert
-} from '../../../../shared/interfaces/ProductVariationInsertInterface';
-import { IProductVariation } from '../../../../shared/interfaces/ProductVariationInterface';
+import { IProductVariationInsert } from '../interfaces/ProductVariationInsertInterface';
+import { IProductVariation } from '../interfaces/ProductVariationInterface';
 
 const useProductVariationRequests = () => {
   const { request } = useRequests();

@@ -1,4 +1,4 @@
-import { IPlatform } from './PlatformInterface';
+import { IPlatform } from '../../modules/platform/interfaces/PlatformInterface';
 import { ISaleStatus } from './SaleStatusInterface';
 
 export interface ISaleOrder {
