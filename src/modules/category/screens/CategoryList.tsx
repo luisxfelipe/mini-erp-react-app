@@ -17,7 +17,7 @@ export const CategoryList = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
-    loadProducts();
+    loadCategories();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -72,7 +72,7 @@ export const CategoryList = () => {
     setCategoryId(undefined);
   };
 
-  const loadProducts = async () => {
+  const loadCategories = async () => {
     const response = await getCategories();
     if (response) {
       setCategories(response);
@@ -102,7 +102,7 @@ export const CategoryList = () => {
         <CategoryDetails
           onCancel={handleCancel}
           categoryId={categoryId}
-          onSave={loadProducts}
+          onSave={loadCategories}
         />
       </Modal>
     </div>
