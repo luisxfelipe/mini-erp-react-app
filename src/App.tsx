@@ -19,6 +19,7 @@ import {
 } from './modules/purchase-order/purchase-order-status/purchase-order-status.routes';
 import { purchaseOrderRoutes } from './modules/purchase-order/purchase-orders.routes';
 import { saleOrderRoutes } from './modules/sale-order/sale-orders.routes';
+import { saleStatusRoutes } from './modules/sale-order/sale-status/sale-status.routes';
 import { supplierRoutes } from './modules/supplier/supplier.routes';
 import { verifyLoggedIn } from './shared/functions/connection/auth';
 
@@ -32,6 +33,7 @@ const routesLoggedIn: RouteObject[] = [
   ...productRoutes,
   ...productVariationRoutes,
   ...saleOrderRoutes,
+  ...saleStatusRoutes,
   ...supplierRoutes,
 ].map((route) => ({
   ...route,

@@ -35,6 +35,7 @@ export const URL_SALE_ORDER_ITEM_STATUS = `${URL_BASE}/sale-order-item-status`;
 export const URL_SALE_ORDER_ITEM_STATUS_ID = `${URL_BASE}/sale-order-item-status/{saleOrderItemStatusId}`;
 
 export const URL_SALE_STATUS = `${URL_BASE}/sale-status`;
+export const URL_SALE_STATUS_ID = `${URL_BASE}/sale-status/{saleStatusId}`;
 
 export const URL_SUPPLIERS = `${URL_BASE}/suppliers`;
 export const URL_SUPPLIER_ID = `${URL_BASE}/suppliers/{supplierId}`;
