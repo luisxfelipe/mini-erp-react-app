@@ -16,29 +16,6 @@ import { IPurchaseOrderItem } from '../interfaces/PurchaseOrderItemInterface';
 import usePurchaseOrderItemStatusRequests from '../purchase-order-item-status/hooks/usePurchaseOrderItemStatusRequests';
 import { IPurchaseOrderItemStatus } from '../purchase-order-item-status/interfaces/PurchaseOrderItemStatusInterface';
 
-const schema = z.object({
-  product: z.string().min(1, 'Selecione um produto'),
-  productVariation: z.string().min(1, 'Selecione uma variação'),
-  supplierProductCode: z.string(),
-  price: z.preprocess(
-    (value) => Number(value),
-    z.number().refine((value) => value >= 0, {
-      message: 'O campo preço deve ser maior ou igual a zero',
-    }),
-  ),
-  purchaseOrderItemStatus: z
-    .string()
-    .min(1, 'O campo status do item do pedido é obrigatório'),
-  productLink: z
-    .string()
-    .refine((value) => !value || z.string().url().safeParse(value).success, {
-      message: 'O campo link do produto deve ser uma URL válida',
-    })
-    .optional(),
-});
-
-type FormData = z.infer<typeof schema>;
-
 interface PurchaseOrderItemDetailsProps {
   onCancel: () => void;
   purchaseOrderItemId?: number;
@@ -50,6 +27,39 @@ export const PurchaseOrderItemDetails = ({
   purchaseOrderItemId,
   onSave,
 }: PurchaseOrderItemDetailsProps) => {
+  console.log(`purchaseOrderItemId: ${purchaseOrderItemId}`);
+  const schema = z.object({
+    product: z.string().min(1, 'Selecione um produto'),
+    productVariation: z.string().min(1, 'Selecione uma variação'),
+    supplierProductCode: z.string().optional(),
+    price: z.preprocess(
+      (value) => Number(value),
+      z.number().refine((value) => value >= 0, {
+        message: 'O campo preço deve ser maior ou igual a zero',
+      }),
+    ),
+    purchaseOrderItemStatus: z
+      .string()
+      .min(1, 'O campo status do item do pedido é obrigatório'),
+    productLink: z
+      .string()
+      .refine((value) => !value || z.string().url().safeParse(value).success, {
+        message: 'O campo link do produto deve ser uma URL válida',
+      })
+      .optional(),
+    // Adicione aqui a validação condicional para o campo quantity
+    quantity: !purchaseOrderItemId
+      ? z
+          .number({ message: 'O campo quantidade é obrigatório' })
+          .int('O campo quantidade deve ser um número inteiro')
+          .refine((value) => value > 0, {
+            message: 'O campo quantidade deve ser maior que zero',
+          })
+      : z.unknown(),
+  });
+
+  type FormData = z.infer<typeof schema>;
+
   const { purchaseOrderId } = useParams();
   const { getPurchaseOrderItemById, savePurchaseOrderItem } =
     usePurchaseOrderItemRequests();
@@ -185,10 +195,11 @@ export const PurchaseOrderItemDetails = ({
         {
           productId: productSelected.id,
           productVariationId: productVariationSelected.id,
+          quantity: Number(data.quantity) || undefined,
           supplierProductCode: data.supplierProductCode || undefined,
           price: data.price,
           purchaseOrderItemStatusId: parseInt(data.purchaseOrderItemStatus),
-          productLink: data.productLink,
+          productLink: data.productLink || undefined,
         },
         purchaseOrderId,
         purchaseOrderItem?.id.toString(),
@@ -248,6 +259,20 @@ export const PurchaseOrderItemDetails = ({
             <p className='my-1 text-red-500'>
               Não há variações disponíveis para o produto selecionado.
             </p>
+          )}
+          {!purchaseOrderItemId && (
+            <div className='w-full mb-4'>
+              <Input
+                className='w-full border-2 rounded-md px-2'
+                title='Quantidade'
+                type='number'
+                placeholder='Digite a quantidade...'
+                {...register('quantity', { valueAsNumber: true })}
+              />
+              {errors.quantity && (
+                <p className='my-1 text-red-500'>{errors.quantity.message}</p>
+              )}
+            </div>
           )}
           <div className='w-full mb-4'>
             <Input
