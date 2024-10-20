@@ -1,25 +1,20 @@
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { useParams } from 'react-router-dom';
 import { z } from 'zod';
 
-import { zodResolver } from '@hookform/resolvers/zod';
-
 import { Input } from '../../../../components/input/Input';
 import Select from '../../../../components/select/Select';
 import { IProduct } from '../../../../shared/interfaces/ProductInterface';
 import useProductRequests from '../../../product/hooks/useProductRequests';
 import useProductVariationRequests from '../../../product/product-variation/hooks/useProductVariationRequests';
-import {
-    IProductVariation
-} from '../../../product/product-variation/interfaces/ProductVariationInterface';
+import { IProductVariation } from '../../../product/product-variation/interfaces/ProductVariationInterface';
 import usePurchaseOrderItemRequests from '../hooks/usePurchaseOrderItemRequests';
 import { IPurchaseOrderItem } from '../interfaces/PurchaseOrderItemInterface';
 import usePurchaseOrderItemStatusRequests from '../purchase-order-item-status/hooks/usePurchaseOrderItemStatusRequests';
-import {
-    IPurchaseOrderItemStatus
-} from '../purchase-order-item-status/interfaces/PurchaseOrderItemStatusInterface';
+import { IPurchaseOrderItemStatus } from '../purchase-order-item-status/interfaces/PurchaseOrderItemStatusInterface';
 
 const schema = z.object({
   product: z.string().min(1, 'Selecione um produto'),
@@ -36,7 +31,10 @@ const schema = z.object({
     .min(1, 'O campo status do item do pedido é obrigatório'),
   productLink: z
     .string()
-    .url('O campo link do produto deve ser uma URL válida'),
+    .refine((value) => !value || z.string().url().safeParse(value).success, {
+      message: 'O campo link do produto deve ser uma URL válida',
+    })
+    .optional(),
 });
 
 type FormData = z.infer<typeof schema>;
@@ -187,7 +185,7 @@ export const PurchaseOrderItemDetails = ({
         {
           productId: productSelected.id,
           productVariationId: productVariationSelected.id,
-          supplierProductCode: data.supplierProductCode,
+          supplierProductCode: data.supplierProductCode || undefined,
           price: data.price,
           purchaseOrderItemStatusId: parseInt(data.purchaseOrderItemStatus),
           productLink: data.productLink,
