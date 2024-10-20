@@ -27,7 +27,6 @@ export const PurchaseOrderItemDetails = ({
   purchaseOrderItemId,
   onSave,
 }: PurchaseOrderItemDetailsProps) => {
-  console.log(`purchaseOrderItemId: ${purchaseOrderItemId}`);
   const schema = z.object({
     product: z.string().min(1, 'Selecione um produto'),
     productVariation: z.string().min(1, 'Selecione uma variação'),
