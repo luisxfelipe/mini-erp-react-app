@@ -15,6 +15,9 @@ import {
     PurchaseOrderStatusRoutesEnum
 } from '../../modules/purchase-order/purchase-order-status/purchase-order-status.routes';
 import { PurchaseOrderRoutesEnum } from '../../modules/purchase-order/purchase-orders.routes';
+import {
+    SaleOrderItemStatusRoutesEnum
+} from '../../modules/sale-order/sale-order-item/sale-order-item-status/sale-order-item-status.routes';
 import { SaleOrderRoutesEnum } from '../../modules/sale-order/sale-orders.routes';
 import { SaleStatusRoutesEnum } from '../../modules/sale-order/sale-status/sale-status.routes';
 import { SupplierRoutesEnum } from '../../modules/supplier/supplier.routes';
@@ -101,6 +104,12 @@ export const Nav = () => {
           key: 'sale-status',
           label: 'Status de venda',
           onClick: () => navigate(SaleStatusRoutesEnum.SALE_STATUS),
+        },
+        {
+          key: 'sale-order-item-status',
+          label: 'Status de itens de venda',
+          onClick: () =>
+            navigate(SaleOrderItemStatusRoutesEnum.SALE_ORDER_ITEM_STATUS),
         },
       ],
     },
