@@ -4,25 +4,16 @@ import { createBrowserRouter, RouteObject } from 'react-router-dom';
 import { Screen } from './components/screen/Screen';
 import { categoryRoutes } from './modules/category/category.routes';
 import { loginRoutes } from './modules/login/routes';
-import {
-    productVariationRoutes
-} from './modules/product/product-variation/produc-variations.routes';
+import { productVariationRoutes } from './modules/product/product-variation/produc-variations.routes';
 import { productRoutes } from './modules/product/product.routes';
-import {
-    purchaseOrderItemStatusRoutes
-} from './modules/purchase-order/purchase-order-item/purchase-order-item-status/purchase-order-item-status.routes';
-import {
-    purchaseOrderItemRoutes
-} from './modules/purchase-order/purchase-order-item/purchase-order-item.routes';
-import {
-    purchaseOrderStatusRoutes
-} from './modules/purchase-order/purchase-order-status/purchase-order-status.routes';
+import { purchaseOrderItemStatusRoutes } from './modules/purchase-order/purchase-order-item/purchase-order-item-status/purchase-order-item-status.routes';
+import { purchaseOrderItemRoutes } from './modules/purchase-order/purchase-order-item/purchase-order-item.routes';
+import { purchaseOrderStatusRoutes } from './modules/purchase-order/purchase-order-status/purchase-order-status.routes';
 import { purchaseOrderRoutes } from './modules/purchase-order/purchase-orders.routes';
-import {
-    saleOrderItemStatusRoutes
-} from './modules/sale-order/sale-order-item/sale-order-item-status/sale-order-item-status.routes';
+import { saleOrderItemStatusRoutes } from './modules/sale-order/sale-order-item/sale-order-item-status/sale-order-item-status.routes';
 import { saleOrderRoutes } from './modules/sale-order/sale-orders.routes';
 import { saleStatusRoutes } from './modules/sale-order/sale-status/sale-status.routes';
+import { stockItemRoutes } from './modules/stock-item/stock-item.routes';
 import { supplierRoutes } from './modules/supplier/supplier.routes';
 import { verifyLoggedIn } from './shared/functions/connection/auth';
 
@@ -38,6 +29,7 @@ const routesLoggedIn: RouteObject[] = [
   ...saleOrderRoutes,
   ...saleOrderItemStatusRoutes,
   ...saleStatusRoutes,
+  ...stockItemRoutes,
   ...supplierRoutes,
 ].map((route) => ({
   ...route,

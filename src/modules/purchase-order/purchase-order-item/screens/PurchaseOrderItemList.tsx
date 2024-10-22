@@ -1,14 +1,17 @@
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { ColumnsType } from 'antd/es/table';
 import { useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
-
 import Button from '../../../../components/button/Button';
 import Modal from '../../../../components/modal/Modal';
 import Table from '../../../../components/table/Table';
+import useStockItemRequests from '../../../stock-item/hooks/useStockItemRequests';
+import { IStockItemInsert } from '../../../stock-item/interfaces/StockItemInsertInterface';
+import { StockItemReview } from '../../../stock-item/screens/StockItemReview';
 import usePurchaseOrderItemRequests from '../hooks/usePurchaseOrderItemRequests';
 import { IPurchaseOrderItem } from '../interfaces/PurchaseOrderItemInterface';
+
 import { PurchaseOrderItemDetails } from './PurchaseOrderItemDetails';
 
 export const PurchaseOrderItemList = () => {
@@ -19,7 +22,12 @@ export const PurchaseOrderItemList = () => {
   const [purchaseOrderItemId, setPurchaseOrderItemId] = useState<number>();
   const { getPurchaseOrderItems } = usePurchaseOrderItemRequests();
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const { createStockItems } = useStockItemRequests();
+
+  const [isModalPurchaseOrderItemOpen, setIsModalPurchaseOrderItemOpen] =
+    useState(false);
+
+  const [isModalStockItemOpen, setIsModalStockItemOpen] = useState(false);
 
   useEffect(() => {
     if (purchaseOrderId) {
@@ -28,9 +36,13 @@ export const PurchaseOrderItemList = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleCancel = () => {
+  const handleModalPurchaseOrderItemCancel = () => {
     setPurchaseOrderItemId(undefined);
-    setIsModalOpen(false);
+    setIsModalPurchaseOrderItemOpen(false);
+  };
+
+  const handleModalStockItemCancel = () => {
+    setIsModalStockItemOpen(false);
   };
 
   const handleEditPurchaseOrderItem = (
@@ -39,7 +51,7 @@ export const PurchaseOrderItemList = () => {
     if (purchaseOrderItem) {
       setPurchaseOrderItemId(purchaseOrderItem.id);
     }
-    setIsModalOpen(true);
+    setIsModalPurchaseOrderItemOpen(true);
   };
 
   const loadPurchaseOrderItems = async () => {
@@ -49,6 +61,25 @@ export const PurchaseOrderItemList = () => {
         setPurchaseOrderItems(response);
       }
     }
+  };
+
+  const convertPurchaseItemsToStockItems = async () => {
+    const stockItems: IStockItemInsert[] = purchaseOrderItems
+      .map((purchaseOrderItem) => {
+        if (purchaseOrderItem.productVariation?.id) {
+          return {
+            purchaseOrderItemId: purchaseOrderItem.id,
+            productId: purchaseOrderItem.product.id,
+            productVariationId: purchaseOrderItem.productVariation.id,
+            stockItemStatusId: 2,
+            manufactureDate: new Date(),
+            expirationDate: new Date(),
+          };
+        }
+      })
+      .filter((item) => item !== undefined);
+
+    return stockItems;
   };
 
   const columns: ColumnsType<IPurchaseOrderItem> = useMemo(
@@ -78,6 +109,20 @@ export const PurchaseOrderItemList = () => {
           ),
       },
       {
+        title: 'Preço',
+        dataIndex: 'price',
+        key: 'price',
+        render: (price) => <a>{price}</a>,
+      },
+      {
+        title: 'Status',
+        dataIndex: 'purchaseOrderItemStatus',
+        key: 'purchaseOrderItemStatus',
+        render: (purchaseOrderItemStatus) => (
+          <a>{purchaseOrderItemStatus.name}</a>
+        ),
+      },
+      {
         title: 'Ações',
         dataIndex: '',
         width: 240,
@@ -102,27 +147,48 @@ export const PurchaseOrderItemList = () => {
   );
   return (
     <div>
-      <div className='flex justify-between'>
+      <div className='flex'>
         <div style={{ width: '240' }}>
           <Button
             className='mb-2'
             title='Inserir'
             backgroundColor='#001529'
             color='white'
-            onClick={() => setIsModalOpen(true)}
+            onClick={() => setIsModalPurchaseOrderItemOpen(true)}
+          />
+        </div>
+        <div style={{ width: '240' }} className='ml-auto'>
+          <Button
+            className='mb-2'
+            title='Lançar itens no estoque'
+            backgroundColor='#001529'
+            color='white'
+            onClick={() => setIsModalStockItemOpen(true)}
           />
         </div>
       </div>
       <Table columns={columns} dataSource={purchaseOrderItems} rowKey='id' />
       <Modal
-        isModalOpen={isModalOpen}
+        isModalOpen={isModalPurchaseOrderItemOpen}
         title='Produto'
-        onClose={() => setIsModalOpen(false)}
-        onCancel={handleCancel}
+        onClose={() => setIsModalPurchaseOrderItemOpen(false)}
+        onCancel={handleModalPurchaseOrderItemCancel}
       >
         <PurchaseOrderItemDetails
-          onCancel={handleCancel}
+          onCancel={handleModalPurchaseOrderItemCancel}
           purchaseOrderItemId={purchaseOrderItemId}
+          onSave={loadPurchaseOrderItems}
+        />
+      </Modal>
+      <Modal
+        isModalOpen={isModalStockItemOpen}
+        title='Revisão de itens'
+        onClose={() => setIsModalStockItemOpen(false)}
+        onCancel={handleModalStockItemCancel}
+      >
+        <StockItemReview
+          onCancel={handleModalStockItemCancel}
+          purchaseOrderItems={purchaseOrderItems}
           onSave={loadPurchaseOrderItems}
         />
       </Modal>

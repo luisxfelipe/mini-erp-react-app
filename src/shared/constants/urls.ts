@@ -37,6 +37,11 @@ export const URL_SALE_ORDER_ITEM_STATUS_ID = `${URL_BASE}/sale-order-item-status
 export const URL_SALE_STATUS = `${URL_BASE}/sale-status`;
 export const URL_SALE_STATUS_ID = `${URL_BASE}/sale-status/{saleStatusId}`;
 
+export const URL_STOCK_ITEMS = `${URL_BASE}/stock-items`;
+export const URL_STOCK_ITEM_ID = `${URL_BASE}/stock-items/{stockItemId}`;
+
+export const URL_STOCK_ITEM_IDENTIFIER_TYPES = `${URL_BASE}/stock-item-identifier-type`;
+
 export const URL_SUPPLIERS = `${URL_BASE}/suppliers`;
 export const URL_SUPPLIER_ID = `${URL_BASE}/suppliers/{supplierId}`;
 

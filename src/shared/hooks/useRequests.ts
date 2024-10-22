@@ -2,11 +2,15 @@ import { useContext, useState } from 'react';
 import { NavigateFunction } from 'react-router-dom';
 
 import { AuthContext } from '../../contexts/authContext';
-import { ERROR_ACCESS_DENIED, ERROR_INVALID_LOGIN } from '../constants/errorsStatus';
+import {
+  ERROR_ACCESS_DENIED,
+  ERROR_INVALID_LOGIN,
+} from '../constants/errorsStatus';
 import { URL_LOGIN } from '../constants/urls';
 import { setAuthorizationToken, signOut } from '../functions/connection/auth';
 import ConnectionAPI, {
-    connectionAPIPost, MethodType
+  connectionAPIPost,
+  MethodType,
 } from '../functions/connection/connectionApi';
 import { IAuth } from '../interfaces/AuthInterface';
 
@@ -21,6 +25,10 @@ export const useRequests = () => {
     message?: string,
   ): Promise<T | undefined> => {
     setLoading(true);
+
+    console.log(`url: ${url}`);
+    console.log(`method: ${method}`);
+    console.log(`body: ${JSON.stringify(body)}`);
 
     const result: T | undefined = await ConnectionAPI.connect<T>(
       url,
