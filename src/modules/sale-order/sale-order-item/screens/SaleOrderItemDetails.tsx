@@ -1,25 +1,20 @@
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { useParams } from 'react-router-dom';
 import { z } from 'zod';
 
-import { zodResolver } from '@hookform/resolvers/zod';
-
 import { Input } from '../../../../components/input/Input';
 import Select from '../../../../components/select/Select';
 import useProductRequests from '../../../product/hooks/useProductRequests';
 import { IProduct } from '../../../product/interfaces/ProductInterface';
 import useProductVariationRequests from '../../../product/product-variation/hooks/useProductVariationRequests';
-import {
-    IProductVariation
-} from '../../../product/product-variation/interfaces/ProductVariationInterface';
+import { IProductVariation } from '../../../product/product-variation/interfaces/ProductVariationInterface';
 import useSaleOrderItemRequests from '../hooks/useSaleOrderItemRequests';
 import { ISaleOrderItem } from '../interfaces/SaleOrderItemInterface';
 import useSaleOrderItemStatusRequests from '../sale-order-item-status/hooks/useSaleOrderItemStatusRequests';
-import {
-    ISaleOrderItemStatus
-} from '../sale-order-item-status/interfaces/SaleOrderItemStatusInterface';
+import { ISaleOrderItemStatus } from '../sale-order-item-status/interfaces/SaleOrderItemStatusInterface';
 
 const schema = z.object({
   product: z.string().min(1, 'Selecione um produto'),
@@ -120,10 +115,6 @@ export const SaleOrderItemDetails = ({
       const saleOrderItemLoaded: ISaleOrderItem = await getSaleOrderItemById(
         saleOrderId,
         id,
-      );
-
-      console.log(
-        `saleOrderItemLoaded: ${JSON.stringify(saleOrderItemLoaded)}`,
       );
 
       setSaleOrderItem(saleOrderItemLoaded);

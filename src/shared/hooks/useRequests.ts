@@ -26,10 +26,6 @@ export const useRequests = () => {
   ): Promise<T | undefined> => {
     setLoading(true);
 
-    console.log(`url: ${url}`);
-    console.log(`method: ${method}`);
-    console.log(`body: ${JSON.stringify(body)}`);
-
     const result: T | undefined = await ConnectionAPI.connect<T>(
       url,
       method,

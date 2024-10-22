@@ -95,7 +95,6 @@ export const StockItemReview = ({
       identifier,
       identifierType,
     );
-    console.log(`stockItem: ${JSON.stringify(stockItem)}`);
 
     if (currentItemIndex < purchaseOrderItems.length - 1) {
       await setStockItems((prevStockItems) => [...prevStockItems, stockItem]);
@@ -118,8 +117,6 @@ export const StockItemReview = ({
           );
         });
     }
-
-    console.log(`stockItems: ${JSON.stringify(stockItems)}`);
   };
 
   const currentItem = purchaseOrderItems[currentItemIndex];
@@ -127,9 +124,6 @@ export const StockItemReview = ({
   if (!currentItem) {
     return <div>Item não encontrado</div>;
   }
-
-  // console.log(`currentItem: ${JSON.stringify(currentItem)}`);
-  console.log(`currentItemIndex: ${currentItemIndex}`);
 
   return (
     <div>
