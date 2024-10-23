@@ -6,7 +6,6 @@ import { useParams } from 'react-router-dom';
 import Button from '../../../../components/button/Button';
 import Modal from '../../../../components/modal/Modal';
 import Table from '../../../../components/table/Table';
-import useStockItemRequests from '../../../stock-item/hooks/useStockItemRequests';
 import { StockItemReview } from '../../../stock-item/screens/StockItemReview';
 import usePurchaseOrderItemRequests from '../hooks/usePurchaseOrderItemRequests';
 import { IPurchaseOrderItem } from '../interfaces/PurchaseOrderItemInterface';
@@ -20,8 +19,6 @@ export const PurchaseOrderItemList = () => {
   >([]);
   const [purchaseOrderItemId, setPurchaseOrderItemId] = useState<number>();
   const { getPurchaseOrderItems } = usePurchaseOrderItemRequests();
-
-  const { createStockItems } = useStockItemRequests();
 
   const [isModalPurchaseOrderItemOpen, setIsModalPurchaseOrderItemOpen] =
     useState(false);
