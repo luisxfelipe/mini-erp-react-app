@@ -10,6 +10,7 @@ import { IProduct } from '../../product/interfaces/ProductInterface';
 import { IProductVariation } from '../../product/product-variation/interfaces/ProductVariationInterface';
 import { IPurchaseOrderItem } from '../../purchase-order/purchase-order-item/interfaces/PurchaseOrderItemInterface';
 import useStockItemRequests from '../hooks/useStockItemRequests';
+import { IStockItemInsert } from '../interfaces/StockItemInsertInterface';
 import useStockItemIdentifierTypeRequests from '../stock-item-identifier-type/hooks/useStockItemIdentifierTypeRequests';
 import { IStockItemIdentifierType } from '../stock-item-identifier-type/interfaces/StockItemIdentifierTypeInterface';
 
@@ -22,15 +23,6 @@ interface StockItemReviewProps {
   purchaseOrderItems: IPurchaseOrderItem[];
   onCancel: () => void;
   onSave: () => void;
-}
-
-interface IStockItemTransformed {
-  purchaseOrderItemId: number;
-  product: IProduct;
-  productVariation: IProductVariation;
-  stockItemStatusId: number;
-  identifier?: string;
-  identifierTypeId?: number;
 }
 
 export const StockItemReview = ({
@@ -48,7 +40,7 @@ export const StockItemReview = ({
     resolver: zodResolver(schema),
   });
   const [currentItemIndex, setCurrentItemIndex] = useState(0);
-  const [stockItems, setStockItems] = useState<IStockItemTransformed[]>([]);
+  const [stockItems, setStockItems] = useState<IStockItemInsert[]>([]);
   const { createStockItems } = useStockItemRequests();
 
   const [stockItemIdentifierTypes, setStockItemIdentifierTypes] = useState<
@@ -75,7 +67,7 @@ export const StockItemReview = ({
     identifier: string,
     identifierType: number,
   ) => {
-    const stockItem: IStockItemTransformed = {
+    const stockItem: IStockItemInsert = {
       purchaseOrderItemId: purchaseOrderItem.id,
       product: purchaseOrderItem.product,
       productVariation: purchaseOrderItem.productVariation,
@@ -103,7 +95,7 @@ export const StockItemReview = ({
       setValue('identifier', '');
       setValue('identifierType', '');
     } else {
-      const items: IStockItemTransformed[] = [...stockItems, stockItem];
+      const items: IStockItemInsert[] = [...stockItems, stockItem];
 
       createStockItems(items)
         .then(() => {

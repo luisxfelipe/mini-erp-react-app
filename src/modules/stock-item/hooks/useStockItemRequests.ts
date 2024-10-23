@@ -1,6 +1,7 @@
 import { URL_STOCK_ITEMS } from '../../../shared/constants/urls';
 import { MethodsEnum } from '../../../shared/enums/methods.enum';
 import { useRequests } from '../../../shared/hooks/useRequests';
+import { IStockItemInsert } from '../interfaces/StockItemInsertInterface';
 import { IStockItem } from '../interfaces/StockItemInterface';
 
 const useStockItemRequests = () => {
@@ -18,7 +19,7 @@ const useStockItemRequests = () => {
   };
 
   // lançar itens no estoque
-  const createStockItems = async (stockItems: IStockItem[]) => {
+  const createStockItems = async (stockItems: IStockItemInsert[]) => {
     try {
       const response = await request<IStockItem[]>(
         URL_STOCK_ITEMS,
