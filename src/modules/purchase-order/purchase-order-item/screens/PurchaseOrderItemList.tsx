@@ -7,7 +7,6 @@ import Button from '../../../../components/button/Button';
 import Modal from '../../../../components/modal/Modal';
 import Table from '../../../../components/table/Table';
 import useStockItemRequests from '../../../stock-item/hooks/useStockItemRequests';
-import { IStockItemInsert } from '../../../stock-item/interfaces/StockItemInsertInterface';
 import { StockItemReview } from '../../../stock-item/screens/StockItemReview';
 import usePurchaseOrderItemRequests from '../hooks/usePurchaseOrderItemRequests';
 import { IPurchaseOrderItem } from '../interfaces/PurchaseOrderItemInterface';
@@ -61,25 +60,6 @@ export const PurchaseOrderItemList = () => {
         setPurchaseOrderItems(response);
       }
     }
-  };
-
-  const convertPurchaseItemsToStockItems = async () => {
-    const stockItems: IStockItemInsert[] = purchaseOrderItems
-      .map((purchaseOrderItem) => {
-        if (purchaseOrderItem.productVariation?.id) {
-          return {
-            purchaseOrderItemId: purchaseOrderItem.id,
-            productId: purchaseOrderItem.product.id,
-            productVariationId: purchaseOrderItem.productVariation.id,
-            stockItemStatusId: 2,
-            manufactureDate: new Date(),
-            expirationDate: new Date(),
-          };
-        }
-      })
-      .filter((item) => item !== undefined);
-
-    return stockItems;
   };
 
   const columns: ColumnsType<IPurchaseOrderItem> = useMemo(
