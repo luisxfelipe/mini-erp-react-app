@@ -1,7 +1,9 @@
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { Checkbox } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import { useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
+
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 
 import Button from '../../../../components/button/Button';
 import Modal from '../../../../components/modal/Modal';
@@ -9,7 +11,6 @@ import Table from '../../../../components/table/Table';
 import { StockItemReview } from '../../../stock-item/screens/StockItemReview';
 import usePurchaseOrderItemRequests from '../hooks/usePurchaseOrderItemRequests';
 import { IPurchaseOrderItem } from '../interfaces/PurchaseOrderItemInterface';
-
 import { PurchaseOrderItemDetails } from './PurchaseOrderItemDetails';
 
 export const PurchaseOrderItemList = () => {
@@ -19,6 +20,7 @@ export const PurchaseOrderItemList = () => {
   >([]);
   const [purchaseOrderItemId, setPurchaseOrderItemId] = useState<number>();
   const { getPurchaseOrderItems } = usePurchaseOrderItemRequests();
+  const [selectedItems, setSelectedItems] = useState<IPurchaseOrderItem[]>([]);
 
   const [isModalPurchaseOrderItemOpen, setIsModalPurchaseOrderItemOpen] =
     useState(false);
@@ -59,8 +61,29 @@ export const PurchaseOrderItemList = () => {
     }
   };
 
+  const handleSelectItem = (item: IPurchaseOrderItem) => {
+    setSelectedItems((prevSelectedItems) => {
+      const isSelected = prevSelectedItems.includes(item);
+      if (isSelected) {
+        return prevSelectedItems.filter((i) => i !== item);
+      } else {
+        return [...prevSelectedItems, item];
+      }
+    });
+  };
+
   const columns: ColumnsType<IPurchaseOrderItem> = useMemo(
     () => [
+      {
+        title: '',
+        key: 'checkbox',
+        render: (purchaseOrderItem) => (
+          <Checkbox
+            onChange={() => handleSelectItem(purchaseOrderItem)}
+            disabled={purchaseOrderItem.purchaseOrderItemStatus.id === 1}
+          />
+        ),
+      },
       {
         title: 'Id',
         dataIndex: 'id',
@@ -137,10 +160,25 @@ export const PurchaseOrderItemList = () => {
         <div style={{ width: '240' }} className='ml-auto'>
           <Button
             className='mb-2'
-            title='Lançar itens no estoque'
+            title={
+              selectedItems.length > 0
+                ? 'Lançar itens selecionados no estoque'
+                : 'Lançar todos os itens no estoque'
+            }
             backgroundColor='#001529'
             color='white'
-            onClick={() => setIsModalStockItemOpen(true)}
+            onClick={() => {
+              if (selectedItems.length > 0) {
+                setIsModalStockItemOpen(true);
+              } else {
+                // filtra os itens que estão com status diferente de 1 e adiciona ao estado selectedItems
+                const filteredItems = purchaseOrderItems.filter(
+                  (item) => item.purchaseOrderItemStatus.id !== 1,
+                );
+                setSelectedItems(filteredItems);
+                setIsModalStockItemOpen(true);
+              }
+            }}
           />
         </div>
       </div>
@@ -165,7 +203,7 @@ export const PurchaseOrderItemList = () => {
       >
         <StockItemReview
           onCancel={handleModalStockItemCancel}
-          purchaseOrderItems={purchaseOrderItems}
+          purchaseOrderItems={selectedItems}
           onSave={loadPurchaseOrderItems}
         />
       </Modal>
