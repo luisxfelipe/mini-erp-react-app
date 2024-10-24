@@ -1,20 +1,25 @@
-import { zodResolver } from '@hookform/resolvers/zod';
 import { useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { useParams } from 'react-router-dom';
 import { z } from 'zod';
 
+import { zodResolver } from '@hookform/resolvers/zod';
+
 import { Input } from '../../../../components/input/Input';
 import Select from '../../../../components/select/Select';
 import { IProduct } from '../../../../shared/interfaces/ProductInterface';
 import useProductRequests from '../../../product/hooks/useProductRequests';
 import useProductVariationRequests from '../../../product/product-variation/hooks/useProductVariationRequests';
-import { IProductVariation } from '../../../product/product-variation/interfaces/ProductVariationInterface';
+import {
+    IProductVariation
+} from '../../../product/product-variation/interfaces/ProductVariationInterface';
 import usePurchaseOrderItemRequests from '../hooks/usePurchaseOrderItemRequests';
 import { IPurchaseOrderItem } from '../interfaces/PurchaseOrderItemInterface';
 import usePurchaseOrderItemStatusRequests from '../purchase-order-item-status/hooks/usePurchaseOrderItemStatusRequests';
-import { IPurchaseOrderItemStatus } from '../purchase-order-item-status/interfaces/PurchaseOrderItemStatusInterface';
+import {
+    IPurchaseOrderItemStatus
+} from '../purchase-order-item-status/interfaces/PurchaseOrderItemStatusInterface';
 
 interface PurchaseOrderItemDetailsProps {
   onCancel: () => void;
@@ -163,7 +168,10 @@ export const PurchaseOrderItemDetails = ({
 
   const loadPurchaseOrderItemStatus = async () => {
     const response = await memoizedGetPurchaseOrderItemStatus();
-    setPurchaseOrderItemStatus(response);
+    // guarda os itens recebidos, excluindo o item com status 1
+    const responseFiltered = response.filter((status) => status.id !== 1);
+
+    setPurchaseOrderItemStatus(responseFiltered);
   };
 
   const handleCancel = () => {
