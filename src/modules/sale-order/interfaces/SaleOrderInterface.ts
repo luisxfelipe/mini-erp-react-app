@@ -1,5 +1,5 @@
-import { IPlatform } from '../../modules/platform/interfaces/PlatformInterface';
-import { ISaleStatus } from './SaleStatusInterface';
+import { IPlatform } from '../../platform/interfaces/PlatformInterface';
+import { ISaleStatus } from '../sale-status/interfaces/SaleStatusInterface';
 
 export interface ISaleOrder {
   id: number;

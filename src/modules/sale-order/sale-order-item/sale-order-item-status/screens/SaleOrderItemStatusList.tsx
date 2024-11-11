@@ -1,13 +1,13 @@
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { ColumnsType } from 'antd/es/table';
 import { useEffect, useMemo, useState } from 'react';
-
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 
 import Button from '../../../../../components/button/Button';
 import Modal from '../../../../../components/modal/Modal';
 import Table from '../../../../../components/table/Table';
 import useSaleOrderItemStatusRequests from '../hooks/useSaleOrderItemStatusRequests';
 import { ISaleOrderItemStatus } from '../interfaces/SaleOrderItemStatusInterface';
+
 import { SaleOrderItemStatusDetails } from './SaleOrderItemStatusDetails';
 
 export const SaleOrderItemStatusList = () => {

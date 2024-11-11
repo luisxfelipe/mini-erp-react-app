@@ -1,13 +1,13 @@
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { ColumnsType } from 'antd/es/table';
 import { useEffect, useMemo, useState } from 'react';
-
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 
 import Button from '../../../../components/button/Button';
 import Modal from '../../../../components/modal/Modal';
 import Table from '../../../../components/table/Table';
 import useStockItemStatusRequests from '../hooks/useStockItemStatusRequests';
 import { IStockItemStatus } from '../interfaces/StockItemStatusInterface';
+
 import { StockItemStatusDetails } from './StockItemStatusDetails';
 
 export const StockItemStatusList = () => {

@@ -1,9 +1,8 @@
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { z } from 'zod';
-
-import { zodResolver } from '@hookform/resolvers/zod';
 
 import { Input } from '../../../components/input/Input';
 import usePlatformRequests from '../hooks/usePlatformRequests';
@@ -16,9 +15,9 @@ const schema = z.object({
 type FormData = z.infer<typeof schema>;
 
 interface PlatformDetailsProps {
-  onCancel: () => void;
+  onCancel?: () => void;
   platformId?: number;
-  onSave: () => void;
+  onSave?: () => void;
 }
 
 export const PlatformDetails = ({
@@ -26,7 +25,7 @@ export const PlatformDetails = ({
   platformId,
   onSave,
 }: PlatformDetailsProps) => {
-  const [platform, setPlatform] = useState<IPlatform>();
+  const [, setPlatform] = useState<IPlatform>();
   const { getPlatformById, savePlatform } = usePlatformRequests();
 
   const {
@@ -69,7 +68,7 @@ export const PlatformDetails = ({
       platformId ? platformId.toString() : undefined,
     )
       .then(() => {
-        onSave();
+        onSave?.();
         toast.success('Plataforma salva com sucesso!');
         handleCancel();
       })
@@ -82,7 +81,7 @@ export const PlatformDetails = ({
   const handleCancel = () => {
     setPlatform(undefined);
     reset();
-    onCancel();
+    onCancel?.();
   };
 
   return (

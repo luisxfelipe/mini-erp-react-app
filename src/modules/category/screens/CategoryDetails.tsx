@@ -1,9 +1,8 @@
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { z } from 'zod';
-
-import { zodResolver } from '@hookform/resolvers/zod';
 
 import { Input } from '../../../components/input/Input';
 import useCategoryRequests from '../hooks/useCategoryRequests';
@@ -16,9 +15,9 @@ const schema = z.object({
 type FormData = z.infer<typeof schema>;
 
 interface CategoryDetailsProps {
-  onCancel: () => void;
+  onCancel?: () => void;
   categoryId?: number;
-  onSave: () => void;
+  onSave?: () => void;
 }
 
 export const CategoryDetails = ({
@@ -26,8 +25,7 @@ export const CategoryDetails = ({
   categoryId,
   onSave,
 }: CategoryDetailsProps) => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [category, setCategory] = useState<ICategory>();
+  const [, setCategory] = useState<ICategory>();
   const { getCategoryById, saveCategory } = useCategoryRequests();
 
   const {
@@ -69,7 +67,7 @@ export const CategoryDetails = ({
       categoryId ? categoryId.toString() : undefined,
     )
       .then(() => {
-        onSave();
+        onSave?.();
         toast.success('Categoria salva com sucesso!');
         handleCancel();
       })
@@ -82,7 +80,7 @@ export const CategoryDetails = ({
   const handleCancel = () => {
     setCategory(undefined);
     reset();
-    onCancel();
+    onCancel?.();
   };
 
   return (

@@ -1,9 +1,11 @@
 import axios, { AxiosRequestConfig } from 'axios';
 
 import {
-    ERROR_ACCESS_DENIED, ERROR_CONNECTION, ERROR_INVALID_LOGIN
+  ERROR_ACCESS_DENIED,
+  ERROR_INVALID_LOGIN,
 } from '../../constants/errorsStatus';
 import { MethodsEnum } from '../../enums/methods.enum';
+
 import { getAuthorizationToken } from './auth';
 
 export type MethodType = 'get' | 'post' | 'put' | 'patch' | 'delete';

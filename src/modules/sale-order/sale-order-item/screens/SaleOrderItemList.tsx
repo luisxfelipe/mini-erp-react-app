@@ -1,14 +1,14 @@
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { ColumnsType } from 'antd/es/table';
 import { useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
-
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 
 import Button from '../../../../components/button/Button';
 import Modal from '../../../../components/modal/Modal';
 import Table from '../../../../components/table/Table';
 import useSaleOrderItemRequests from '../hooks/useSaleOrderItemRequests';
 import { ISaleOrderItem } from '../interfaces/SaleOrderItemInterface';
+
 import { SaleOrderItemDetails } from './SaleOrderItemDetails';
 
 export const SaleOrderItemList = () => {

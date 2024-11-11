@@ -1,9 +1,8 @@
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { z } from 'zod';
-
-import { zodResolver } from '@hookform/resolvers/zod';
 
 import { Input } from '../../../../components/input/Input';
 import useSaleStatusRequests from '../hooks/useSaleStatusRequests';
@@ -26,7 +25,7 @@ export const SaleStatusDetails = ({
   saleStatusId,
   onSave,
 }: SaleStatusDetailsProps) => {
-  const [saleStatus, setSaleStatus] = useState<ISaleStatus>();
+  const [, setSaleStatus] = useState<ISaleStatus>();
   const { getSaleStatusById, saveSaleStatus } = useSaleStatusRequests();
 
   const {
@@ -59,8 +58,7 @@ export const SaleStatusDetails = ({
     if (saleStatusId) {
       loadSaleStatus(saleStatusId);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [saleStatusId]);
+  }, [getSaleStatusById, saleStatusId, setValue]);
 
   function onSubmit(data: FormData) {
     saveSaleStatus(

@@ -1,16 +1,7 @@
-import { lazy } from 'react';
 import { RouteObject } from 'react-router-dom';
 
-const SaleOrderItemList = lazy(() =>
-  import('./screens/SaleOrderItemList').then((module) => ({
-    default: module.SaleOrderItemList,
-  })),
-);
-const SaleOrderItemDetails = lazy(() =>
-  import('./screens/SaleOrderItemDetails').then((module) => ({
-    default: module.SaleOrderItemDetails,
-  })),
-);
+import { SaleOrderItemDetails } from './screens/SaleOrderItemDetails';
+import { SaleOrderItemList } from './screens/SaleOrderItemList';
 
 export enum SaleOrderItemRoutesEnum {
   SALE_ORDER_ITEMS = '/sale-order-items',

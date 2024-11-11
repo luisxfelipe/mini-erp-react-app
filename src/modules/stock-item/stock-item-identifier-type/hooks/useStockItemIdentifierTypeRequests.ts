@@ -1,13 +1,12 @@
 import toast from 'react-hot-toast';
 
 import {
-    URL_STOCK_ITEM_IDENTIFIER_TYPE_ID, URL_STOCK_ITEM_IDENTIFIER_TYPES
+  URL_STOCK_ITEM_IDENTIFIER_TYPE_ID,
+  URL_STOCK_ITEM_IDENTIFIER_TYPES,
 } from '../../../../shared/constants/urls';
 import { MethodsEnum } from '../../../../shared/enums/methods.enum';
 import { useRequests } from '../../../../shared/hooks/useRequests';
-import {
-    IStockItemIdentifierTypeInsert
-} from '../interfaces/StockItemIdentifierTypeInsertInterface';
+import { IStockItemIdentifierTypeInsert } from '../interfaces/StockItemIdentifierTypeInsertInterface';
 import { IStockItemIdentifierType } from '../interfaces/StockItemIdentifierTypeInterface';
 
 const useStockItemIdentifierTypeRequests = () => {

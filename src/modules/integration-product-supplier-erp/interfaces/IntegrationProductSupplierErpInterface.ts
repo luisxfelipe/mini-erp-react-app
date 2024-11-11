@@ -1,7 +1,5 @@
 import { IProduct } from '../../product/interfaces/ProductInterface';
-import {
-    IProductVariation
-} from '../../product/product-variation/interfaces/ProductVariationInterface';
+import { IProductVariation } from '../../product/product-variation/interfaces/ProductVariationInterface';
 import { ISupplier } from '../../supplier/interfaces/SupplierInterface';
 
 export interface IIntegrationProductSupplier {

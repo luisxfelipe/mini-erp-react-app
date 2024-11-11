@@ -1,10 +1,9 @@
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useContext, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import { z } from 'zod';
-
-import { zodResolver } from '@hookform/resolvers/zod';
 
 import { Input } from '../../../components/input/Input';
 import { AuthContext } from '../../../contexts/authContext';

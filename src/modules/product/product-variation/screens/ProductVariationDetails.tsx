@@ -1,10 +1,9 @@
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { useParams } from 'react-router-dom';
 import { z } from 'zod';
-
-import { zodResolver } from '@hookform/resolvers/zod';
 
 import { Input } from '../../../../components/input/Input';
 import useProductVariationRequests from '../hooks/useProductVariationRequests';
@@ -17,9 +16,9 @@ const schema = z.object({
 type FormData = z.infer<typeof schema>;
 
 interface ProductVariationDetailsProps {
-  onCancel: () => void;
+  onCancel?: () => void;
   productVariationId?: number;
-  onSave: () => void;
+  onSave?: () => void;
 }
 
 export const ProductVariationDetails = ({
@@ -31,8 +30,7 @@ export const ProductVariationDetails = ({
   const { getProductVariationById, saveProductVariation } =
     useProductVariationRequests();
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [productVariation, setProductVariation] = useState<IProductVariation>();
+  const [, setProductVariation] = useState<IProductVariation>();
 
   const {
     register,
@@ -71,7 +69,7 @@ export const ProductVariationDetails = ({
         productVariationId ? productVariationId.toString() : undefined,
       )
         .then(() => {
-          onSave();
+          onSave?.();
           handleCancel();
           toast.success('Variação salva com sucesso!');
         })
@@ -84,7 +82,7 @@ export const ProductVariationDetails = ({
   const handleCancel = () => {
     setProductVariation(undefined);
     reset();
-    onCancel();
+    onCancel?.();
   };
 
   return (

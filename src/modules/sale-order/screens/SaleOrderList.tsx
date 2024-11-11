@@ -1,14 +1,13 @@
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { ColumnsType } from 'antd/es/table';
 import { format, parseISO } from 'date-fns';
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
-
 import Button from '../../../components/button/Button';
 import Table from '../../../components/table/Table';
-import { ISaleOrder } from '../../../shared/interfaces/SaleOrderInterface';
 import useSaleOrderRequests from '../hooks/useSaleOrderRequests';
+import { ISaleOrder } from '../interfaces/SaleOrderInterface';
 import { SaleOrderRoutesEnum } from '../sale-orders.routes';
 
 export const SaleOrderList = () => {
@@ -72,6 +71,7 @@ export const SaleOrderList = () => {
         ),
       },
     ],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   );
 

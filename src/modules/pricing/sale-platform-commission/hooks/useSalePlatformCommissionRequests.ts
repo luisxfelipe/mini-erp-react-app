@@ -1,8 +1,9 @@
 import toast from 'react-hot-toast';
 
 import {
-    URL_SALE_PLATFORM_COMMISSION_BY_PLATFORM_ID, URL_SALE_PLATFORM_COMMISSION_ID,
-    URL_SALE_PLATFORM_COMMISSIONS
+  URL_SALE_PLATFORM_COMMISSION_BY_PLATFORM_ID,
+  URL_SALE_PLATFORM_COMMISSION_ID,
+  URL_SALE_PLATFORM_COMMISSIONS,
 } from '../../../../shared/constants/urls';
 import { MethodsEnum } from '../../../../shared/enums/methods.enum';
 import { useRequests } from '../../../../shared/hooks/useRequests';

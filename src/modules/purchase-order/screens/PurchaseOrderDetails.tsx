@@ -1,3 +1,4 @@
+import { zodResolver } from '@hookform/resolvers/zod';
 import { Divider } from 'antd';
 import { useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -5,19 +6,15 @@ import toast from 'react-hot-toast';
 import { useNavigate, useParams } from 'react-router-dom';
 import { z } from 'zod';
 
-import { zodResolver } from '@hookform/resolvers/zod';
-
 import { Input } from '../../../components/input/Input';
 import Select from '../../../components/select/Select';
-import { IPurchaseOrder } from '../../../shared/interfaces/PurchaseOrderInterface';
 import useSupplierRequests from '../../supplier/hooks/useSupplierRequets';
 import { ISupplier } from '../../supplier/interfaces/SupplierInterface';
 import usePurchaseOrderRequests from '../hooks/usePurchaseOrderRequests';
+import { IPurchaseOrder } from '../interfaces/PurchaseOrderInterface';
 import { PurchaseOrderItemList } from '../purchase-order-item/screens/PurchaseOrderItemList';
 import usePurchaseOrderStatusRequests from '../purchase-order-status/hooks/usePurchaseOrderStatusRequests';
-import {
-    IPurchaseOrderStatus
-} from '../purchase-order-status/interfaces/PurchaseOrderStatusInterface';
+import { IPurchaseOrderStatus } from '../purchase-order-status/interfaces/PurchaseOrderStatusInterface';
 import { PurchaseOrderRoutesEnum } from '../purchase-orders.routes';
 
 const schema = z.object({
@@ -54,7 +51,7 @@ type FormData = z.infer<typeof schema>;
 
 export const PurchaseOrderDetails = () => {
   const { purchaseOrderId } = useParams();
-  const [purchaseOrder, setPurchaseOrder] = useState<IPurchaseOrder>();
+  const [, setPurchaseOrder] = useState<IPurchaseOrder>();
   const { getPurchaseOrderById, savePurchaseOrder } =
     usePurchaseOrderRequests();
 
@@ -78,12 +75,13 @@ export const PurchaseOrderDetails = () => {
     mode: 'onChange',
   });
 
-  const memoizedGetSuppliers = useCallback(getSuppliers, []);
-  const memoizedGetPurchaseOrderById = useCallback(getPurchaseOrderById, []);
-  const memoizedGetPurchaseOrderStatus = useCallback(
+  const memoizedGetSuppliers = useCallback(getSuppliers, [getSuppliers]);
+  const memoizedGetPurchaseOrderById = useCallback(getPurchaseOrderById, [
+    getPurchaseOrderById,
+  ]);
+  const memoizedGetPurchaseOrderStatus = useCallback(getPurchaseOrderStatus, [
     getPurchaseOrderStatus,
-    [],
-  );
+  ]);
 
   useEffect(() => {
     const fetchData = async () => {

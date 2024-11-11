@@ -1,10 +1,13 @@
 import toast from 'react-hot-toast';
 
-import { URL_SALE_ORDER_ID, URL_SALE_ORDERS } from '../../../shared/constants/urls';
+import {
+  URL_SALE_ORDER_ID,
+  URL_SALE_ORDERS,
+} from '../../../shared/constants/urls';
 import { MethodsEnum } from '../../../shared/enums/methods.enum';
 import { useRequests } from '../../../shared/hooks/useRequests';
-import { ISaleOrder } from '../../../shared/interfaces/SaleOrderInterface';
 import { ISaleOrderInsert } from '../interfaces/SaleOrderInsertInterface';
+import { ISaleOrder } from '../interfaces/SaleOrderInterface';
 
 const useSaleOrderRequests = () => {
   const { request } = useRequests();

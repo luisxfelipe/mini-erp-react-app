@@ -1,9 +1,8 @@
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { z } from 'zod';
-
-import { zodResolver } from '@hookform/resolvers/zod';
 
 import { Input } from '../../../../components/input/Input';
 import useStockItemStatusRequests from '../hooks/useStockItemStatusRequests';
@@ -16,9 +15,9 @@ const schema = z.object({
 type FormData = z.infer<typeof schema>;
 
 interface StockItemStatusDetailsProps {
-  onCancel: () => void;
+  onCancel?: () => void;
   stockItemStatusId?: number;
-  onSave: () => void;
+  onSave?: () => void;
 }
 
 export const StockItemStatusDetails = ({
@@ -26,7 +25,7 @@ export const StockItemStatusDetails = ({
   stockItemStatusId,
   onSave,
 }: StockItemStatusDetailsProps) => {
-  const [stockItemStatus, setStockItemStatus] = useState<IStockItemStatus>();
+  const [, setStockItemStatus] = useState<IStockItemStatus>();
   const { getStockItemStatusById, saveStockItemStatus } =
     useStockItemStatusRequests();
 
@@ -71,7 +70,7 @@ export const StockItemStatusDetails = ({
       stockItemStatusId ? stockItemStatusId.toString() : undefined,
     )
       .then(() => {
-        onSave();
+        onSave?.();
         toast.success('Status de item de estoque salvo com sucesso!');
         handleCancel();
       })
@@ -84,7 +83,7 @@ export const StockItemStatusDetails = ({
   const handleCancel = () => {
     setStockItemStatus(undefined);
     reset();
-    onCancel();
+    onCancel?.();
   };
 
   return (

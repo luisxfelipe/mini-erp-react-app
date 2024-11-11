@@ -1,9 +1,8 @@
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { z } from 'zod';
-
-import { zodResolver } from '@hookform/resolvers/zod';
 
 import { Input } from '../../../../../components/input/Input';
 import useSaleOrderItemStatusRequests from '../hooks/useSaleOrderItemStatusRequests';
@@ -25,8 +24,7 @@ export const SaleOrderItemStatusDetails = ({
   saleOrderItemStatusId,
   onSave,
 }: SaleOrderItemStatusDetailsProps) => {
-  const [saleOrderItemStatus, setSaleOrderItemStatus] =
-    useState<ISaleOrderItemStatus>();
+  const [, setSaleOrderItemStatus] = useState<ISaleOrderItemStatus>();
   const { getSaleOrderItemStatusById, saveSaleOrderItemStatus } =
     useSaleOrderItemStatusRequests();
 

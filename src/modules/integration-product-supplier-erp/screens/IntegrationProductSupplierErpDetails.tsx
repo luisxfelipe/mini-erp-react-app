@@ -1,18 +1,15 @@
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { z } from 'zod';
-
-import { zodResolver } from '@hookform/resolvers/zod';
 
 import { Input } from '../../../components/input/Input';
 import Select from '../../../components/select/Select';
 import useProductRequests from '../../product/hooks/useProductRequests';
 import { IProduct } from '../../product/interfaces/ProductInterface';
 import useProductVariationRequests from '../../product/product-variation/hooks/useProductVariationRequests';
-import {
-    IProductVariation
-} from '../../product/product-variation/interfaces/ProductVariationInterface';
+import { IProductVariation } from '../../product/product-variation/interfaces/ProductVariationInterface';
 import useSupplierRequests from '../../supplier/hooks/useSupplierRequets';
 import { ISupplier } from '../../supplier/interfaces/SupplierInterface';
 import useIntegrationProductSupplierErpRequests from '../hooks/useIntegrationProductSupplierErpRequests';
@@ -60,9 +57,9 @@ const schema = z.object({
 type FormData = z.infer<typeof schema>;
 
 interface IntegrationProductSupplierErpDetailsProps {
-  onCancel: () => void;
+  onCancel?: () => void;
   integrationProductSupplierErpId?: number;
-  onSave: () => void;
+  onSave?: () => void;
 }
 
 export const IntegrationProductSupplierErpDetails = ({
@@ -103,32 +100,27 @@ export const IntegrationProductSupplierErpDetails = ({
   const productId = watch('product');
   const productVariationId = watch('productVariation');
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const memoizedGetProducts = useCallback(getProducts, []);
+  const memoizedGetProducts = useCallback(getProducts, [getProducts]);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const memoizedGetProductVariations = useCallback(getProductVariations, []);
+  const memoizedGetProductVariations = useCallback(getProductVariations, [
+    getProductVariations,
+  ]);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const memoizedGetSuppliers = useCallback(getSuppliers, []);
+  const memoizedGetSuppliers = useCallback(getSuppliers, [getSuppliers]);
 
   useEffect(() => {
+    const loadProductVariations = async () => {
+      const response = await memoizedGetProductVariations(parseInt(productId));
+      setProductVariations(response);
+    };
+
     if (productId && productId !== '') {
       setValue('productVariation', '');
       loadProductVariations();
     }
-  }, [productId]);
+  }, [memoizedGetProductVariations, productId, setValue]);
 
-  useEffect(() => {
-    loadProducts();
-    loadSuppliers();
-
-    if (integrationProductSupplierErpId) {
-      loadIntegrationProductSupplierErp();
-    }
-  }, []);
-
-  const loadIntegrationProductSupplierErp = async () => {
+  const loadIntegrationProductSupplierErp = useCallback(async () => {
     const productsData = await memoizedGetProducts();
     setProducts(productsData);
 
@@ -161,22 +153,35 @@ export const IntegrationProductSupplierErpDetails = ({
         }
       });
     }
-  };
+  }, [
+    getIntegrationProductSupplierErpById,
+    integrationProductSupplierErpId,
+    memoizedGetProducts,
+    setValue,
+  ]);
 
-  const loadProducts = async () => {
-    const response = await memoizedGetProducts();
-    setProducts(response);
-  };
+  useEffect(() => {
+    const loadProducts = async () => {
+      const response = await memoizedGetProducts();
+      setProducts(response);
+    };
+    loadProducts();
 
-  const loadProductVariations = async () => {
-    const response = await memoizedGetProductVariations(parseInt(productId));
-    setProductVariations(response);
-  };
+    const loadSuppliers = async () => {
+      const response = await memoizedGetSuppliers();
+      setSuppliers(response);
+    };
+    loadSuppliers();
 
-  const loadSuppliers = async () => {
-    const response = await memoizedGetSuppliers();
-    setSuppliers(response);
-  };
+    if (integrationProductSupplierErpId) {
+      loadIntegrationProductSupplierErp();
+    }
+  }, [
+    integrationProductSupplierErpId,
+    loadIntegrationProductSupplierErp,
+    memoizedGetProducts,
+    memoizedGetSuppliers,
+  ]);
 
   function onSubmit(data: FormData) {
     saveIntegrationProductSupplierErp(
@@ -194,7 +199,7 @@ export const IntegrationProductSupplierErpDetails = ({
     )
       .then((response) => {
         if (response) {
-          onSave();
+          onSave?.();
           handleCancel();
           toast.success('Código de produto do fornecedor salvo com sucesso!');
           reset();
@@ -212,7 +217,7 @@ export const IntegrationProductSupplierErpDetails = ({
     setProducts([]);
     setProductVariations([]);
     reset();
-    onCancel();
+    onCancel?.();
   };
 
   return (

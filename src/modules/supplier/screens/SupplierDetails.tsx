@@ -1,9 +1,8 @@
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { z } from 'zod';
-
-import { zodResolver } from '@hookform/resolvers/zod';
 
 import { Input } from '../../../components/input/Input';
 import useSupplierRequests from '../hooks/useSupplierRequets';
@@ -23,9 +22,9 @@ const schema = z.object({
 type FormData = z.infer<typeof schema>;
 
 interface SupplierDetailsProps {
-  onCancel: () => void;
+  onCancel?: () => void;
   supplierId?: number;
-  onSave: () => void;
+  onSave?: () => void;
 }
 
 export const SupplierDetails = ({
@@ -33,8 +32,7 @@ export const SupplierDetails = ({
   supplierId,
   onSave,
 }: SupplierDetailsProps) => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [supplier, setSupplier] = useState<ISupplier>();
+  const [, setSupplier] = useState<ISupplier>();
 
   const { getSupplierById, saveSupplier } = useSupplierRequests();
 
@@ -77,7 +75,7 @@ export const SupplierDetails = ({
   const handleCancel = () => {
     setSupplier(undefined);
     reset();
-    onCancel();
+    onCancel?.();
   };
 
   function onSubmit(data: FormData) {
@@ -93,7 +91,7 @@ export const SupplierDetails = ({
       supplierId ? supplierId.toString() : undefined,
     )
       .then(() => {
-        onSave();
+        onSave?.();
         toast.success('Fornecedor salvo com sucesso!');
         handleCancel();
       })

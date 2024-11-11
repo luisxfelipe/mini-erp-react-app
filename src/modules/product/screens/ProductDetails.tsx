@@ -1,17 +1,16 @@
+import { zodResolver } from '@hookform/resolvers/zod';
 import { Divider } from 'antd';
 import { useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
 import { z } from 'zod';
 
-import { zodResolver } from '@hookform/resolvers/zod';
-
 import { Input } from '../../../components/input/Input';
 import Select from '../../../components/select/Select';
-import { IProduct } from '../../../shared/interfaces/ProductInterface';
 import useCategoryRequests from '../../category/hooks/useCategoryRequests';
 import { ICategory } from '../../category/interfaces/CategoryInterface';
 import useProductRequests from '../hooks/useProductRequests';
+import { IProduct } from '../interfaces/ProductInterface';
 import { ProductVariationList } from '../product-variation/screens/ProductVariationList';
 
 const schema = z.object({

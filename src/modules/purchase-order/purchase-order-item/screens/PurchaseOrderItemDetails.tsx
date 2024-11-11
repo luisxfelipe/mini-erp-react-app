@@ -1,30 +1,25 @@
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { useParams } from 'react-router-dom';
 import { z } from 'zod';
 
-import { zodResolver } from '@hookform/resolvers/zod';
-
 import { Input } from '../../../../components/input/Input';
 import Select from '../../../../components/select/Select';
-import { IProduct } from '../../../../shared/interfaces/ProductInterface';
 import useProductRequests from '../../../product/hooks/useProductRequests';
+import { IProduct } from '../../../product/interfaces/ProductInterface';
 import useProductVariationRequests from '../../../product/product-variation/hooks/useProductVariationRequests';
-import {
-    IProductVariation
-} from '../../../product/product-variation/interfaces/ProductVariationInterface';
+import { IProductVariation } from '../../../product/product-variation/interfaces/ProductVariationInterface';
 import usePurchaseOrderItemRequests from '../hooks/usePurchaseOrderItemRequests';
 import { IPurchaseOrderItem } from '../interfaces/PurchaseOrderItemInterface';
 import usePurchaseOrderItemStatusRequests from '../purchase-order-item-status/hooks/usePurchaseOrderItemStatusRequests';
-import {
-    IPurchaseOrderItemStatus
-} from '../purchase-order-item-status/interfaces/PurchaseOrderItemStatusInterface';
+import { IPurchaseOrderItemStatus } from '../purchase-order-item-status/interfaces/PurchaseOrderItemStatusInterface';
 
 interface PurchaseOrderItemDetailsProps {
-  onCancel: () => void;
+  onCancel?: () => void;
   purchaseOrderItemId?: number;
-  onSave: () => void;
+  onSave?: () => void;
 }
 
 export const PurchaseOrderItemDetails = ({
@@ -97,25 +92,64 @@ export const PurchaseOrderItemDetails = ({
 
   const productId = watch('product');
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const memoizedGetProducts = useCallback(getProducts, []);
+  const memoizedGetProducts = useCallback(getProducts, [getProducts]);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const memoizedGetProductVariations = useCallback(getProductVariations, []);
+  const memoizedGetProductVariations = useCallback(getProductVariations, [
+    getProductVariations,
+  ]);
 
   const memoizedGetPurchaseOrderItemStatus = useCallback(
     getPurchaseOrderItemStatus,
-    [],
+    [getPurchaseOrderItemStatus],
+  );
+
+  const loadPurchaseOrderItem = useCallback(
+    async (purchaseOrderId: number, id: number) => {
+      const productsData = await memoizedGetProducts();
+      setProducts(productsData);
+
+      if (id) {
+        const purchaseOrderItemLoaded: IPurchaseOrderItem =
+          await getPurchaseOrderItemById(purchaseOrderId, id);
+
+        setPurchaseOrderItem(purchaseOrderItemLoaded);
+        setValue('product', purchaseOrderItemLoaded.product.id.toString());
+        setValue(
+          'productVariation',
+          purchaseOrderItemLoaded.productVariation.id?.toString() || '',
+        );
+        setValue(
+          'supplierProductCode',
+          purchaseOrderItemLoaded.supplierProductCode,
+        );
+        setValue('price', purchaseOrderItemLoaded.price);
+        setValue(
+          'purchaseOrderItemStatus',
+          purchaseOrderItemLoaded.purchaseOrderItemStatus.id.toString(),
+        );
+        setValue('productLink', purchaseOrderItemLoaded.productLink);
+      }
+    },
+    [getPurchaseOrderItemById, memoizedGetProducts, setValue],
   );
 
   useEffect(() => {
-    if (productId && productId !== '') {
-      loadProductVariations();
-    }
-  }, [productId]);
+    const loadProducts = async () => {
+      const productsData = await memoizedGetProducts();
+      setProducts(productsData);
+    };
 
-  useEffect(() => {
-    loadProducts();
+    if (productId && productId !== '') {
+      loadProducts();
+    }
+
+    const loadPurchaseOrderItemStatus = async () => {
+      const response = await memoizedGetPurchaseOrderItemStatus();
+      // guarda os itens recebidos, excluindo o item com status 1
+      const responseFiltered = response.filter((status) => status.id !== 1);
+
+      setPurchaseOrderItemStatus(responseFiltered);
+    };
     loadPurchaseOrderItemStatus();
 
     if (purchaseOrderId && purchaseOrderItemId) {
@@ -127,59 +161,33 @@ export const PurchaseOrderItemDetails = ({
     memoizedGetProducts,
     memoizedGetPurchaseOrderItemStatus,
     setValue,
+    loadPurchaseOrderItem,
+    productId,
   ]);
 
-  const loadPurchaseOrderItem = async (purchaseOrderId: number, id: number) => {
-    const productsData = await memoizedGetProducts();
-    setProducts(productsData);
-
-    if (id) {
-      const purchaseOrderItemLoaded: IPurchaseOrderItem =
-        await getPurchaseOrderItemById(purchaseOrderId, id);
-
-      setPurchaseOrderItem(purchaseOrderItemLoaded);
-      setValue('product', purchaseOrderItemLoaded.product.id.toString());
-      setValue(
-        'productVariation',
-        purchaseOrderItemLoaded.productVariation.id?.toString() || '',
-      );
-      setValue(
-        'supplierProductCode',
-        purchaseOrderItemLoaded.supplierProductCode,
-      );
-      setValue('price', purchaseOrderItemLoaded.price);
-      setValue(
-        'purchaseOrderItemStatus',
-        purchaseOrderItemLoaded.purchaseOrderItemStatus.id.toString(),
-      );
-      setValue('productLink', purchaseOrderItemLoaded.productLink);
-    }
-  };
-
-  const loadProducts = async () => {
-    const productsData = await memoizedGetProducts();
-    setProducts(productsData);
-  };
-
-  const loadProductVariations = async () => {
+  const loadProductVariations = useCallback(async () => {
     const response = await memoizedGetProductVariations(parseInt(productId));
     setProductVariations(response);
-  };
+  }, [memoizedGetProductVariations, productId]);
 
-  const loadPurchaseOrderItemStatus = async () => {
-    const response = await memoizedGetPurchaseOrderItemStatus();
-    // guarda os itens recebidos, excluindo o item com status 1
-    const responseFiltered = response.filter((status) => status.id !== 1);
+  useEffect(() => {
+    if (productId && productId !== '') {
+      loadProductVariations();
+    }
+  }, [loadProductVariations, productId]);
 
-    setPurchaseOrderItemStatus(responseFiltered);
-  };
+  useEffect(() => {
+    if (productId && productId !== '') {
+      loadProductVariations();
+    }
+  }, [loadProductVariations, productId]);
 
   const handleCancel = () => {
     setPurchaseOrderItem(undefined);
     setProducts([]);
     setProductVariations([]);
     reset();
-    onCancel();
+    onCancel?.();
   };
 
   function onSubmit(data: FormData) {
@@ -212,7 +220,7 @@ export const PurchaseOrderItemDetails = ({
         purchaseOrderItem?.id.toString(),
       )
         .then(() => {
-          onSave();
+          onSave?.();
           handleCancel();
           toast.success('Item salvo com sucesso!');
         })

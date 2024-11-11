@@ -1,25 +1,16 @@
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { z } from 'zod';
 
-import { zodResolver } from '@hookform/resolvers/zod';
-
 import { Input } from '../../../components/input/Input';
 import Select from '../../../components/select/Select';
-import { IProduct } from '../../product/interfaces/ProductInterface';
-import {
-    IProductVariation
-} from '../../product/product-variation/interfaces/ProductVariationInterface';
-import {
-    IPurchaseOrderItem
-} from '../../purchase-order/purchase-order-item/interfaces/PurchaseOrderItemInterface';
+import { IPurchaseOrderItem } from '../../purchase-order/purchase-order-item/interfaces/PurchaseOrderItemInterface';
 import useStockItemRequests from '../hooks/useStockItemRequests';
 import { IStockItemInsert } from '../interfaces/StockItemInsertInterface';
 import useStockItemIdentifierTypeRequests from '../stock-item-identifier-type/hooks/useStockItemIdentifierTypeRequests';
-import {
-    IStockItemIdentifierType
-} from '../stock-item-identifier-type/interfaces/StockItemIdentifierTypeInterface';
+import { IStockItemIdentifierType } from '../stock-item-identifier-type/interfaces/StockItemIdentifierTypeInterface';
 
 const schema = z.object({
   identifier: z.string(),
@@ -28,8 +19,8 @@ const schema = z.object({
 
 interface StockItemReviewProps {
   purchaseOrderItems: IPurchaseOrderItem[];
-  onCancel: () => void;
-  onSave: () => void;
+  onCancel?: () => void;
+  onSave?: () => void;
 }
 
 export const StockItemReview = ({
@@ -67,6 +58,7 @@ export const StockItemReview = ({
     if (isLoading) {
       loadStockItemIdentifierTypes();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [getStockItemIdentifierTypes]);
 
   const transformPurchaseOrderItemToStockItem = (
@@ -106,8 +98,8 @@ export const StockItemReview = ({
 
       createStockItems(items)
         .then(() => {
-          onSave();
-          onCancel();
+          onSave?.();
+          onCancel?.();
           toast.success('Itens lançados no estoque com sucesso!');
         })
         .catch((error) => {

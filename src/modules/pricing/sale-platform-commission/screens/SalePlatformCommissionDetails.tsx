@@ -1,9 +1,8 @@
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import { nullable, optional, z } from 'zod';
-
-import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 
 import { Input } from '../../../../components/input/Input';
 import Select from '../../../../components/select/Select';
@@ -43,9 +42,9 @@ const schema = z.object({
 type FormData = z.infer<typeof schema>;
 
 interface SalePlatformCommissionDetailsProps {
-  onCancel: () => void;
+  onCancel?: () => void;
   salePlatformCommissionId?: number;
-  onSave: () => void;
+  onSave?: () => void;
 }
 
 export const SalePlatformCommissionDetails = ({
@@ -64,7 +63,6 @@ export const SalePlatformCommissionDetails = ({
   const {
     register,
     handleSubmit,
-    watch,
     setValue,
     formState: { errors },
     reset,
@@ -73,23 +71,9 @@ export const SalePlatformCommissionDetails = ({
     mode: 'onChange',
   });
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const memoizedGetSalePlatforms = useCallback(getPlatforms, []);
+  const memoizedGetSalePlatforms = useCallback(getPlatforms, [getPlatforms]);
 
-  useEffect(() => {
-    loadSalePlatforms();
-
-    if (salePlatformCommissionId) {
-      loadSalePlatformCommission();
-    }
-  }, []);
-
-  const loadSalePlatforms = async () => {
-    const salePlatformsData = await memoizedGetSalePlatforms();
-    setSalePlatforms(salePlatformsData);
-  };
-
-  const loadSalePlatformCommission = async () => {
+  const loadSalePlatformCommission = useCallback(async () => {
     if (salePlatformCommissionId) {
       await getSalePlatformCommissionById(salePlatformCommissionId).then(
         (data: ISalePlatformCommission | undefined) => {
@@ -110,13 +94,34 @@ export const SalePlatformCommissionDetails = ({
         },
       );
     }
-  };
+  }, [
+    salePlatformCommissionId,
+    getSalePlatformCommissionById,
+    setSalePlatformCommission,
+    setValue,
+  ]);
+
+  useEffect(() => {
+    const loadSalePlatforms = async () => {
+      const salePlatformsData = await memoizedGetSalePlatforms();
+      setSalePlatforms(salePlatformsData);
+    };
+    loadSalePlatforms();
+
+    if (salePlatformCommissionId) {
+      loadSalePlatformCommission();
+    }
+  }, [
+    loadSalePlatformCommission,
+    memoizedGetSalePlatforms,
+    salePlatformCommissionId,
+  ]);
 
   const handleCancel = () => {
     setSalePlatformCommission(undefined);
     setSalePlatforms([]);
     reset();
-    onCancel();
+    onCancel?.();
   };
 
   function onSubmit(data: FormData) {
@@ -140,7 +145,7 @@ export const SalePlatformCommissionDetails = ({
       )
         .then((response) => {
           if (response) {
-            onSave();
+            onSave?.();
             handleCancel();
             toast.success('Comissão salva com sucesso!');
             reset();

@@ -1,11 +1,10 @@
 import {
-    URL_INTEGRATION_PRODUCT_SUPPLIER_ERP, URL_INTEGRATION_PRODUCT_SUPPLIER_ERP_ID
+  URL_INTEGRATION_PRODUCT_SUPPLIER_ERP,
+  URL_INTEGRATION_PRODUCT_SUPPLIER_ERP_ID,
 } from '../../../shared/constants/urls';
 import { MethodsEnum } from '../../../shared/enums/methods.enum';
 import { useRequests } from '../../../shared/hooks/useRequests';
-import {
-    IIntegrationProductSupplierInsert
-} from '../interfaces/IntegrationProductSupplierErpInsertInterface';
+import { IIntegrationProductSupplierInsert } from '../interfaces/IntegrationProductSupplierErpInsertInterface';
 import { IIntegrationProductSupplier } from '../interfaces/IntegrationProductSupplierErpInterface';
 
 const useIntegrationProductSupplierErpRequests = () => {

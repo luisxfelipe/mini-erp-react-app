@@ -1,3 +1,4 @@
+import { zodResolver } from '@hookform/resolvers/zod';
 import { Divider } from 'antd';
 import { useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -5,14 +6,12 @@ import toast from 'react-hot-toast';
 import { useNavigate, useParams } from 'react-router-dom';
 import { z } from 'zod';
 
-import { zodResolver } from '@hookform/resolvers/zod';
-
 import { Input } from '../../../components/input/Input';
 import Select from '../../../components/select/Select';
-import { ISaleOrder } from '../../../shared/interfaces/SaleOrderInterface';
 import usePlatformRequests from '../../platform/hooks/usePlatformRequests';
 import { IPlatform } from '../../platform/interfaces/PlatformInterface';
 import useSaleOrderRequests from '../hooks/useSaleOrderRequests';
+import { ISaleOrder } from '../interfaces/SaleOrderInterface';
 import { SaleOrderItemList } from '../sale-order-item/screens/SaleOrderItemList';
 import { SaleOrderRoutesEnum } from '../sale-orders.routes';
 import useSaleStatusRequests from '../sale-status/hooks/useSaleStatusRequests';
@@ -50,7 +49,7 @@ type FormData = z.infer<typeof schema>;
 
 export const SaleOrderDetails = () => {
   const { saleOrderId } = useParams();
-  const [saleOrder, setSaleOrder] = useState<ISaleOrder>();
+  const [, setSaleOrder] = useState<ISaleOrder>();
   const { getSaleOrderById, saveSaleOrder } = useSaleOrderRequests();
 
   const [platforms, setPlatforms] = useState<IPlatform[]>([]);
@@ -71,9 +70,11 @@ export const SaleOrderDetails = () => {
     mode: 'onChange',
   });
 
-  const memoizedGetPlatforms = useCallback(getPlatforms, []);
-  const memoizedGetSaleOrderById = useCallback(getSaleOrderById, []);
-  const memoizedGetSaleStatus = useCallback(getSaleStatus, []);
+  const memoizedGetPlatforms = useCallback(getPlatforms, [getPlatforms]);
+  const memoizedGetSaleOrderById = useCallback(getSaleOrderById, [
+    getSaleOrderById,
+  ]);
+  const memoizedGetSaleStatus = useCallback(getSaleStatus, [getSaleStatus]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -139,7 +140,6 @@ export const SaleOrderDetails = () => {
     )
       .then((saleOrder: ISaleOrder | undefined | Error) => {
         if (saleOrder && saleOrderId === undefined) {
-          const id = (saleOrder as ISaleOrder).id;
           navigate(
             SaleOrderRoutesEnum.SALE_ORDER_EDIT.replace(
               ':saleOrderId',

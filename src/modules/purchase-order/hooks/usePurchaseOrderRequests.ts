@@ -1,10 +1,13 @@
 import toast from 'react-hot-toast';
 
-import { URL_PURCHASE_ORDER_ID, URL_PURCHASE_ORDERS } from '../../../shared/constants/urls';
+import {
+  URL_PURCHASE_ORDER_ID,
+  URL_PURCHASE_ORDERS,
+} from '../../../shared/constants/urls';
 import { MethodsEnum } from '../../../shared/enums/methods.enum';
 import { useRequests } from '../../../shared/hooks/useRequests';
-import { IPurchaseOrder } from '../../../shared/interfaces/PurchaseOrderInterface';
 import { IPurchaseOrderInsert } from '../interfaces/PurchaseOrderInsertInterface';
+import { IPurchaseOrder } from '../interfaces/PurchaseOrderInterface';
 
 const usePurchaseOrderRequests = () => {
   const { request } = useRequests();

@@ -1,39 +1,27 @@
+import {
+  AppstoreOutlined,
+  HomeOutlined,
+  ShoppingOutlined,
+  TagOutlined,
+} from '@ant-design/icons';
 import { Menu as ManuAntd, MenuProps } from 'antd';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import {
-    AppstoreOutlined, HomeOutlined, ShoppingOutlined, TagOutlined, UserOutlined
-} from '@ant-design/icons';
-
 import { CategoryRoutesEnum } from '../../modules/category/category.routes';
-import {
-    IntegrationProductSupplierErpRoutesEnum
-} from '../../modules/integration-product-supplier-erp/integration-product-supplier-erp.routes';
+import { IntegrationProductSupplierErpRoutesEnum } from '../../modules/integration-product-supplier-erp/integration-product-supplier-erp.routes';
 import { PlatformRoutesEnum } from '../../modules/platform/platform.routes';
 import { PricingRoutesEnum } from '../../modules/pricing/pricing.routes';
-import {
-    SalePlatformCommissionRoutesEnum
-} from '../../modules/pricing/sale-platform-commission/sale-platform-commission.routes';
+import { SalePlatformCommissionRoutesEnum } from '../../modules/pricing/sale-platform-commission/sale-platform-commission.routes';
 import { ProductRoutesEnum } from '../../modules/product/product.routes';
-import {
-    PurchaseOrderItemStatusRoutesEnum
-} from '../../modules/purchase-order/purchase-order-item/purchase-order-item-status/purchase-order-item-status.routes';
-import {
-    PurchaseOrderStatusRoutesEnum
-} from '../../modules/purchase-order/purchase-order-status/purchase-order-status.routes';
+import { PurchaseOrderItemStatusRoutesEnum } from '../../modules/purchase-order/purchase-order-item/purchase-order-item-status/purchase-order-item-status.routes';
+import { PurchaseOrderStatusRoutesEnum } from '../../modules/purchase-order/purchase-order-status/purchase-order-status.routes';
 import { PurchaseOrderRoutesEnum } from '../../modules/purchase-order/purchase-orders.routes';
-import {
-    SaleOrderItemStatusRoutesEnum
-} from '../../modules/sale-order/sale-order-item/sale-order-item-status/sale-order-item-status.routes';
+import { SaleOrderItemStatusRoutesEnum } from '../../modules/sale-order/sale-order-item/sale-order-item-status/sale-order-item-status.routes';
 import { SaleOrderRoutesEnum } from '../../modules/sale-order/sale-orders.routes';
 import { SaleStatusRoutesEnum } from '../../modules/sale-order/sale-status/sale-status.routes';
-import {
-    StockItemIdentifierTypeRoutesEnum
-} from '../../modules/stock-item/stock-item-identifier-type/stock-item-identifier-type.routes';
-import {
-    StockItemStatusRoutesEnum
-} from '../../modules/stock-item/stock-item-status/stock-item-status.routes';
+import { StockItemIdentifierTypeRoutesEnum } from '../../modules/stock-item/stock-item-identifier-type/stock-item-identifier-type.routes';
+import { StockItemStatusRoutesEnum } from '../../modules/stock-item/stock-item-status/stock-item-status.routes';
 import { SupplierRoutesEnum } from '../../modules/supplier/supplier.routes';
 
 type MenuItem = Required<MenuProps>['items'][number];

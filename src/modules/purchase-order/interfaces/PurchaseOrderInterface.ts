@@ -1,5 +1,5 @@
-import { IPurchaseOrderStatus } from './PurchaseOrderStatusInterface';
-import { ISupplier } from './SupplierInterface';
+import { ISupplier } from '../../supplier/interfaces/SupplierInterface';
+import { IPurchaseOrderStatus } from '../purchase-order-status/interfaces/PurchaseOrderStatusInterface';
 
 export interface IPurchaseOrder {
   id: number;

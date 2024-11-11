@@ -1,15 +1,15 @@
-/* eslint-disable react-hooks/exhaustive-deps */
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { ColumnsType } from 'antd/es/table';
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
+/* eslint-disable react-hooks/exhaustive-deps */
 
 import Button from '../../../components/button/Button';
 import Table from '../../../components/table/Table';
-import { IProduct } from '../../../shared/interfaces/ProductInterface';
 import CategoryColumn from '../components/CategoryColumn';
 import useProductRequests from '../hooks/useProductRequests';
+import { IProduct } from '../interfaces/ProductInterface';
 import { ProductRoutesEnum } from '../product.routes';
 
 export const ProductList = () => {

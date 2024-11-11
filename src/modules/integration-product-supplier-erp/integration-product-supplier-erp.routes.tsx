@@ -1,8 +1,6 @@
 import { RouteObject } from 'react-router-dom';
 
-import {
-    IntegrationProductSupplierErpDetails
-} from './screens/IntegrationProductSupplierErpDetails';
+import { IntegrationProductSupplierErpDetails } from './screens/IntegrationProductSupplierErpDetails';
 import { IntegrationProductSupplierErpList } from './screens/IntegrationProductSupplierErpList';
 
 export enum IntegrationProductSupplierErpRoutesEnum {

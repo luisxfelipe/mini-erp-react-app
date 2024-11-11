@@ -1,6 +1,9 @@
 import toast from 'react-hot-toast';
 
-import { URL_SALE_STATUS, URL_SALE_STATUS_ID } from '../../../../shared/constants/urls';
+import {
+  URL_SALE_STATUS,
+  URL_SALE_STATUS_ID,
+} from '../../../../shared/constants/urls';
 import { MethodsEnum } from '../../../../shared/enums/methods.enum';
 import { useRequests } from '../../../../shared/hooks/useRequests';
 import { ISaleStatusInsert } from '../interfaces/SaleStatusInsertInterface';

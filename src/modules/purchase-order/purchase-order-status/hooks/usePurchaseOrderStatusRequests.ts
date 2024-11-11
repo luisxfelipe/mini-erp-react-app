@@ -1,7 +1,8 @@
 import toast from 'react-hot-toast';
 
 import {
-    URL_PURCHASE_ORDER_STATUS, URL_PURCHASE_ORDER_STATUS_ID
+  URL_PURCHASE_ORDER_STATUS,
+  URL_PURCHASE_ORDER_STATUS_ID,
 } from '../../../../shared/constants/urls';
 import { MethodsEnum } from '../../../../shared/enums/methods.enum';
 import { useRequests } from '../../../../shared/hooks/useRequests';

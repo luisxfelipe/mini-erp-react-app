@@ -33,9 +33,9 @@ const schema = z.object({
 type FormData = z.infer<typeof schema>;
 
 interface SaleOrderItemDetailsProps {
-  onCancel: () => void;
+  onCancel?: () => void;
   saleOrderItemId?: number;
-  onSave: () => void;
+  onSave?: () => void;
 }
 
 export const SaleOrderItemDetails = ({
@@ -81,16 +81,71 @@ export const SaleOrderItemDetails = ({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const memoizedGetProductVariations = useCallback(getProductVariations, []);
 
-  const memoizedGetSaleOrderItemStatus = useCallback(
+  const memoizedGetSaleOrderItemStatus = useCallback(getSaleOrderItemStatus, [
     getSaleOrderItemStatus,
-    [],
+  ]);
+
+  const loadSaleOrderItemStatus = useCallback(async () => {
+    const response = await memoizedGetSaleOrderItemStatus();
+    setSaleOrderItemStatus(response);
+  }, [memoizedGetSaleOrderItemStatus, setSaleOrderItemStatus]);
+
+  const loadSaleOrderItem = useCallback(
+    async (saleOrderId: number, id: number) => {
+      const productsData = await memoizedGetProducts();
+      setProducts(productsData);
+
+      if (id) {
+        const saleOrderItemLoaded: ISaleOrderItem = await getSaleOrderItemById(
+          saleOrderId,
+          id,
+        );
+
+        setSaleOrderItem(saleOrderItemLoaded);
+        setValue('product', saleOrderItemLoaded.product.id.toString());
+        setValue(
+          'productVariation',
+          saleOrderItemLoaded.productVariation.id?.toString() || '',
+        );
+        setValue('price', saleOrderItemLoaded.price);
+        setValue(
+          'saleOrderItemStatus',
+          saleOrderItemLoaded.saleOrderItemStatus.id.toString(),
+        );
+      }
+    },
+    [
+      memoizedGetProducts,
+      setProducts,
+      getSaleOrderItemById,
+      setSaleOrderItem,
+      setValue,
+    ],
   );
+
+  const loadProducts = useCallback(async () => {
+    const productsData = await memoizedGetProducts();
+    setProducts(productsData);
+  }, [memoizedGetProducts, setProducts]);
+
+  const loadProductVariations = useCallback(async () => {
+    const response = await memoizedGetProductVariations(parseInt(productId));
+    setProductVariations(response);
+  }, [memoizedGetProductVariations, productId, setProductVariations]);
 
   useEffect(() => {
     if (productId && productId !== '') {
       loadProductVariations();
     }
-  }, [productId]);
+  }, [loadProductVariations, productId]);
+
+  const handleCancel = () => {
+    setSaleOrderItem(undefined);
+    setProducts([]);
+    setProductVariations([]);
+    reset();
+    onCancel?.();
+  };
 
   useEffect(() => {
     loadProducts();
@@ -105,54 +160,10 @@ export const SaleOrderItemDetails = ({
     memoizedGetProducts,
     memoizedGetSaleOrderItemStatus,
     setValue,
+    loadProducts,
+    loadSaleOrderItem,
+    loadSaleOrderItemStatus,
   ]);
-
-  const loadSaleOrderItem = async (saleOrderId: number, id: number) => {
-    const productsData = await memoizedGetProducts();
-    setProducts(productsData);
-
-    if (id) {
-      const saleOrderItemLoaded: ISaleOrderItem = await getSaleOrderItemById(
-        saleOrderId,
-        id,
-      );
-
-      setSaleOrderItem(saleOrderItemLoaded);
-      setValue('product', saleOrderItemLoaded.product.id.toString());
-      setValue(
-        'productVariation',
-        saleOrderItemLoaded.productVariation.id?.toString() || '',
-      );
-      setValue('price', saleOrderItemLoaded.price);
-      setValue(
-        'saleOrderItemStatus',
-        saleOrderItemLoaded.saleOrderItemStatus.id.toString(),
-      );
-    }
-  };
-
-  const loadProducts = async () => {
-    const productsData = await memoizedGetProducts();
-    setProducts(productsData);
-  };
-
-  const loadProductVariations = async () => {
-    const response = await memoizedGetProductVariations(parseInt(productId));
-    setProductVariations(response);
-  };
-
-  const loadSaleOrderItemStatus = async () => {
-    const response = await memoizedGetSaleOrderItemStatus();
-    setSaleOrderItemStatus(response);
-  };
-
-  const handleCancel = () => {
-    setSaleOrderItem(undefined);
-    setProducts([]);
-    setProductVariations([]);
-    reset();
-    onCancel();
-  };
 
   function onSubmit(data: FormData) {
     const productSelected = products.find(
@@ -181,7 +192,7 @@ export const SaleOrderItemDetails = ({
         saleOrderItem?.id.toString(),
       )
         .then(() => {
-          onSave();
+          onSave?.();
           handleCancel();
           toast.success('Item salvo com sucesso!');
         })

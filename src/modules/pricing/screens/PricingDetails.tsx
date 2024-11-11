@@ -6,7 +6,6 @@ import { z } from 'zod';
 
 import { Input } from '../../../components/input/Input';
 import Select from '../../../components/select/Select';
-import usePlatformRequests from '../../platform/hooks/usePlatformRequests';
 import { IPlatform } from '../../platform/interfaces/PlatformInterface';
 import useProductRequests from '../../product/hooks/useProductRequests';
 import { IProduct } from '../../product/interfaces/ProductInterface';
@@ -49,9 +48,9 @@ const schema = z.object({
 type FormData = z.infer<typeof schema>;
 
 interface PricingDetailsProps {
-  onCancel: () => void;
+  onCancel?: () => void;
   pricingId?: number;
-  onSave: () => void;
+  onSave?: () => void;
 }
 
 export const PricingDetails = ({
@@ -62,7 +61,7 @@ export const PricingDetails = ({
   const { getPricingById, savePricing } = usePricingRequests();
   const [pricing, setPricing] = useState<IPricing>();
 
-  const [salePlatforms, setSalePlatforms] = useState<IPlatform[]>([]);
+  const [, setSalePlatforms] = useState<IPlatform[]>([]);
 
   const [products, setProducts] = useState<IProduct[]>([]);
   const { getProducts } = useProductRequests();
@@ -111,18 +110,9 @@ export const PricingDetails = ({
     } else {
       setSalePlatformCommission(undefined);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [salePlatformId]);
+  }, [getSalePlatformCommissionByPlatformId, salePlatformId]);
 
-  useEffect(() => {
-    if (salePlatformCommission && costPrice) {
-      calculateSalePrice();
-    } else {
-      setValue('salePrice', 0);
-    }
-  }, [salePlatformCommission, costPrice]);
-
-  function calculateSalePrice() {
+  const calculateSalePrice = useCallback(() => {
     if (salePlatformCommission && isAllFieldsFilled) {
       const additionalProfit = Number(
         salePlatformCommission.additionalProfit || 0,
@@ -145,42 +135,30 @@ export const PricingDetails = ({
       const salePrice = Number((costs / profitPercentage).toFixed(2));
       setValue('salePrice', salePrice);
     }
-  }
+  }, [salePlatformCommission, isAllFieldsFilled, costPrice, setValue]);
+
+  useEffect(() => {
+    if (salePlatformCommission && costPrice) {
+      calculateSalePrice();
+    } else {
+      setValue('salePrice', 0);
+    }
+  }, [salePlatformCommission, costPrice, calculateSalePrice, setValue]);
 
   const productId = watch('product');
   const productVariationId = watch('productVariation');
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const memoizedGetSalePlatforms = useCallback(getSalePlatformCommissions, []);
+  const memoizedGetSalePlatforms = useCallback(getSalePlatformCommissions, [
+    getSalePlatformCommissions,
+  ]);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const memoizedGetProducts = useCallback(getProducts, []);
+  const memoizedGetProducts = useCallback(getProducts, [getProducts]);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const memoizedGetProductVariations = useCallback(getProductVariations, []);
+  const memoizedGetProductVariations = useCallback(getProductVariations, [
+    getProductVariations,
+  ]);
 
-  useEffect(() => {
-    if (productId && productId !== '') {
-      setValue('productVariation', '');
-      loadProductVariations();
-    }
-  }, [productId]);
-
-  useEffect(() => {
-    loadSalePlatforms();
-    loadProducts();
-
-    if (pricingId) {
-      loadPricing();
-    }
-  }, []);
-
-  const loadSalePlatforms = async () => {
-    const salePlatformsData = await memoizedGetSalePlatforms();
-    setSalePlatformCommissions(salePlatformsData);
-  };
-
-  const loadPricing = async () => {
+  const loadPricing = useCallback(async () => {
     const productsData = await memoizedGetProducts();
     setProducts(productsData);
 
@@ -199,17 +177,36 @@ export const PricingDetails = ({
         }
       });
     }
-  };
+  }, [getPricingById, memoizedGetProducts, pricingId, setValue]);
 
-  const loadProducts = async () => {
-    const productsData = await memoizedGetProducts();
-    setProducts(productsData);
-  };
+  useEffect(() => {
+    const loadSalePlatforms = async () => {
+      const salePlatformsData = await memoizedGetSalePlatforms();
+      setSalePlatformCommissions(salePlatformsData);
+    };
+    loadSalePlatforms();
+    const loadProducts = async () => {
+      const productsData = await memoizedGetProducts();
+      setProducts(productsData);
+    };
+    loadProducts();
 
-  const loadProductVariations = async () => {
-    const response = await memoizedGetProductVariations(parseInt(productId));
-    setProductVariations(response);
-  };
+    if (pricingId) {
+      loadPricing();
+    }
+  }, [loadPricing, memoizedGetProducts, memoizedGetSalePlatforms, pricingId]);
+
+  useEffect(() => {
+    const loadProductVariations = async () => {
+      const response = await memoizedGetProductVariations(parseInt(productId));
+      setProductVariations(response);
+    };
+
+    if (productId && productId !== '') {
+      setValue('productVariation', '');
+      loadProductVariations();
+    }
+  }, [memoizedGetProductVariations, productId, setValue]);
 
   function onSubmit(data: FormData) {
     savePricing(
@@ -224,7 +221,7 @@ export const PricingDetails = ({
     )
       .then((response) => {
         if (response) {
-          onSave();
+          onSave?.();
           handleCancel();
           toast.success('Comissão salva com sucesso!');
           reset();
@@ -243,7 +240,7 @@ export const PricingDetails = ({
     setProductVariations([]);
     setSalePlatforms([]);
     reset();
-    onCancel();
+    onCancel?.();
   };
 
   return (

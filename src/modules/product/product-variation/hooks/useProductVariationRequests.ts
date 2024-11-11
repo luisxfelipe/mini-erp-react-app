@@ -1,5 +1,6 @@
 import {
-    URL_PRODUCT_VARIATION_ID, URL_PRODUCT_VARIATIONS
+  URL_PRODUCT_VARIATION_ID,
+  URL_PRODUCT_VARIATIONS,
 } from '../../../../shared/constants/urls';
 import { MethodsEnum } from '../../../../shared/enums/methods.enum';
 import { useRequests } from '../../../../shared/hooks/useRequests';

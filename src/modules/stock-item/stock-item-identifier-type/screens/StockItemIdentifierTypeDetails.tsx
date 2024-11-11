@@ -1,9 +1,8 @@
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { z } from 'zod';
-
-import { zodResolver } from '@hookform/resolvers/zod';
 
 import { Input } from '../../../../components/input/Input';
 import useStockItemIdentifierTypeRequests from '../hooks/useStockItemIdentifierTypeRequests';
@@ -16,9 +15,9 @@ const schema = z.object({
 type FormData = z.infer<typeof schema>;
 
 interface StockItemIdentifierTypeDetailsProps {
-  onCancel: () => void;
+  onCancel?: () => void;
   stockItemIdentifierTypeId?: number;
-  onSave: () => void;
+  onSave?: () => void;
 }
 
 export const StockItemIdentifierTypeDetails = ({
@@ -26,8 +25,7 @@ export const StockItemIdentifierTypeDetails = ({
   stockItemIdentifierTypeId,
   onSave,
 }: StockItemIdentifierTypeDetailsProps) => {
-  const [stockItemIdentifierType, setStockItemIdentifierType] =
-    useState<IStockItemIdentifierType>();
+  const [, setStockItemIdentifierType] = useState<IStockItemIdentifierType>();
   const { getStockItemIdentifierTypeById, saveStockItemIdentifierType } =
     useStockItemIdentifierTypeRequests();
 
@@ -72,7 +70,7 @@ export const StockItemIdentifierTypeDetails = ({
         : undefined,
     )
       .then(() => {
-        onSave();
+        onSave?.();
         toast.success('Tipo de identificador salvo com sucesso!');
         handleCancel();
       })
@@ -85,7 +83,7 @@ export const StockItemIdentifierTypeDetails = ({
   const handleCancel = () => {
     setStockItemIdentifierType(undefined);
     reset();
-    onCancel();
+    onCancel?.();
   };
 
   return (

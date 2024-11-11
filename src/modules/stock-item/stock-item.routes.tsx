@@ -9,6 +9,6 @@ export enum StockItemRoutesEnum {
 export const stockItemRoutes: RouteObject[] = [
   {
     path: StockItemRoutesEnum.STOCK_ITEM_INSERT,
-    element: <StockItemReview />,
+    element: <StockItemReview purchaseOrderItems={[]} />,
   },
 ];

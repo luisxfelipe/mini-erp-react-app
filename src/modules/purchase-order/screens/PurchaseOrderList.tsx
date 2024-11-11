@@ -1,13 +1,13 @@
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { ColumnsType } from 'antd/es/table';
 import { format, parseISO } from 'date-fns';
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import Button from '../../../components/button/Button';
 import Table from '../../../components/table/Table';
-import { IPurchaseOrder } from '../../../shared/interfaces/PurchaseOrderInterface';
 import usePurchaseOrderRequests from '../hooks/usePurchaseOrderRequests';
+import { IPurchaseOrder } from '../interfaces/PurchaseOrderInterface';
 import { PurchaseOrderRoutesEnum } from '../purchase-orders.routes';
 
 export const PurchaseOrderList = () => {
@@ -71,20 +71,19 @@ export const PurchaseOrderList = () => {
         ),
       },
     ],
-    [],
+    [navigate],
   );
 
-  useEffect(() => {
-    loadPurchaseOrders();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const loadPurchaseOrders = async () => {
+  const loadPurchaseOrders = useCallback(async () => {
     const response = await getPurchaseOrders();
     if (response) {
       setPurchaseOrders(response);
     }
-  };
+  }, [getPurchaseOrders, setPurchaseOrders]);
+
+  useEffect(() => {
+    loadPurchaseOrders();
+  }, [loadPurchaseOrders]);
 
   return (
     <div>

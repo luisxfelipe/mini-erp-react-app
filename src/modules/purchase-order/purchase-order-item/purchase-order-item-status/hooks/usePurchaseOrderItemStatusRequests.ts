@@ -1,13 +1,12 @@
 import toast from 'react-hot-toast';
 
 import {
-    URL_PURCHASE_ORDER_ITEM_STATUS, URL_PURCHASE_ORDER_ITEM_STATUS_ID
+  URL_PURCHASE_ORDER_ITEM_STATUS,
+  URL_PURCHASE_ORDER_ITEM_STATUS_ID,
 } from '../../../../../shared/constants/urls';
 import { MethodsEnum } from '../../../../../shared/enums/methods.enum';
 import { useRequests } from '../../../../../shared/hooks/useRequests';
-import {
-    IPurchaseOrderItemStatusInsert
-} from '../interfaces/PurchaseOrderItemStatusInsertInterface';
+import { IPurchaseOrderItemStatusInsert } from '../interfaces/PurchaseOrderItemStatusInsertInterface';
 import { IPurchaseOrderItemStatus } from '../interfaces/PurchaseOrderItemStatusInterface';
 
 const usePurchaseOrderItemStatusRequests = () => {

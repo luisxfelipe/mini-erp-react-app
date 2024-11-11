@@ -1,6 +1,7 @@
 import { redirect } from 'react-router-dom';
 
 import { IUser } from '../../interfaces/UserInterface';
+
 import { getItem, getItemParse, removeItem, setItem } from './storageProxy';
 
 export const getAuthorizationToken = () => getItem('@mini-erp:token');
