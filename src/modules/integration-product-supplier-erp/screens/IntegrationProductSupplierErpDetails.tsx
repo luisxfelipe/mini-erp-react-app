@@ -1,15 +1,18 @@
-import { zodResolver } from '@hookform/resolvers/zod';
 import { useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { z } from 'zod';
+
+import { zodResolver } from '@hookform/resolvers/zod';
 
 import { Input } from '../../../components/input/Input';
 import Select from '../../../components/select/Select';
 import useProductRequests from '../../product/hooks/useProductRequests';
 import { IProduct } from '../../product/interfaces/ProductInterface';
 import useProductVariationRequests from '../../product/product-variation/hooks/useProductVariationRequests';
-import { IProductVariation } from '../../product/product-variation/interfaces/ProductVariationInterface';
+import {
+    IProductVariation
+} from '../../product/product-variation/interfaces/ProductVariationInterface';
 import useSupplierRequests from '../../supplier/hooks/useSupplierRequets';
 import { ISupplier } from '../../supplier/interfaces/SupplierInterface';
 import useIntegrationProductSupplierErpRequests from '../hooks/useIntegrationProductSupplierErpRequests';
@@ -102,28 +105,21 @@ export const IntegrationProductSupplierErpDetails = ({
 
   const memoizedGetProducts = useCallback(getProducts, [getProducts]);
 
-  const memoizedGetProductVariations = useCallback(getProductVariations, [
-    getProductVariations,
-  ]);
-
   const memoizedGetSuppliers = useCallback(getSuppliers, [getSuppliers]);
 
   useEffect(() => {
     const loadProductVariations = async () => {
-      const response = await memoizedGetProductVariations(parseInt(productId));
-      setProductVariations(response);
+      if (productId && productId !== '') {
+        const response = await getProductVariations(parseInt(productId));
+        setProductVariations(response);
+      }
     };
 
-    if (productId && productId !== '') {
-      setValue('productVariation', '');
-      loadProductVariations();
-    }
-  }, [memoizedGetProductVariations, productId, setValue]);
+    loadProductVariations();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [productId]);
 
   const loadIntegrationProductSupplierErp = useCallback(async () => {
-    const productsData = await memoizedGetProducts();
-    setProducts(productsData);
-
     if (integrationProductSupplierErpId) {
       await getIntegrationProductSupplierErpById(
         integrationProductSupplierErpId,
@@ -156,32 +152,87 @@ export const IntegrationProductSupplierErpDetails = ({
   }, [
     getIntegrationProductSupplierErpById,
     integrationProductSupplierErpId,
-    memoizedGetProducts,
     setValue,
   ]);
 
   useEffect(() => {
     const loadProducts = async () => {
-      const response = await memoizedGetProducts();
-      setProducts(response);
+      const productsData = await memoizedGetProducts();
+      setProducts(productsData);
     };
-    loadProducts();
 
-    const loadSuppliers = async () => {
-      const response = await memoizedGetSuppliers();
-      setSuppliers(response);
-    };
-    loadSuppliers();
-
-    if (integrationProductSupplierErpId) {
-      loadIntegrationProductSupplierErp();
+    if (products.length === 0) {
+      loadProducts();
     }
-  }, [
-    integrationProductSupplierErpId,
-    loadIntegrationProductSupplierErp,
-    memoizedGetProducts,
-    memoizedGetSuppliers,
-  ]);
+  }, [memoizedGetProducts, products.length]);
+
+  useEffect(() => {
+    const loadSuppliers = async () => {
+      const suppliersData = await memoizedGetSuppliers();
+      setSuppliers(suppliersData);
+    };
+
+    if (suppliers.length === 0) {
+      loadSuppliers();
+    }
+  }, [memoizedGetProducts, memoizedGetSuppliers, suppliers.length]);
+
+  useEffect(() => {
+    if (integrationProductSupplierErpId && !integrationProductSupplierErp) {
+      const loadData = async () => {
+        const integrationProductSupplierErpData:
+          | IIntegrationProductSupplier
+          | undefined = await getIntegrationProductSupplierErpById(
+          integrationProductSupplierErpId,
+        );
+
+        if (integrationProductSupplierErpData) {
+          console.log(JSON.stringify(integrationProductSupplierErpData));
+          setIntegrationProductSupplierErp(integrationProductSupplierErpData);
+          setValue(
+            'product',
+            integrationProductSupplierErpData.product.id.toString(),
+          );
+          setValue(
+            'productVariation',
+            integrationProductSupplierErpData.productVariation.id?.toString() ||
+              '',
+          );
+          if (integrationProductSupplierErpData?.supplier) {
+            setValue(
+              'supplierId',
+              integrationProductSupplierErpData.supplier.id?.toString(),
+            );
+          }
+          setValue(
+            'supplierPrice',
+            integrationProductSupplierErpData.supplierPrice,
+          );
+          setValue(
+            'supplierProductCode',
+            integrationProductSupplierErpData.supplierProductCode,
+          );
+          setValue(
+            'inStockInTheSupplier',
+            integrationProductSupplierErpData.inStockInTheSupplier ? '1' : '0',
+          );
+          if (integrationProductSupplierErpData.supplierProductLink) {
+            setValue(
+              'supplierProductLink',
+              integrationProductSupplierErpData.supplierProductLink,
+            );
+          }
+          if (integrationProductSupplierErpData.blingProductId) {
+            setValue(
+              'blingProductId',
+              integrationProductSupplierErpData.blingProductId,
+            );
+          }
+        }
+      };
+      loadData();
+    }
+  }, [integrationProductSupplierErpId, loadIntegrationProductSupplierErp]);
 
   function onSubmit(data: FormData) {
     saveIntegrationProductSupplierErp(
