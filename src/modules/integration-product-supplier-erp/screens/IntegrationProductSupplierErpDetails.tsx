@@ -119,42 +119,6 @@ export const IntegrationProductSupplierErpDetails = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [productId]);
 
-  const loadIntegrationProductSupplierErp = useCallback(async () => {
-    if (integrationProductSupplierErpId) {
-      await getIntegrationProductSupplierErpById(
-        integrationProductSupplierErpId,
-      ).then((data: IIntegrationProductSupplier | undefined) => {
-        if (data) {
-          setIntegrationProductSupplierErp(data);
-          setValue('product', data.product.id.toString());
-          setValue(
-            'productVariation',
-            data.productVariation.id?.toString() || '',
-          );
-          if (data?.supplier) {
-            setValue('supplierId', data?.supplier?.id?.toString());
-          }
-          setValue('supplierPrice', data.supplierPrice);
-          setValue('supplierProductCode', data.supplierProductCode);
-          setValue(
-            'inStockInTheSupplier',
-            data.inStockInTheSupplier ? '1' : '0',
-          );
-          if (data.supplierProductLink) {
-            setValue('supplierProductLink', data.supplierProductLink);
-          }
-          if (data.blingProductId) {
-            setValue('blingProductId', data.blingProductId);
-          }
-        }
-      });
-    }
-  }, [
-    getIntegrationProductSupplierErpById,
-    integrationProductSupplierErpId,
-    setValue,
-  ]);
-
   useEffect(() => {
     const loadProducts = async () => {
       const productsData = await memoizedGetProducts();
@@ -187,7 +151,6 @@ export const IntegrationProductSupplierErpDetails = ({
         );
 
         if (integrationProductSupplierErpData) {
-          console.log(JSON.stringify(integrationProductSupplierErpData));
           setIntegrationProductSupplierErp(integrationProductSupplierErpData);
           setValue(
             'product',
@@ -232,7 +195,7 @@ export const IntegrationProductSupplierErpDetails = ({
       };
       loadData();
     }
-  }, [integrationProductSupplierErpId, loadIntegrationProductSupplierErp]);
+  }, [integrationProductSupplierErpId]);
 
   function onSubmit(data: FormData) {
     saveIntegrationProductSupplierErp(
