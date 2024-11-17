@@ -1,4 +1,4 @@
-export const URL_BASE = 'https://api.meviosshop.com.br';
+export const URL_BASE = import.meta.env.VITE_API_URL;
 
 export const URL_CATEGORIES = `${URL_BASE}/categories`;
 export const URL_CATEGORY_ID = `${URL_BASE}/categories/{categoryId}`;
