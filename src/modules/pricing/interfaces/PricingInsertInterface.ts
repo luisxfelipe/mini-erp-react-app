@@ -3,5 +3,7 @@ export interface IPricingInsert {
   productVariationId: number;
   salePlatformId: number;
   costPrice: number;
+  profitPercentage: number;
+  additionalProfit?: number;
   salePrice: number;
 }
