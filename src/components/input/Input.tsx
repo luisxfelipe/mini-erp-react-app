@@ -8,10 +8,14 @@ type InputProps = HtmlHTMLAttributes<HTMLInputElement> & {
   error?: string;
   step?: string | number;
   disabled?: boolean;
+  value?: string | number;
 };
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ title, type, placeholder, error, step, disabled, ...props }, ref) => {
+  (
+    { title, type, placeholder, error, step, disabled, value, ...props },
+    ref,
+  ) => {
     return (
       <>
         {title && <p className='mb-2 font-medium'>{title}</p>}
@@ -20,6 +24,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           type={type}
           step={step}
           disabled={disabled}
+          value={value}
           placeholder={placeholder}
           {...props}
           ref={ref}

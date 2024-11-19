@@ -1,18 +1,15 @@
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { z } from 'zod';
-
-import { zodResolver } from '@hookform/resolvers/zod';
 
 import { Input } from '../../../components/input/Input';
 import Select from '../../../components/select/Select';
 import useProductRequests from '../../product/hooks/useProductRequests';
 import { IProduct } from '../../product/interfaces/ProductInterface';
 import useProductVariationRequests from '../../product/product-variation/hooks/useProductVariationRequests';
-import {
-    IProductVariation
-} from '../../product/product-variation/interfaces/ProductVariationInterface';
+import { IProductVariation } from '../../product/product-variation/interfaces/ProductVariationInterface';
 import useSupplierRequests from '../../supplier/hooks/useSupplierRequets';
 import { ISupplier } from '../../supplier/interfaces/SupplierInterface';
 import useIntegrationProductSupplierErpRequests from '../hooks/useIntegrationProductSupplierErpRequests';
@@ -195,6 +192,7 @@ export const IntegrationProductSupplierErpDetails = ({
       };
       loadData();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [integrationProductSupplierErpId]);
 
   function onSubmit(data: FormData) {

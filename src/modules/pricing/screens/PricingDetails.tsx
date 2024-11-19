@@ -1,24 +1,19 @@
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { z } from 'zod';
-
-import { zodResolver } from '@hookform/resolvers/zod';
 
 import { Input } from '../../../components/input/Input';
 import Select from '../../../components/select/Select';
 import useProductRequests from '../../product/hooks/useProductRequests';
 import { IProduct } from '../../product/interfaces/ProductInterface';
 import useProductVariationRequests from '../../product/product-variation/hooks/useProductVariationRequests';
-import {
-    IProductVariation
-} from '../../product/product-variation/interfaces/ProductVariationInterface';
+import { IProductVariation } from '../../product/product-variation/interfaces/ProductVariationInterface';
 import usePricingRequests from '../hooks/usePricingRequests';
 import { IPricing } from '../interfaces/PricingInterface';
 import useSalePlatformCommissionRequests from '../sale-platform-commission/hooks/useSalePlatformCommissionRequests';
-import {
-    ISalePlatformCommission
-} from '../sale-platform-commission/interfaces/SalePlatformCommissionInterface';
+import { ISalePlatformCommission } from '../sale-platform-commission/interfaces/SalePlatformCommissionInterface';
 
 const schema = z.object({
   product: z.string().min(1, 'Selecione um produto'),
@@ -38,6 +33,20 @@ const schema = z.object({
       .positive({
         message: 'O campo preço de custo deve ser um número positivo',
       }),
+  ),
+  profitPercentage: z.preprocess(
+    (value) => Number(value),
+    z
+      .number({ message: 'O campo porcentagem de lucro deve ser um número' })
+      .positive({
+        message: 'O campo porcentagem de lucro deve ser um número positivo',
+      }),
+  ),
+  additionalProfit: z.preprocess(
+    (value) => Number(value),
+    z.number({
+      message: 'O campo porcentagem de lucro adicional deve ser um número',
+    }),
   ),
   salePrice: z.preprocess(
     (value) => Number(value),
@@ -63,6 +72,7 @@ export const PricingDetails = ({
   onSave,
 }: PricingDetailsProps) => {
   const [isLoading, setIsLoading] = useState(false);
+
   const { getPricingById, savePricing } = usePricingRequests();
   const [pricing, setPricing] = useState<IPricing>();
 
@@ -101,24 +111,6 @@ export const PricingDetails = ({
     [getSalePlatformCommissionByPlatformId],
   );
 
-  const loadPricing = useCallback(async () => {
-    if (pricingId) {
-      await getPricingById(pricingId).then((data: IPricing | undefined) => {
-        if (data) {
-          setPricing(data);
-          setValue('product', data.product.id.toString());
-          setValue(
-            'productVariation',
-            data.productVariation.id?.toString() || '',
-          );
-          setValue('salePlatform', data?.salePlatform?.id?.toString());
-          setValue('costPrice', data.costPrice);
-          setValue('salePrice', data.salePrice);
-        }
-      });
-    }
-  }, [getPricingById, pricingId, setValue]);
-
   // Segundo useEffect para carregar os produtos
   useEffect(() => {
     const loadProducts = async () => {
@@ -135,6 +127,7 @@ export const PricingDetails = ({
   useEffect(() => {
     if (pricingId && !pricing) {
       const loadPricingData = async () => {
+        setIsLoading(true);
         const pricingData: IPricing | undefined =
           await getPricingById(pricingId);
 
@@ -147,20 +140,33 @@ export const PricingDetails = ({
           );
           setValue('salePlatform', pricingData?.salePlatform?.id?.toString());
           setValue('costPrice', pricingData.costPrice);
+          setValue('profitPercentage', pricingData.profitPercentage);
+          setValue('additionalProfit', pricingData?.additionalProfit || 0);
           setValue('salePrice', pricingData.salePrice);
         }
+        setIsLoading(false);
       };
 
-      setIsLoading(true);
       loadPricingData();
-      setIsLoading(false);
     }
-  }, [getPricingById, loadPricing, pricing, pricingId, setValue]);
+  }, [getPricingById, pricing, pricingId, setValue]);
 
-  const { product, productVariation, salePlatform, costPrice } = watch();
+  const {
+    product,
+    productVariation,
+    salePlatform,
+    costPrice,
+    profitPercentage,
+    additionalProfit,
+  } = watch();
 
   const isAllFieldsFilled =
-    product && productVariation && salePlatform && costPrice;
+    product &&
+    productVariation &&
+    salePlatform &&
+    costPrice &&
+    profitPercentage &&
+    additionalProfit;
 
   const salePlatformId = parseInt(watch('salePlatform'));
 
@@ -187,6 +193,12 @@ export const PricingDetails = ({
             await memoizedGetSalePlatformCommissionByPlatformId(salePlatformId);
           if (data) {
             setSalePlatformCommission(data);
+            if (profitPercentage == 0) {
+              setValue('profitPercentage', data.defaultProfitPercentage);
+            }
+            if (additionalProfit == 0) {
+              setValue('additionalProfit', data?.additionalProfit || 0);
+            }
           }
         } else {
           setSalePlatformCommission(undefined);
@@ -201,25 +213,25 @@ export const PricingDetails = ({
   const calculatedSalePrice = useMemo(() => {
     if (!salePlatformCommission || !isAllFieldsFilled) return 0;
 
-    const additionalProfit = Number(
-      salePlatformCommission.additionalProfit || 0,
-    );
     const costPerItemSold = Number(salePlatformCommission.costPerItemSold || 0);
-    const defaultProfitPercentage = Number(
-      salePlatformCommission.defaultProfitPercentage || 0,
-    );
     const commissionPercentage = Number(
       salePlatformCommission.commissionPercentage || 0,
     );
 
     const costs = costPrice + additionalProfit + costPerItemSold;
-    const profitPercentage =
-      (100 - (defaultProfitPercentage + commissionPercentage)) / 100;
 
-    return Number((costs / profitPercentage).toFixed(2));
-  }, [salePlatformCommission, isAllFieldsFilled, costPrice]);
+    const totalProfitPercentage =
+      (100 - (profitPercentage + commissionPercentage)) / 100;
 
-  // Adicione um useEffect único para atualizar o preço de venda
+    return Number((costs / totalProfitPercentage).toFixed(2));
+  }, [
+    salePlatformCommission,
+    isAllFieldsFilled,
+    costPrice,
+    additionalProfit,
+    profitPercentage,
+  ]);
+
   useEffect(() => {
     if (isAllFieldsFilled && salePlatformCommission) {
       setIsLoading(true);
@@ -236,7 +248,6 @@ export const PricingDetails = ({
   const productId = watch('product');
   const productVariationId = watch('productVariation');
 
-  // Then modify the useEffect for product variations like this:
   useEffect(() => {
     const loadProductVariations = async () => {
       if (productId && productId !== '') {
@@ -247,7 +258,7 @@ export const PricingDetails = ({
 
     loadProductVariations();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [productId]); // Remove memoizedGetProductVariations from dependencies
+  }, [productId]);
 
   function onSubmit(data: FormData) {
     savePricing(
@@ -256,6 +267,9 @@ export const PricingDetails = ({
         productVariationId: parseInt(productVariationId),
         salePlatformId: parseInt(data.salePlatform),
         costPrice: data.costPrice,
+        profitPercentage: data.profitPercentage,
+        additionalProfit:
+          data.additionalProfit > 0 ? data.additionalProfit : undefined,
         salePrice: data.salePrice,
       },
       pricing?.id.toString(),
@@ -293,6 +307,7 @@ export const PricingDetails = ({
       ) : (
         <div className='w-full bg-white p-3 rounded-lg flex flex-col sm:flex-row items-center gap-2 mt-2'>
           <form className='w-full' onSubmit={handleSubmit(onSubmit)}>
+            {/* Product */}
             <div className='w-full mb-4'>
               <Select
                 className='w-full border-2 rounded-md mb-4 px-2'
@@ -309,6 +324,7 @@ export const PricingDetails = ({
               )}
             </div>
             {productId && productVariations.length > 0 && (
+              // Product variations
               <div className='w-full mb-4'>
                 <Select
                   className='w-full border-2 rounded-md mb-4 px-2'
@@ -334,6 +350,7 @@ export const PricingDetails = ({
                 Não há variações disponíveis para o produto selecionado.
               </p>
             )}
+            {/* Sale Platform */}
             <div className='w-full mb-4'>
               <Select
                 className='w-full border-2 rounded-md mb-4 px-2'
@@ -354,6 +371,7 @@ export const PricingDetails = ({
               )}
             </div>
             {salePlatformCommission && (
+              // Platform commission details
               <div>
                 <div className='w-full mb-4'>
                   <p>
@@ -391,6 +409,7 @@ export const PricingDetails = ({
                 </div>
               </div>
             )}
+            {/* Cost price */}
             <div className='w-full mb-4'>
               <Input
                 className='w-full border-2 rounded-md px-2'
@@ -404,6 +423,53 @@ export const PricingDetails = ({
                 <p className='my-1 text-red-500'>{errors.costPrice.message}</p>
               )}
             </div>
+            {/* Profit percentage */}
+            <div className='w-full mb-4'>
+              <Input
+                className='w-full border-2 rounded-md px-2'
+                title='Porcentagem de lucro'
+                type='number'
+                step='0.01'
+                placeholder='Digite a porcentagem de lucro...'
+                {...register('profitPercentage', { valueAsNumber: true })}
+                defaultValue={0}
+                onChange={(e) =>
+                  setValue(
+                    'profitPercentage',
+                    Number((e.target as HTMLInputElement).value),
+                  )
+                }
+              />
+              {errors.profitPercentage && (
+                <p className='my-1 text-red-500'>
+                  {errors.profitPercentage.message}
+                </p>
+              )}
+            </div>
+            {/* Additional profit */}
+            <div className='w-full mb-4'>
+              <Input
+                className='w-full border-2 rounded-md px-2'
+                title='Lucro adicional'
+                type='number'
+                step='0.01'
+                placeholder='Digite o lucro adicional...'
+                {...register('additionalProfit', { valueAsNumber: true })}
+                defaultValue={0}
+                onChange={(e) =>
+                  setValue(
+                    'additionalProfit',
+                    Number((e.target as HTMLInputElement).value),
+                  )
+                }
+              />
+              {errors.additionalProfit && (
+                <p className='my-1 text-red-500'>
+                  {errors.additionalProfit.message}
+                </p>
+              )}
+            </div>
+            {/* Sale price */}
             <div className='w-full mb-4'>
               <Input
                 className='w-full border-2 rounded-md px-2'

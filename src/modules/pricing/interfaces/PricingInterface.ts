@@ -8,5 +8,7 @@ export interface IPricing {
   productVariation: IProductVariation;
   salePlatform: IPlatform;
   costPrice: number;
+  profitPercentage: number;
+  additionalProfit?: number;
   salePrice: number;
 }
