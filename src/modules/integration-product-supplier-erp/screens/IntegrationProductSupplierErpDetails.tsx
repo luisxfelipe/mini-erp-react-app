@@ -1,15 +1,18 @@
-import { zodResolver } from '@hookform/resolvers/zod';
 import { useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { z } from 'zod';
+
+import { zodResolver } from '@hookform/resolvers/zod';
 
 import { Input } from '../../../components/input/Input';
 import Select from '../../../components/select/Select';
 import useProductRequests from '../../product/hooks/useProductRequests';
 import { IProduct } from '../../product/interfaces/ProductInterface';
 import useProductVariationRequests from '../../product/product-variation/hooks/useProductVariationRequests';
-import { IProductVariation } from '../../product/product-variation/interfaces/ProductVariationInterface';
+import {
+    IProductVariation
+} from '../../product/product-variation/interfaces/ProductVariationInterface';
 import useSupplierRequests from '../../supplier/hooks/useSupplierRequets';
 import { ISupplier } from '../../supplier/interfaces/SupplierInterface';
 import useIntegrationProductSupplierErpRequests from '../hooks/useIntegrationProductSupplierErpRequests';
@@ -26,14 +29,7 @@ const schema = z.object({
     })
     .min(1, 'Selecione uma variação'),
   supplierId: z.string().min(1, 'O campo fornecedor é obrigatório'),
-  supplierPrice: z.preprocess(
-    (value) => Number(value),
-    z
-      .number({ message: 'O campo preço de custo deve ser um número' })
-      .positive({
-        message: 'O campo preço de custo deve ser um número positivo',
-      }),
-  ),
+
   supplierProductCode: z
     .string()
     .min(1, 'O campo Código do fornecedor é obrigatório'),
@@ -165,10 +161,6 @@ export const IntegrationProductSupplierErpDetails = ({
             );
           }
           setValue(
-            'supplierPrice',
-            integrationProductSupplierErpData.supplierPrice,
-          );
-          setValue(
             'supplierProductCode',
             integrationProductSupplierErpData.supplierProductCode,
           );
@@ -201,7 +193,6 @@ export const IntegrationProductSupplierErpDetails = ({
         productId: parseInt(productId),
         productVariationId: parseInt(productVariationId),
         supplierId: parseInt(data.supplierId),
-        supplierPrice: data.supplierPrice,
         supplierProductCode: data.supplierProductCode,
         inStockInTheSupplier: Boolean(Number(data.inStockInTheSupplier)),
         supplierProductLink: data.supplierProductLink || undefined,
@@ -290,21 +281,6 @@ export const IntegrationProductSupplierErpDetails = ({
             />
             {errors.supplierId && (
               <p className='my-1 text-red-500'>{errors.supplierId.message}</p>
-            )}
-          </div>
-          <div className='w-full mb-4'>
-            <Input
-              className='w-full border-2 rounded-md px-2'
-              title='Preço de custo'
-              type='number'
-              step='0.01'
-              placeholder='Digite o preço de custo...'
-              {...register('supplierPrice', { valueAsNumber: true })}
-            />
-            {errors.supplierPrice && (
-              <p className='my-1 text-red-500'>
-                {errors.supplierPrice.message}
-              </p>
             )}
           </div>
           <div className='w-full mb-4'>
