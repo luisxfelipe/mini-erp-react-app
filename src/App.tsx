@@ -4,6 +4,7 @@ import { createBrowserRouter, RouteObject } from 'react-router-dom';
 import { Screen } from './components/screen/Screen';
 import { categoryRoutes } from './modules/category/category.routes';
 import { integrationProductSupplierErpRoutes } from './modules/integration-product-supplier-erp/integration-product-supplier-erp.routes';
+import { integrationStatusRoutes } from './modules/integration-product-supplier-erp/integration-status/integration-status.routes';
 import { loginRoutes } from './modules/login/routes';
 import { platformRoutes } from './modules/platform/platform.routes';
 import { pricingRoutes } from './modules/pricing/pricing.routes';
@@ -27,6 +28,7 @@ const routes: RouteObject[] = [...loginRoutes];
 const routesLoggedIn: RouteObject[] = [
   ...categoryRoutes,
   ...integrationProductSupplierErpRoutes,
+  ...integrationStatusRoutes,
   ...platformRoutes,
   ...pricingRoutes,
   ...productRoutes,

@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { CategoryRoutesEnum } from '../../modules/category/category.routes';
 import { IntegrationProductSupplierErpRoutesEnum } from '../../modules/integration-product-supplier-erp/integration-product-supplier-erp.routes';
+import { IntegrationStatusRoutesEnum } from '../../modules/integration-product-supplier-erp/integration-status/integration-status.routes';
 import { PlatformRoutesEnum } from '../../modules/platform/platform.routes';
 import { PricingRoutesEnum } from '../../modules/pricing/pricing.routes';
 import { SalePlatformCommissionRoutesEnum } from '../../modules/pricing/sale-platform-commission/sale-platform-commission.routes';
@@ -59,14 +60,6 @@ export const Nav = () => {
           onClick: () => navigate(ProductRoutesEnum.PRODUCTS),
         },
         {
-          key: 'integration-product-supplier-erp',
-          label: 'Integrações',
-          onClick: () =>
-            navigate(
-              IntegrationProductSupplierErpRoutesEnum.INTEGRATION_PRODUCT_SUPPLIER_ERP,
-            ),
-        },
-        {
           key: 'categories',
           label: 'Categorias',
           onClick: () => navigate(CategoryRoutesEnum.CATEGORIES),
@@ -90,6 +83,27 @@ export const Nav = () => {
           key: 'stock_item_status',
           label: 'Status de itens de estoque',
           onClick: () => navigate(StockItemStatusRoutesEnum.STOCK_ITEM_STATUS),
+        },
+      ],
+    },
+    {
+      key: 'integrations',
+      label: 'Integrações',
+      icon: <AppstoreOutlined />,
+      children: [
+        {
+          key: 'integration_product_supplier_erp',
+          label: 'Integração',
+          onClick: () =>
+            navigate(
+              IntegrationProductSupplierErpRoutesEnum.INTEGRATION_PRODUCT_SUPPLIER_ERP,
+            ),
+        },
+        {
+          key: 'integration_status',
+          label: 'Status de integração',
+          onClick: () =>
+            navigate(IntegrationStatusRoutesEnum.INTEGRATION_STATUS),
         },
       ],
     },
