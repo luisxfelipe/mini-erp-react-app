@@ -3,7 +3,7 @@ export interface IIntegrationProductSupplierInsert {
   productVariationId: number;
   supplierId: number;
   supplierProductCode: string;
-  inStockInTheSupplier: boolean;
+  statusId: number;
   supplierProductLink?: string;
   blingProductId?: number;
 }

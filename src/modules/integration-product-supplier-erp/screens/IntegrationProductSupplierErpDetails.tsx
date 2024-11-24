@@ -13,6 +13,8 @@ import { IProductVariation } from '../../product/product-variation/interfaces/Pr
 import useSupplierRequests from '../../supplier/hooks/useSupplierRequets';
 import { ISupplier } from '../../supplier/interfaces/SupplierInterface';
 import useIntegrationProductSupplierErpRequests from '../hooks/useIntegrationProductSupplierErpRequests';
+import useIntegrationStatusRequests from '../integration-status/hooks/useIntegrationStatusRequests';
+import { IIntegrationStatus } from '../integration-status/interfaces/IntegrationStatusInterface';
 import { IIntegrationProductSupplier } from '../interfaces/IntegrationProductSupplierErpInterface';
 
 const schema = z.object({
@@ -30,9 +32,7 @@ const schema = z.object({
   supplierProductCode: z
     .string()
     .min(1, 'O campo Código do fornecedor é obrigatório'),
-  inStockInTheSupplier: z
-    .string()
-    .min(1, 'O campo estoque no fornecedor é obrigatório'),
+  statusId: z.string().min(1, 'O campo status é obrigatório'),
   supplierProductLink: z
     .string()
     .refine((value) => !value || z.string().url().safeParse(value).success, {
@@ -78,6 +78,11 @@ export const IntegrationProductSupplierErpDetails = ({
   const [suppliers, setSuppliers] = useState<ISupplier[]>([]);
   const { getSuppliers } = useSupplierRequests();
 
+  const [integrationStatus, setIntegrationStatus] = useState<
+    IIntegrationStatus[]
+  >([]);
+  const { getIntegrationStatus } = useIntegrationStatusRequests();
+
   const {
     register,
     handleSubmit,
@@ -96,6 +101,10 @@ export const IntegrationProductSupplierErpDetails = ({
   const memoizedGetProducts = useCallback(getProducts, [getProducts]);
 
   const memoizedGetSuppliers = useCallback(getSuppliers, [getSuppliers]);
+
+  const memoizedGetIntegrationStatus = useCallback(getIntegrationStatus, [
+    getIntegrationStatus,
+  ]);
 
   useEffect(() => {
     const loadProductVariations = async () => {
@@ -132,6 +141,17 @@ export const IntegrationProductSupplierErpDetails = ({
   }, [memoizedGetProducts, memoizedGetSuppliers, suppliers.length]);
 
   useEffect(() => {
+    const loadIntegrationStatus = async () => {
+      const integrationStatusData = await memoizedGetIntegrationStatus();
+      setIntegrationStatus(integrationStatusData);
+    };
+
+    if (integrationStatus.length === 0) {
+      loadIntegrationStatus();
+    }
+  });
+
+  useEffect(() => {
     if (integrationProductSupplierErpId && !integrationProductSupplierErp) {
       const loadData = async () => {
         const integrationProductSupplierErpData:
@@ -157,13 +177,15 @@ export const IntegrationProductSupplierErpDetails = ({
               integrationProductSupplierErpData.supplier.id?.toString(),
             );
           }
+          if (integrationProductSupplierErpData?.status) {
+            setValue(
+              'statusId',
+              integrationProductSupplierErpData.status.id.toString(),
+            );
+          }
           setValue(
             'supplierProductCode',
             integrationProductSupplierErpData.supplierProductCode,
-          );
-          setValue(
-            'inStockInTheSupplier',
-            integrationProductSupplierErpData.inStockInTheSupplier ? '1' : '0',
           );
           if (integrationProductSupplierErpData.supplierProductLink) {
             setValue(
@@ -191,7 +213,7 @@ export const IntegrationProductSupplierErpDetails = ({
         productVariationId: parseInt(productVariationId),
         supplierId: parseInt(data.supplierId),
         supplierProductCode: data.supplierProductCode,
-        inStockInTheSupplier: Boolean(Number(data.inStockInTheSupplier)),
+        statusId: parseInt(data.statusId),
         supplierProductLink: data.supplierProductLink || undefined,
         blingProductId: data.blingProductId || undefined,
       },
@@ -297,18 +319,16 @@ export const IntegrationProductSupplierErpDetails = ({
           <div className='w-full mb-4'>
             <Select
               className='w-full border-2 rounded-md mb-4 px-2'
-              title='Estoque'
-              name='inStockInTheSupplier'
-              options={[
-                { value: 0, label: 'Não' },
-                { value: 1, label: 'Sim' },
-              ]}
+              title='Status'
+              name='statusId'
+              options={integrationStatus.map((status) => ({
+                value: status.id ? status.id.toString() : '',
+                label: status.name,
+              }))}
               register={register}
             />
-            {errors.inStockInTheSupplier && (
-              <p className='my-1 text-red-500'>
-                {errors.inStockInTheSupplier.message}
-              </p>
+            {errors.statusId && (
+              <p className='my-1 text-red-500'>{errors.statusId.message}</p>
             )}
           </div>
           <div className='w-full mb-4'>

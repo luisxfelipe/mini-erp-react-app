@@ -1,6 +1,7 @@
 import { IProduct } from '../../product/interfaces/ProductInterface';
 import { IProductVariation } from '../../product/product-variation/interfaces/ProductVariationInterface';
 import { ISupplier } from '../../supplier/interfaces/SupplierInterface';
+import { IIntegrationStatus } from '../integration-status/interfaces/IntegrationStatusInterface';
 
 export interface IIntegrationProductSupplier {
   id: number;
@@ -8,7 +9,7 @@ export interface IIntegrationProductSupplier {
   productVariation: IProductVariation;
   supplier: ISupplier;
   supplierProductCode: string;
-  inStockInTheSupplier: boolean;
+  status: IIntegrationStatus;
   supplierProductLink?: string;
   blingProductId?: number;
 }
