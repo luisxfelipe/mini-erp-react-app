@@ -60,4 +60,7 @@ export const URL_SUPPLIER_ID = `${URL_BASE}/suppliers/{supplierId}`;
 export const URL_INTEGRATION_PRODUCT_SUPPLIER_ERP = `${URL_BASE}/integration-product-supplier-erp`;
 export const URL_INTEGRATION_PRODUCT_SUPPLIER_ERP_ID = `${URL_BASE}/integration-product-supplier-erp/{integrationProductSupplierErpId}`;
 
+export const URL_INTEGRATION_STATUS = `${URL_BASE}/integration-status`;
+export const URL_INTEGRATION_STATUS_ID = `${URL_BASE}/integration-status/{integrationStatusId}`;
+
 export const URL_USERS = '/users';
