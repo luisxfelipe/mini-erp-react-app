@@ -1,10 +1,12 @@
+import { Layout } from 'antd';
 import { useContext } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 
 import { AuthContext } from '../../contexts/authContext';
-import { Container } from '../container/Container';
 import { Header } from '../header/Header';
 import { Nav } from '../nav/Nav';
+
+const { Content, Footer } = Layout;
 
 export const Screen = () => {
   const { signed, loading } = useContext(AuthContext);
@@ -18,17 +20,24 @@ export const Screen = () => {
   }
 
   return (
-    <>
-      <div className='w-full flex flex-row'>
-        <Nav />
-
-        <Container>
-          <Header />
-          <div className='p-4'>
+    <Layout style={{ minHeight: '100vh' }}>
+      <Nav />
+      <Layout>
+        <Header />
+        <Content style={{ margin: '0 16px' }}>
+          <div
+            style={{
+              padding: 24,
+              minHeight: 360,
+            }}
+          >
             <Outlet />
           </div>
-        </Container>
-      </div>
-    </>
+        </Content>
+        <Footer style={{ textAlign: 'center' }}>
+          Ant Design ©{new Date().getFullYear()} Created by Ant UED
+        </Footer>
+      </Layout>
+    </Layout>
   );
 };

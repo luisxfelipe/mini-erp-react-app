@@ -5,6 +5,7 @@ import {
   TagOutlined,
 } from '@ant-design/icons';
 import { Menu as ManuAntd, MenuProps } from 'antd';
+import Layout from 'antd/es/layout';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -27,9 +28,10 @@ import { SupplierRoutesEnum } from '../../modules/supplier/supplier.routes';
 
 type MenuItem = Required<MenuProps>['items'][number];
 
+const { Sider } = Layout;
+
 export const Nav = () => {
   const navigate = useNavigate();
-  const [current, setCurrent] = useState('1');
 
   const items: MenuItem[] = [
     {
@@ -178,41 +180,39 @@ export const Nav = () => {
     },
   ];
 
-  const onClick: MenuProps['onClick'] = (e) => {
-    setCurrent(e.key);
-  };
+  const [collapsed, setCollapsed] = useState(false);
 
   return (
-    <div
-      className='h-screen'
-      style={{
-        width: '240px',
-        backgroundColor: '#001529',
-      }}
+    <Sider
+      collapsible
+      collapsed={collapsed}
+      onCollapse={(value) => setCollapsed(value)}
+      style={{ width: '20vw' }}
     >
-      <div
-        className='w-full flex justify-center'
-        style={{
-          height: '72px',
-          display: 'flex',
-          alignItems: 'center',
+      <div className='demo-logo-vertical' />
+      {!collapsed && (
+        <div
+          className='w-full flex justify-center'
+          style={{
+            height: '52px',
+            display: 'flex',
+            alignItems: 'center',
+            marginTop: '5px',
+            WebkitBoxShadow: '-2px 6px 4px 0px rgba(0, 0, 0, 0.47)',
+            MozBoxShadow: '-2px 6px 4px 0px rgba(0, 0, 0, 0.47)',
+            boxShadow: '-2px 6px 4px 0px rgba(0, 0, 0, 0.47)',
+          }}
+        >
+          <h1 className='text-white font-bold'>Vendas Online</h1>
+        </div>
+      )}
 
-          WebkitBoxShadow: '-2px 6px 4px 0px rgba(0, 0, 0, 0.47)',
-          MozBoxShadow: '-2px 6px 4px 0px rgba(0, 0, 0, 0.47)',
-          boxShadow: '-2px 6px 4px 0px rgba(0, 0, 0, 0.47)',
-        }}
-      >
-        <h1 className='text-white font-bold'>Vendas Online</h1>
-      </div>
       <ManuAntd
         theme='dark'
-        onClick={onClick}
-        style={{ width: 240 }}
-        defaultOpenKeys={['sub1']}
-        selectedKeys={[current]}
+        defaultSelectedKeys={['1']}
         mode='inline'
         items={items}
       />
-    </div>
+    </Sider>
   );
 };
