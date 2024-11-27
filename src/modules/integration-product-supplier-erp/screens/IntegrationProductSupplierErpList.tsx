@@ -1,5 +1,5 @@
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
-import { PaginationProps } from 'antd';
+import { Input, PaginationProps } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import { useEffect, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
@@ -12,6 +12,8 @@ import { IIntegrationProductSupplier } from '../interfaces/IntegrationProductSup
 
 import { IntegrationProductSupplierErpDetails } from './IntegrationProductSupplierErpDetails';
 
+const { Search } = Input;
+
 export const IntegrationProductSupplierErpList = () => {
   const [integrationProductSupplierErp, setIntegrationProductSupplierErp] =
     useState<IIntegrationProductSupplier[]>([]);
@@ -23,7 +25,7 @@ export const IntegrationProductSupplierErpList = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [loading, setLoading] = useState(false);
-  const [search] = useState('');
+  const [search, setSearch] = useState('');
   const [current, setCurrent] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [totalItems, setTotalItems] = useState(0);
@@ -52,6 +54,11 @@ export const IntegrationProductSupplierErpList = () => {
   ) => {
     setCurrent(current);
     setItemsPerPage(pageSize);
+  };
+
+  const handleSearch = (value: string) => {
+    setSearch(value);
+    setCurrent(1);
   };
 
   useEffect(() => {
@@ -168,17 +175,31 @@ export const IntegrationProductSupplierErpList = () => {
 
   return (
     <div>
-      <div className='flex justify-between'>
-        <div style={{ width: '240' }}>
-          <Button
-            className='mb-2'
-            title='Inserir'
-            backgroundColor='#001529'
-            color='white'
-            onClick={() => setIsModalOpen(true)}
-          />
-        </div>
+      <div
+        style={{
+          width: '100%',
+          marginBottom: '16px',
+          display: 'flex',
+          justifyContent: 'space-between',
+        }}
+      >
+        <Button
+          width='10vw'
+          title='Inserir'
+          backgroundColor='#001529'
+          color='white'
+          onClick={() => setIsModalOpen(true)}
+        />
+        <Search
+          placeholder='input search text'
+          enterButton='Search'
+          size='middle'
+          loading={loading}
+          style={{ width: '65vw' }}
+          onSearch={(value) => handleSearch(value)}
+        />
       </div>
+
       <Table
         columns={columns}
         dataSource={integrationProductSupplierErp}
