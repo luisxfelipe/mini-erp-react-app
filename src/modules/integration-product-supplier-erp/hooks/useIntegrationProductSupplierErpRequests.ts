@@ -4,6 +4,7 @@ import {
 } from '../../../shared/constants/urls';
 import { MethodsEnum } from '../../../shared/enums/methods.enum';
 import { useRequests } from '../../../shared/hooks/useRequests';
+import { IPaginationResponse } from '../../../shared/interfaces/PaginationResponseInteface';
 import { IIntegrationProductSupplierInsert } from '../interfaces/IntegrationProductSupplierErpInsertInterface';
 import { IIntegrationProductSupplier } from '../interfaces/IntegrationProductSupplierErpInterface';
 
@@ -17,6 +18,27 @@ const useIntegrationProductSupplierErpRequests = () => {
     );
     if (response) {
       return response;
+    }
+  };
+
+  const getIntegrationProductSupplierErpPaginated = async (
+    page: number,
+    take: number,
+    search?: string,
+  ): Promise<IPaginationResponse<IIntegrationProductSupplier[]>> => {
+    try {
+      const response = await request<
+        IPaginationResponse<IIntegrationProductSupplier[]>
+      >(
+        `${URL_INTEGRATION_PRODUCT_SUPPLIER_ERP}/pages?search=${search || ''}&page=${page}&take=${take}`,
+        MethodsEnum.GET,
+      );
+      if (!response) {
+        throw new Error('Requisição falhou');
+      }
+      return response;
+    } catch (error) {
+      throw new Error(error as string);
     }
   };
 
@@ -70,6 +92,7 @@ const useIntegrationProductSupplierErpRequests = () => {
   return {
     getIntegrationProductSupplierErpById,
     getIntegrationProductSupplierErp,
+    getIntegrationProductSupplierErpPaginated,
     saveIntegrationProductSupplierErp,
   };
 };

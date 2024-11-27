@@ -1,10 +1,9 @@
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { Input, PaginationProps } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import { useEffect, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
-
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 
 /* eslint-disable react-hooks/exhaustive-deps */
 import Button from '../../../components/button/Button';

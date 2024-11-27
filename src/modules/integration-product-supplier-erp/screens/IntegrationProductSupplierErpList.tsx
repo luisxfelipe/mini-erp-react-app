@@ -1,6 +1,8 @@
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { PaginationProps } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import { useEffect, useMemo, useState } from 'react';
+import toast from 'react-hot-toast';
 
 import Button from '../../../components/button/Button';
 import Modal from '../../../components/modal/Modal';
@@ -16,9 +18,76 @@ export const IntegrationProductSupplierErpList = () => {
   const [integrationProductSupplierId, setIntegrationProductSupplierErpId] =
     useState<number>();
 
-  const { getIntegrationProductSupplierErp } =
+  const { getIntegrationProductSupplierErpPaginated } =
     useIntegrationProductSupplierErpRequests();
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const [loading, setLoading] = useState(false);
+  const [search] = useState('');
+  const [current, setCurrent] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [totalItems, setTotalItems] = useState(0);
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+    setIntegrationProductSupplierErpId(undefined);
+  };
+
+  const handleEditIntegrationProductSupplierErp = (
+    integrationProductSupplierErp: IIntegrationProductSupplier,
+  ) => {
+    if (integrationProductSupplierErp) {
+      setIntegrationProductSupplierErpId(integrationProductSupplierErp.id);
+    }
+    setIsModalOpen(true);
+  };
+
+  const onChange: PaginationProps['onChange'] = (page) => {
+    setCurrent(page);
+  };
+
+  const onShowSizeChange: PaginationProps['onShowSizeChange'] = (
+    current,
+    pageSize,
+  ) => {
+    setCurrent(current);
+    setItemsPerPage(pageSize);
+  };
+
+  useEffect(() => {
+    if (integrationProductSupplierErp.length === 0) {
+      loadIntegrationProductSupplierErp();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    loadIntegrationProductSupplierErp();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [current, itemsPerPage, search]);
+
+  const loadIntegrationProductSupplierErp = async () => {
+    setLoading(true);
+
+    try {
+      const response = await getIntegrationProductSupplierErpPaginated(
+        current,
+        itemsPerPage,
+        search,
+      );
+
+      if (response && response.data.length > 0) {
+        setIntegrationProductSupplierErp(response.data);
+        setTotalItems(response.meta.totalItems);
+      } else {
+        toast.error('Nenhum resultado encontrado');
+      }
+    } catch (error) {
+      console.log('catch error', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const columns: ColumnsType<IIntegrationProductSupplier> = useMemo(
     () => [
@@ -88,30 +157,13 @@ export const IntegrationProductSupplierErpList = () => {
     [],
   );
 
-  useEffect(() => {
-    loadIntegrationProductSupplierErp();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const handleCancel = () => {
-    setIsModalOpen(false);
-    setIntegrationProductSupplierErpId(undefined);
-  };
-
-  const handleEditIntegrationProductSupplierErp = (
-    integrationProductSupplierErp: IIntegrationProductSupplier,
-  ) => {
-    if (integrationProductSupplierErp) {
-      setIntegrationProductSupplierErpId(integrationProductSupplierErp.id);
-    }
-    setIsModalOpen(true);
-  };
-
-  const loadIntegrationProductSupplierErp = async () => {
-    const response = await getIntegrationProductSupplierErp();
-    if (response) {
-      setIntegrationProductSupplierErp(response);
-    }
+  const pagination = {
+    current: current,
+    pageSize: itemsPerPage,
+    total: totalItems,
+    onChange: onChange,
+    onShowSizeChange: onShowSizeChange,
+    showSizeChanger: true,
   };
 
   return (
@@ -131,6 +183,8 @@ export const IntegrationProductSupplierErpList = () => {
         columns={columns}
         dataSource={integrationProductSupplierErp}
         rowKey='id'
+        loading={loading}
+        pagination={pagination}
       />
       <Modal
         isModalOpen={isModalOpen}
