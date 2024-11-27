@@ -23,6 +23,7 @@ export const ProductList = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
+  const [search, setSearch] = useState('');
   const [current, setCurrent] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [totalItems, setTotalItems] = useState(0);
@@ -39,11 +40,20 @@ export const ProductList = () => {
     setItemsPerPage(pageSize);
   };
 
+  const handleSearch = (value: string) => {
+    setSearch(value);
+    setCurrent(1);
+  };
+
   const loadProducts = async () => {
     setLoading(true);
 
     try {
-      const response = await getProductsPaginated(current, itemsPerPage);
+      const response = await getProductsPaginated(
+        current,
+        itemsPerPage,
+        search,
+      );
 
       if (response && response.data.length > 0) {
         setProducts(response.data);
@@ -66,7 +76,7 @@ export const ProductList = () => {
 
   useEffect(() => {
     loadProducts();
-  }, [current, itemsPerPage]);
+  }, [current, itemsPerPage, search]);
 
   const columns: ColumnsType<IProduct> = useMemo(
     () => [
@@ -154,7 +164,7 @@ export const ProductList = () => {
             size='middle'
             loading={loading}
             style={{ width: '65vw' }}
-            onSearch={(value) => console.log(value)}
+            onSearch={(value) => handleSearch(value)}
           />
         </div>
       </div>
