@@ -1,4 +1,5 @@
 import { PaginationProps } from 'antd';
+import Search from 'antd/es/input/Search';
 import { ColumnsType } from 'antd/es/table';
 import { useEffect, useMemo, useState } from 'react';
 
@@ -18,7 +19,7 @@ export const PricingList = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [loading, setLoading] = useState(false);
-  const [search] = useState('');
+  const [search, setSearch] = useState('');
   const [current, setCurrent] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [totalItems, setTotalItems] = useState(0);
@@ -45,6 +46,11 @@ export const PricingList = () => {
   ) => {
     setCurrent(current);
     setItemsPerPage(pageSize);
+  };
+
+  const handleSearch = (value: string) => {
+    setSearch(value);
+    setCurrent(1);
   };
 
   useEffect(() => {
@@ -147,16 +153,29 @@ export const PricingList = () => {
 
   return (
     <div>
-      <div className='flex justify-between'>
-        <div style={{ width: '240' }}>
-          <Button
-            className='mb-2'
-            title='Inserir'
-            backgroundColor='#001529'
-            color='white'
-            onClick={() => setIsModalOpen(true)}
-          />
-        </div>
+      <div
+        style={{
+          width: '100%',
+          marginBottom: '16px',
+          display: 'flex',
+          justifyContent: 'space-between',
+        }}
+      >
+        <Button
+          width='10vw'
+          title='Inserir'
+          backgroundColor='#001529'
+          color='white'
+          onClick={() => setIsModalOpen(true)}
+        />
+        <Search
+          placeholder='input search text'
+          enterButton='Search'
+          size='middle'
+          loading={loading}
+          style={{ width: '65vw' }}
+          onSearch={(value) => handleSearch(value)}
+        />
       </div>
       <Table
         columns={columns}
