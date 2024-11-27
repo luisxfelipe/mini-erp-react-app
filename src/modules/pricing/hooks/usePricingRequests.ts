@@ -3,6 +3,7 @@ import toast from 'react-hot-toast';
 import { URL_PRICING, URL_PRICING_ID } from '../../../shared/constants/urls';
 import { MethodsEnum } from '../../../shared/enums/methods.enum';
 import { useRequests } from '../../../shared/hooks/useRequests';
+import { IPaginationResponse } from '../../../shared/interfaces/PaginationResponseInteface';
 import { IPricingInsert } from '../interfaces/PricingInsertInterface';
 import { IPricing } from '../interfaces/PricingInterface';
 
@@ -16,6 +17,25 @@ const usePricingRequests = () => {
     } catch (error) {
       toast.error('Erro ao buscar as  precificações');
       throw new Error(`Erro ao buscar as  precificações: ${error}`);
+    }
+  };
+
+  const getPricingPaginated = async (
+    page: number,
+    take: number,
+    search?: string,
+  ): Promise<IPaginationResponse<IPricing[]>> => {
+    try {
+      const response = await request<IPaginationResponse<IPricing[]>>(
+        `${URL_PRICING}/pages?search=${search || ''}&page=${page}&take=${take}`,
+        MethodsEnum.GET,
+      );
+      if (!response) {
+        throw new Error('Requisição falhou');
+      }
+      return response;
+    } catch (error) {
+      throw new Error(error as string);
     }
   };
 
@@ -51,6 +71,7 @@ const usePricingRequests = () => {
   return {
     getPricingById,
     getPricing,
+    getPricingPaginated,
     savePricing,
   };
 };
