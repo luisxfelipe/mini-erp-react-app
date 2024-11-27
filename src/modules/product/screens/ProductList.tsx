@@ -1,10 +1,12 @@
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { Input, PaginationProps } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import { useEffect, useMemo, useState } from 'react';
+import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 
-/* eslint-disable react-hooks/exhaustive-deps */
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 
+/* eslint-disable react-hooks/exhaustive-deps */
 import Button from '../../../components/button/Button';
 import Table from '../../../components/table/Table';
 import CategoryColumn from '../components/CategoryColumn';
@@ -12,21 +14,59 @@ import useProductRequests from '../hooks/useProductRequests';
 import { IProduct } from '../interfaces/ProductInterface';
 import { ProductRoutesEnum } from '../product.routes';
 
+const { Search } = Input;
+
 export const ProductList = () => {
-  const { getProducts } = useProductRequests();
+  const { getProductsPaginated } = useProductRequests();
   const [products, setProducts] = useState<IProduct[]>([]);
+
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const loadProducts = async () => {
-      const response = await getProducts();
-      if (response) {
-        setProducts(response);
-      }
-    };
+  const [current, setCurrent] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [totalItems, setTotalItems] = useState(0);
 
-    loadProducts();
+  const onChange: PaginationProps['onChange'] = (page) => {
+    setCurrent(page);
+  };
+
+  const onShowSizeChange: PaginationProps['onShowSizeChange'] = (
+    current,
+    pageSize,
+  ) => {
+    setCurrent(current);
+    setItemsPerPage(pageSize);
+  };
+
+  const loadProducts = async () => {
+    setLoading(true);
+
+    try {
+      const response = await getProductsPaginated(current, itemsPerPage);
+
+      if (response && response.data.length > 0) {
+        setProducts(response.data);
+        setTotalItems(response.meta.totalItems);
+      } else {
+        toast.error('Nenhum produto encontrado');
+      }
+    } catch (error) {
+      console.log('catch error', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (products.length === 0) {
+      loadProducts();
+    }
   }, []);
+
+  useEffect(() => {
+    loadProducts();
+  }, [current, itemsPerPage]);
 
   const columns: ColumnsType<IProduct> = useMemo(
     () => [
@@ -80,12 +120,27 @@ export const ProductList = () => {
     [],
   );
 
+  const pagination = {
+    current: current,
+    pageSize: itemsPerPage,
+    total: totalItems,
+    onChange: onChange,
+    onShowSizeChange: onShowSizeChange,
+  };
+
   return (
     <div>
       <div className='flex justify-between'>
-        <div style={{ width: '240' }}>
+        <div
+          style={{
+            width: '100%',
+            marginBottom: '16px',
+            display: 'flex',
+            justifyContent: 'space-between',
+          }}
+        >
           <Button
-            className='mb-2'
+            width='10vw'
             title='Inserir'
             backgroundColor='#001529'
             color='white'
@@ -93,9 +148,23 @@ export const ProductList = () => {
               navigate(ProductRoutesEnum.PRODUCT_INSERT);
             }}
           />
+          <Search
+            placeholder='input search text'
+            enterButton='Search'
+            size='middle'
+            loading={loading}
+            style={{ width: '65vw' }}
+            onSearch={(value) => console.log(value)}
+          />
         </div>
       </div>
-      <Table columns={columns} dataSource={products} rowKey='id' />
+      <Table
+        columns={columns}
+        dataSource={products}
+        rowKey='id'
+        loading={loading}
+        pagination={pagination}
+      />
     </div>
   );
 };

@@ -1,6 +1,7 @@
 import { Button as ButtonAnt, ButtonProps } from 'antd';
 
 interface ButtonCurrentProps extends ButtonProps {
+  width?: string;
   title?: string;
   margin?: string;
   backgroundColor?: string;
@@ -8,6 +9,7 @@ interface ButtonCurrentProps extends ButtonProps {
 }
 
 const Button = ({
+  width,
   title,
   margin,
   backgroundColor,
@@ -18,7 +20,7 @@ const Button = ({
     <ButtonAnt
       style={{
         margin,
-        width: '100%',
+        width: width || '100%',
         backgroundColor,
         color,
       }}
