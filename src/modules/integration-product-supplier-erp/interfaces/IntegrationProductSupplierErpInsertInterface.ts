@@ -6,4 +6,5 @@ export interface IIntegrationProductSupplierInsert {
   statusId: number;
   supplierProductLink?: string;
   blingProductId?: number;
+  costPrice: number;
 }
