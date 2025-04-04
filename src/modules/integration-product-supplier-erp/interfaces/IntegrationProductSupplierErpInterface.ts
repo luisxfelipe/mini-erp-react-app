@@ -1,5 +1,7 @@
 import { IProduct } from '../../product/interfaces/ProductInterface';
-import { IProductVariation } from '../../product/product-variation/interfaces/ProductVariationInterface';
+import {
+    IProductVariation
+} from '../../product/product-variation/interfaces/ProductVariationInterface';
 import { ISupplier } from '../../supplier/interfaces/SupplierInterface';
 import { IIntegrationStatus } from '../integration-status/interfaces/IntegrationStatusInterface';
 
@@ -12,4 +14,5 @@ export interface IIntegrationProductSupplier {
   status: IIntegrationStatus;
   supplierProductLink?: string;
   blingProductId?: number;
+  costPrice: number;
 }

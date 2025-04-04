@@ -45,6 +45,14 @@ const schema = z.object({
       message: 'O campo id do produto no Bling deve ser um número',
     }),
   ),
+  costPrice: z.preprocess(
+    (value) => Number(value),
+    z
+      .number({ message: 'O campo preço de custo deve ser um número' })
+      .positive({
+        message: 'O campo preço de custo deve ser um número positivo',
+      }),
+  ),
 });
 
 type FormData = z.infer<typeof schema>;
@@ -171,6 +179,7 @@ export const IntegrationProductSupplierErpDetails = ({
             integrationProductSupplierErpData.productVariation.id?.toString() ||
               '',
           );
+          setValue('costPrice', integrationProductSupplierErpData.costPrice);
           if (integrationProductSupplierErpData?.supplier) {
             setValue(
               'supplierId',
@@ -216,6 +225,7 @@ export const IntegrationProductSupplierErpDetails = ({
         statusId: parseInt(data.statusId),
         supplierProductLink: data.supplierProductLink || undefined,
         blingProductId: data.blingProductId || undefined,
+        costPrice: data.costPrice,
       },
       integrationProductSupplierErp?.id.toString() || undefined,
     )
@@ -314,6 +324,20 @@ export const IntegrationProductSupplierErpDetails = ({
               <p className='my-1 text-red-500'>
                 {errors.supplierProductCode.message}
               </p>
+            )}
+          </div>
+          {/* Cost price */}
+          <div className='w-full mb-4'>
+            <Input
+              className='w-full border-2 rounded-md px-2'
+              title='Preço de custo'
+              type='number'
+              step='0.01'
+              placeholder='Digite o preço de custo...'
+              {...register('costPrice', { valueAsNumber: true })}
+            />
+            {errors.costPrice && (
+              <p className='my-1 text-red-500'>{errors.costPrice.message}</p>
             )}
           </div>
           <div className='w-full mb-4'>
